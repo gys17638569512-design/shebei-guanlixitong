@@ -1,0 +1,154 @@
+from fastapi import APIRouter, Depends, BackgroundTasks, Path, Body, Query
+from sqlalchemy.orm import Session
+from typing import List, Optional
+from datetime import date
+from core.database import get_db
+from core.permissions import get_current_user, require_role
+from core.response import ok
+from core.audit import write_audit_log
+from models.user import User
+from models.work_order import WorkOrder, OrderStatus
+from schemas.work_order import WorkOrderCreate
+from services import order_service
+
+router = APIRouter(prefix="/orders", tags=["工单中心"])
+
+
+@router.get("/my", summary="获取我的工单列表", description="根据当前登录的工程人员 Token，拉取分配给该人员的所有工单任务及其当前维护状态。")
+async def get_my_orders(
+    current_user: User = Depends(require_role(["TECH"])),
+    db: Session = Depends(get_db)
+):
+    data = order_service.get_my_orders(db, current_user)
+    return ok(data)
+
+
+@router.get("/{id}", summary="获取工单详情", description="根据工单 ID 获取特定工单的详细信息，包含客户、指派人、状态及检查项的级联数据。")
+async def get_order(
+    id: int = Path(..., description="要查询的单一工单记录的 ID 数字"),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    data = order_service.get_order_detail(db, id, current_user)
+    return ok(data)
+
+
+@router.put("/{id}/checkin", summary="现场实施打卡", description="维保人员到达现场后调用的接口，记录签到时间、地理位置及现场照片凭证，将工单推进到 [进行中] 状态。")
+async def checkin_order(
+    id: int = Path(..., description="要进行签到打卡的工单 ID"),
+    checkin_data: dict = Body(..., description="签到负载数据，包含经纬度与现场环境照片 URL"),
+    current_user: User = Depends(require_role(["TECH"])),
+    db: Session = Depends(get_db)
+):
+    order_service.checkin_order(db, id, checkin_data, current_user)
+    return ok(None, msg="Checkin successful")
+
+
+@router.put("/{id}/complete", summary="提交工单完成反馈", description="维保人员完成检查项排查后，上传客户手写签字留存，并触发自动 PDF 报告生成的结单流程。")
+async def complete_order_route(
+    id: int = Path(..., description="要确认完成的工单 ID"),
+    completion_data: dict = Body(..., description="完工负载数据，必须包含客户签名的图片 URL 等总结信息"),
+    background_tasks: BackgroundTasks = None,
+    current_user: User = Depends(require_role(["TECH"])),
+    db: Session = Depends(get_db)
+):
+    order_service.complete_order(db, id, completion_data, current_user)
+    
+    # 异步生成PDF报告 TODO
+    # background_tasks.add_task(pdf_service.generate_maintenance_report, id, db)
+    
+    return ok(None, msg="Order completed successfully")
+
+
+@router.post("", summary="创建新工单（派单）", description="管理员或经理将维保任务指派给特定工程师，指定设备、日期、工单类型。创建成功后工程师小程序端将收到推送。")
+async def create_order(
+    order_in: WorkOrderCreate,
+    current_user: User = Depends(require_role(["ADMIN", "MANAGER"])),
+    db: Session = Depends(get_db)
+):
+    """
+    创建工单的核心业务逻辑：
+    1. 校验客户、设备、工程师是否存在
+    2. 写入 work_orders 表
+    3. 写入 audit_logs 审计记录
+    """
+    # 直接写入数据库，不依赖原有 order_service（避免参数不匹配）
+    new_order = WorkOrder(
+        order_type=order_in.order_type,
+        customer_id=order_in.customer_id,
+        equipment_id=order_in.equipment_id,
+        technician_id=order_in.technician_id,
+        plan_date=order_in.plan_date,
+        status=OrderStatus.PENDING
+    )
+    db.add(new_order)
+    db.flush()
+
+    # 写入操作审计日志 - PRD 铁律：所有写操作必须记录
+    write_audit_log(
+        db=db,
+        user_id=current_user.id,
+        action="CREATE",
+        table_name="work_orders",
+        record_id=new_order.id,
+        new_value={
+            "order_type": new_order.order_type,
+            "equipment_id": new_order.equipment_id,
+            "technician_id": new_order.technician_id,
+            "plan_date": str(new_order.plan_date)
+        }
+    )
+
+    db.commit()
+    db.refresh(new_order)
+    return ok(data=new_order)
+
+
+@router.get("", summary="获取所有工单（管理员/经理视图）", description="支持按工单状态、工程师ID、客户ID筛选，用于PC后台工单管理看板。")
+async def get_orders(
+    status: Optional[str] = Query(None, description="按工单状态筛选，如 PENDING/IN_PROGRESS/COMPLETED"),
+    technician_id: Optional[int] = Query(None, description="按工程师ID筛选"),
+    customer_id: Optional[int] = Query(None, description="按客户ID筛选"),
+    current_user: User = Depends(require_role(["ADMIN", "MANAGER"])),
+    db: Session = Depends(get_db)
+):
+    """
+    管理员/经理查询工单列表：
+    支持多维度筛选，并附带关联的客户名、设备名、工程师名
+    """
+    query = db.query(WorkOrder)
+
+    # 按条件筛选
+    if status:
+        query = query.filter(WorkOrder.status == status)
+    if technician_id:
+        query = query.filter(WorkOrder.technician_id == technician_id)
+    if customer_id:
+        query = query.filter(WorkOrder.customer_id == customer_id)
+
+    orders = query.order_by(WorkOrder.created_at.desc()).all()
+
+    # 组装返回数据（关联客户名/设备名/工程师名）
+    from models.customer import Customer
+    from models.equipment import Equipment
+    from models.user import User as UserModel
+    result = []
+    for o in orders:
+        customer = db.query(Customer).filter(Customer.id == o.customer_id).first()
+        equipment = db.query(Equipment).filter(Equipment.id == o.equipment_id).first()
+        technician = db.query(UserModel).filter(UserModel.id == o.technician_id).first()
+        result.append({
+            "id": o.id,
+            "order_type": o.order_type,
+            "status": o.status.value if hasattr(o.status, 'value') else o.status,
+            "plan_date": str(o.plan_date),
+            "created_at": str(o.created_at),
+            "customer_id": o.customer_id,
+            "customer_name": customer.company_name if customer else "—",
+            "equipment_id": o.equipment_id,
+            "equipment_name": equipment.name if equipment else "—",
+            "technician_id": o.technician_id,
+            "technician_name": technician.name if technician else "—",
+        })
+
+    return ok(data=result)

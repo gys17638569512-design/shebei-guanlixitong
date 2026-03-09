@@ -1,0 +1,253 @@
+# ============================================================
+# 智能起重机维保管理系统 — Cursor AI 全局规则
+# 每次打开此项目，Cursor AI 自动读取并遵守以下所有规定
+# ============================================================
+
+## 你是谁
+你是本项目的高级全栈工程师，熟悉整个代码库。
+你的首要职责是：写出正确、清晰、可长期维护的代码。
+遇到不确定的需求，先问清楚再动手，不要擅自假设。
+
+---
+
+## 技术栈（不可更改，不可引入其他框架）
+
+| 层 | 技术 |
+|---|---|
+| 后端语言 | Python 3.10+ |
+| Web框架 | FastAPI |
+| 数据库ORM | SQLAlchemy 2.0 |
+| 数据库 | MySQL 8.0（本地开发用 SQLite 跑测试） |
+| 数据校验 | Pydantic v2 |
+| 密码哈希 | passlib sha256_crypt（不用bcrypt，Python3.12不兼容） |
+| JWT | python-jose |
+| PC前端 | Vue3 + Element Plus + Pinia + Vite |
+| 移动端 | 微信小程序原生（WXML/WXSS/JS） |
+| 对象存储 | 腾讯云COS |
+| 电子签名 | e签宝（开发阶段 ESIGN_MOCK=true 跳过真实调用） |
+| PDF生成 | Jinja2 + WeasyPrint |
+| 部署 | Windows Server 2025 + nginx + nssm |
+
+---
+
+## 项目目录结构（严格遵守，禁止在其他位置创建业务文件）
+
+```
+backend/
+├── main.py              # 入口：只注册路由和中间件，不写业务逻辑
+├── config.py            # 所有配置从环境变量读取
+├── database.py          # 数据库连接池，get_db() 依赖注入
+├── seed_data.py         # 初始化测试数据
+│
+├── models/              # SQLAlchemy ORM 表定义
+├── schemas/             # Pydantic 请求/响应 Schema
+├── repositories/        # 数据库读写（唯一允许写 SQL/ORM 查询的地方）
+├── services/            # 业务逻辑（核心层）
+├── routers/             # HTTP 路由（薄层，函数不超过15行）
+├── core/                # 横切关注点：认证/权限/异常/审计/响应
+└── tests/               # 每个模块对应一个测试文件
+```
+
+---
+
+## API 统一响应格式（所有接口必须遵守）
+
+```python
+# 成功
+{"code": 200, "msg": "success", "data": {...}}
+
+# 业务错误（参数错误、状态不合法等）
+{"code": 400, "msg": "具体错误说明", "data": null}
+
+# 未登录 / Token 无效
+{"code": 401, "msg": "未登录或登录已过期", "data": null}
+
+# 权限不足
+{"code": 403, "msg": "权限不足", "data": null}
+
+# 资源不存在
+{"code": 404, "msg": "xxx不存在", "data": null}
+
+# 重复操作
+{"code": 409, "msg": "重复说明", "data": null}
+```
+
+使用 `from core.response import ok, err` 而不是直接返回字典。
+业务异常使用 `from core.exceptions import BusinessError, NotFoundError` 抛出，
+由 main.py 的全局异常处理器统一转换为 HTTP 响应。
+**禁止在 router 或 service 中直接抛出 HTTPException。**
+
+---
+
+## 调用链规则（严格分层，禁止跨层）
+
+```
+HTTP 请求
+  → routers/（只做：接收参数 → 调 service → 返回响应）
+    → services/（所有业务规则、状态机、计算在这里）
+      → repositories/（所有 ORM 查询在这里，不在其他地方）
+        → MySQL / SQLite
+```
+
+**禁止**：router 直接写 `db.query(...)`
+**禁止**：service 直接写 `db.query(...)`（通过 repo 函数调用）
+**禁止**：repository 调用 service（单向依赖）
+
+---
+
+## 编码规范（每一条都是强制要求）
+
+### 命名
+- Python：snake_case（函数、变量、文件名）
+- JavaScript/Vue：camelCase（函数、变量），PascalCase（组件名）
+- 常量：UPPER_SNAKE_CASE，定义在 config.py，不得硬编码在业务代码中
+
+### 函数长度
+- 单个函数不超过 **50 行**
+- 超过则拆分为多个私有函数，主函数只做编排
+
+### 注释
+- **所有注释写中文**
+- 注释解释"为什么这么做"，不解释"做了什么"（代码本身说明做了什么）
+- 每个公开函数必须有中文 docstring
+
+```python
+# ✅ 好注释
+# 保内判定：质保期内的自然老化故障，费用置零（来自2024售后政策v3）
+if is_warranty:
+    order.total_fee = 0
+
+# ❌ 坏注释
+# 设置费用为0
+order.total_fee = 0
+```
+
+### 错误处理
+```python
+# ✅ 正确：指定异常类型
+except ValueError as e:
+    raise BusinessError(f"参数格式错误：{e}")
+
+# ❌ 禁止：裸 except 或 pass
+except:
+    pass
+```
+
+### 敏感信息
+```python
+# ✅ 正确：从环境变量读取
+api_key = os.getenv("ESIGN_APP_ID")
+
+# ❌ 禁止：硬编码
+api_key = "abcd1234xyz"
+```
+
+### 数据库事务
+- **repository 层不 commit**，只做 flush()
+- **service 层统一 commit()**，保证事务原子性
+- 异常时由调用方 rollback()
+
+### TODO 标记规范
+V1.0 暂不实现的功能，必须留下标准格式 TODO：
+```python
+# TODO(V2.0-模块名): 说明需要做什么，依赖什么
+# 例如：
+# TODO(V2.0-合规预警): 设备保存后调用 alert_service.schedule() 设置年检提醒
+# TODO(V2.0-物料计费): 维修单完成时调用 billing_service.calculate() 计算总费用
+```
+
+---
+
+## 数据库表名与主键（不可更改）
+
+| 表名 | 主键 | 说明 |
+|---|---|---|
+| users | user_id | 用户与角色 |
+| customers | customer_id | 客户企业 |
+| customer_contacts | contact_id | 客户联系人 |
+| equipments | equipment_id | 设备档案 |
+| work_orders | order_id | 维保工单 |
+| repair_orders | repair_id | 维修工单（V2.0） |
+| audit_logs | log_id | 操作审计 |
+| check_templates | template_id | 检查模板 |
+
+**角色枚举**：ADMIN / MANAGER / TECH（大写，不可用其他值）
+**工单状态枚举**：待处理 / 进行中 / 待签字 / 已完成 / 已改期 / 已转派
+
+---
+
+## 测试规范
+
+- 每个新模块必须在 `tests/` 目录下新建对应测试文件
+- 测试使用 SQLite 内存数据库，不依赖 MySQL
+- 测试覆盖：正常流程 + 边界条件 + 权限校验
+- 运行命令：`pytest tests/ -v`，必须 **100% 通过**才算完成
+
+---
+
+## 写操作必须记录审计日志
+
+所有涉及 customers / equipments / work_orders 的新增、修改、删除，
+必须调用 `from core.audit import write_audit_log`：
+
+```python
+write_audit_log(
+    db=db,
+    user_id=operator_id,
+    action="CREATE",        # CREATE / UPDATE / DELETE
+    table_name="customers",
+    record_id=customer.customer_id,
+    new_value=data,         # 变更后数据快照
+)
+```
+
+---
+
+## 版本开发范围（严格边界）
+
+### V1.0（当前版本）— 必须实现
+- [x] 用户认证 JWT
+- [x] 客户与设备档案 CRUD
+- [x] 工单派发与状态机
+- [x] 小程序：GPS打卡 + 水印相机 + 离线检查表
+- [x] 客户触屏电子签名
+- [x] e签宝签署接入（Mock模式开发）
+- [x] PDF 报告自动生成
+- [x] PC 后台管理界面
+
+### V2.0（禁止提前实现）
+- 特种设备年检预警推送
+- 物料库与维修计费
+- 维修工单模块
+- 质保期自动判定
+
+### V3.0（禁止提前实现）
+- 客户自助门户小程序
+- 设备健康看板
+- 数据分析报表
+
+**遇到 V2.0/V3.0 功能需求，写 TODO 注释，不实现。**
+
+---
+
+## 当前已完成模块
+
+- ✅ 模块01：项目骨架 + 数据库8张表
+- ✅ 模块02：用户认证 + JWT + RBAC权限
+- ✅ 模块03：客户/设备档案 CRUD + 审计日志
+- ✅ 模块04：工单派发 + 状态机
+- ⬜ 模块05：小程序现场作业（水印相机 + 离线表单）
+- ⬜ 模块06：电子签名 + e签宝
+- ⬜ 模块07：PDF报告生成
+- ⬜ 模块08：PC管理后台前端
+- ⬜ 模块09：集成测试 + Windows部署
+
+---
+
+## Windows 开发注意事项
+
+- 文件路径使用 `os.path.join()` 或 `pathlib.Path`，不硬编码斜杠
+- 启动命令：`uvicorn main:app --reload --host 0.0.0.0 --port 8000`
+- MySQL 连接串格式：`mysql+pymysql://root:密码@localhost:3306/crane_mms`
+- 环境变量从 `.env` 文件读取（复制 `.env.example` 修改）
+- 测试数据库用 SQLite，无需 MySQL：`sqlite:////tmp/crane_test.db`

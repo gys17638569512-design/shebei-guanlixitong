@@ -1,0 +1,61 @@
+from fastapi import APIRouter, Depends, Query
+from sqlalchemy.orm import Session
+
+from core.database import get_db
+from core.response import ok
+from schemas.equipment import EquipmentCreate, EquipmentUpdate, EquipmentResponse
+from services.equipment_service import EquipmentService
+from core.permissions import get_current_user
+from models.user import User
+
+router = APIRouter(
+    prefix="/equipments",
+    tags=["设备档案"]
+)
+
+@router.post("", summary="新建设备并保存部件清单")
+def create_equipment(
+    equipment_in: EquipmentCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # 写操作，传入 user_id 以记录审计日志
+    service = EquipmentService(db)
+    equipment = service.create_equipment(equipment_in, current_user.id)
+    return ok(data=equipment)
+
+@router.get("/templates", summary="根据大类和型式智能获取部件清单模板")
+def get_equipment_templates(
+    category: str = Query(..., description="设备大类"),
+    model_type: str = Query(..., description="型式"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # 读操作，无需审计日志
+    service = EquipmentService(db)
+    templates = service.get_equipment_templates(category, model_type)
+    return ok(data=templates)
+
+@router.get("/{equipment_id}", summary="获取设备档案详情（含部件清单）")
+def get_equipment_detail(
+    equipment_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # 读操作，无需审计日志
+    service = EquipmentService(db)
+    equipment = service.get_equipment_detail(equipment_id)
+    return ok(data=equipment)
+
+@router.put("/{equipment_id}", summary="更新设备档案信息")
+def update_equipment(
+    equipment_id: int,
+    equipment_in: EquipmentUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # 写操作，传入 user_id 以记录审计日志
+    service = EquipmentService(db)
+    equipment = service.update_equipment(equipment_id, equipment_in, current_user.id)
+    return ok(data=equipment)
+

@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+sqlalchemy
+pymysql
+alembic
+python-jose[cryptography]
+python-multipart
+python-dotenv
+passlib[bcrypt]
+cos-python-sdk-v5
+Pillow
+weasyprint
+jinja2
