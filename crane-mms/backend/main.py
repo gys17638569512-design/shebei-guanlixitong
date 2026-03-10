@@ -22,7 +22,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from core.exceptions import BusinessError, UnauthorizedError, ForbiddenError, NotFoundError, ConflictError
 from core.response import err
 from routers import auth, order, upload, report, user, customer, equipment, part, audit_log, stats
-from routers import portal, repair
+from routers import portal, repair, template
 import uvicorn
 
 description = """
@@ -61,6 +61,7 @@ tags_metadata = [
     {"name": "文件上传", "description": "云端文件与图片归档服务。"},
     {"name": "报告生成", "description": "维保结单后可触达客户的 PDF 维修报告单生成引擎。"},
     {"name": "安全审计", "description": "系统痕迹追踪：记录所有敏感数据的增删改记录。"},
+    {"name": "检查模板管理", "description": "标准作业程序管理：维护各型号起重机的检查标准模板。"},
     {"name": "统计中心", "description": "数据驾驶舱：聚合全业务线指标，透视运营效率。"}
 ]
 
@@ -141,6 +142,7 @@ app.include_router(audit_log.router, prefix="/api/v1")
 app.include_router(stats.router, prefix="/api/v1")
 app.include_router(portal.router, prefix="/api/v1")
 app.include_router(repair.router, prefix="/api/v1")
+app.include_router(template.router, prefix="/api/v1")
 
 @app.get("/", tags=["默认连接"], summary="查询服务根节点状态")
 def read_root():

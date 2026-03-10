@@ -106,6 +106,18 @@ const router = createRouter({
           name: 'auditLog',
           component: () => import('../views/system/AuditLog.vue'),
           meta: { requiresRole: ['ADMIN'] }
+        },
+        {
+          path: 'repairs',
+          name: 'repairList',
+          component: () => import('../views/repairs/RepairList.vue'),
+          meta: { requiresRole: ['ADMIN', 'MANAGER', 'TECH'] }
+        },
+        {
+          path: 'repairs/:id',
+          name: 'repairDetail',
+          component: () => import('../views/repairs/RepairDetail.vue'),
+          meta: { requiresRole: ['ADMIN', 'MANAGER', 'TECH'] }
         }
       ]
     }

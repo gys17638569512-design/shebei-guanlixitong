@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     # JWT配置
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24小时，满足现场长时间作业需求
     
     # 腾讯云COS配置
     COS_SECRET_ID: Optional[str] = None

@@ -151,31 +151,11 @@ async def get_orders(
     current_user: User = Depends(require_role(["ADMIN", "MANAGER"])),
     db: Session = Depends(get_db)
 ):
-    """
-    管理员/经理查询工单列表：
-    支持多维度筛选，并附带关联的客户名、设备名、工程师名
-    """
-    query = db.query(WorkOrder)
-
-    # 按条件筛选
-    if status:
-        query = query.filter(WorkOrder.status == status)
-    if technician_id:
-        query = query.filter(WorkOrder.technician_id == technician_id)
-    if customer_id:
-        query = query.filter(WorkOrder.customer_id == customer_id)
-
-    orders = query.order_by(WorkOrder.created_at.desc()).all()
-
-    # 组装返回数据（关联客户名/设备名/工程师名）
-    from models.customer import Customer
-    from models.equipment import Equipment
-    from models.user import User as UserModel
+    from repositories.work_order_repo import get_orders_with_relations
+    orders = get_orders_with_relations(db, status, technician_id, customer_id)
+    
     result = []
     for o in orders:
-        customer = db.query(Customer).filter(Customer.id == o.customer_id).first()
-        equipment = db.query(Equipment).filter(Equipment.id == o.equipment_id).first()
-        technician = db.query(UserModel).filter(UserModel.id == o.technician_id).first()
         result.append({
             "id": o.id,
             "order_type": o.order_type,
@@ -183,13 +163,12 @@ async def get_orders(
             "plan_date": str(o.plan_date),
             "created_at": str(o.created_at),
             "customer_id": o.customer_id,
-            "customer_name": customer.company_name if customer else "—",
+            "customer_name": o.customer.company_name if o.customer else "—",
             "equipment_id": o.equipment_id,
-            "equipment_name": equipment.name if equipment else "—",
+            "equipment_name": o.equipment.name if o.equipment else "—",
             "technician_id": o.technician_id,
-            "technician_name": technician.name if technician else "—",
+            "technician_name": o.technician.name if o.technician else "—",
         })
-
     return ok(data=result)
 
 
@@ -242,4 +221,4 @@ async def batch_create_orders(
         created.append(new_order.id)
 
     db.commit()
-    return ok(data={"created_count": len(created), "skipped_count": len(skipped), "skipped_items": skipped}, msg=f"成功创建 {len(created)} 条工单")
+    return ok(data={"created_count": len(created), "skipped_count": len(skipped), "skipped_items": skipped}, msg=f"成功创建 {len(created)} 条工单")

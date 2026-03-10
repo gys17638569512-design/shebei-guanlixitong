@@ -46,6 +46,7 @@
         </view>
         
         <view class="btn-group">
+          <button class="btn-inspection" @click="goToInspection">开始现场检查</button>
           <button class="btn-sub" @click="handlePushSign">推送客户签字</button>
           <button class="btn-main" @click="handleComplete">确认直接完工</button>
         </view>
@@ -131,6 +132,12 @@ const handleComplete = async () => {
         } catch (err) {}
       }
     }
+  })
+}
+
+const goToInspection = () => {
+  uni.navigateTo({
+    url: `/pages/inspection/inspection?id=${order.value.id}&templateId=${order.value.template_id || 1}`
   })
 }
 
@@ -253,6 +260,14 @@ const getStatusDesc = (s: string) => {
   margin-top: 40rpx;
   display: flex;
   gap: 20rpx;
+}
+
+.btn-inspection {
+  flex: 1.5;
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+  font-size: 28rpx;
+  border-radius: 12rpx;
 }
 
 .btn-sub {

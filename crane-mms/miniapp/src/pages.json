@@ -19,6 +19,18 @@
       "style": {
         "navigationBarTitleText": "工单详情"
       }
+    },
+    {
+      "path": "pages/inspection/inspection",
+      "style": {
+        "navigationBarTitleText": "现场检查表"
+      }
+    },
+    {
+      "path": "pages/signature/signature",
+      "style": {
+        "navigationBarTitleText": "客户签字确认"
+      }
     }
   ],
   "globalStyle": {

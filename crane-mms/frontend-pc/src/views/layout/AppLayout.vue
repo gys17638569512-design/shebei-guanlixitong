@@ -83,6 +83,19 @@
         </router-link>
 
         <router-link
+          to="/repairs"
+          class="nav-item"
+          :class="{ active: isActive('/repairs') }"
+        >
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M14.7 10.3a2.828 2.828 0 11-4-4l3.1-3.1a2 2 0 012.8 0l1.2 1.2a2 2 0 010 2.8l-3.1 3.1zM5 21l3-3m-1-5l5 5"/>
+            </svg>
+          </span>
+          <span class="nav-label">维修工单</span>
+        </router-link>
+
+        <router-link
           v-if="hasPermission(['ADMIN', 'MANAGER'])"
           to="/orders/batch"
           class="nav-item"
@@ -257,6 +270,7 @@ const pageNameMap = {
   '/customers': '客户管理',
   '/equipments': '设备档案',
   '/orders': '工单中心',
+  '/repairs': '故障维修',
   '/system/users': '人员管理',
   '/system/audit': '安全审计',
   '/system/reports': '集中报告'

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
 import { useAuthStore } from "./stores/auth";
+import { processQueue } from "./utils/offline-queue";
 
 onLaunch(() => {
   console.log("App Launch");
@@ -12,6 +13,14 @@ onLaunch(() => {
       url: "/pages/login/login"
     });
   }
+
+  // 监听网络状态变化
+  uni.onNetworkStatusChange((res) => {
+    if (res.isConnected) {
+      console.log('[网络] 已恢复连接，开始同步离线队列');
+      processQueue();
+    }
+  });
 });
 
 onShow(() => {

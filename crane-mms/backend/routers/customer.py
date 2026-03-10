@@ -22,7 +22,7 @@ def get_customers(
 ):
     # 读操作，无需审计日志
     service = CustomerService(db)
-    customers = service.get_customer_list(search)
+    customers = service.get_customer_list(search, current_user)
     return ok(data=customers)
 
 @router.post("", summary="新建客户及关联联系人")

@@ -23,6 +23,11 @@ def create_repair_order(
         
     db_order = RepairOrder(**payload.model_dump())
     db.add(db_order)
+    db.flush()
+    
+    from core.audit import write_audit_log
+    write_audit_log(db, current_user.id, "CREATE", "repair_orders", db_order.id, payload.model_dump())
+    
     db.commit()
     db.refresh(db_order)
     return ok(data=db_order)
@@ -73,6 +78,10 @@ def update_repair_order(
     for k, v in update_data.items():
         setattr(order, k, v)
         
+    db.flush()
+    from core.audit import write_audit_log
+    write_audit_log(db, current_user.id, "UPDATE", "repair_orders", order.id, update_data)
+    
     db.commit()
     db.refresh(order)
     return ok(data=order)

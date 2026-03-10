@@ -7,13 +7,36 @@ class CustomerService:
     def __init__(self, db: Session):
         self.repo = CustomerRepository(db)
 
-    def get_customer_list(self, search: str = None):
-        customers = self.repo.get_customers(search)
+    def get_customer_list(self, search: str = None, current_user=None):
+        query = self.repo.db.query(Customer)
+        
+        # MANAGER 只能看自己负责的客户（通过工单关联判断）
+        if current_user and current_user.role == "MANAGER":
+            # 通过已有工单关联找到该经理相关的客户ID
+            from models.work_order import WorkOrder
+            from models.user import User
+            managed_customer_ids = self.repo.db.query(WorkOrder.customer_id).filter(
+                WorkOrder.technician_id.in_(
+                    self.repo.db.query(User.id).filter(User.manager_id == current_user.id)
+                )
+            ).distinct().all()
+            customer_ids = [cid for (cid,) in managed_customer_ids]
+            if customer_ids:
+                query = query.filter(Customer.id.in_(customer_ids))
+            else:
+                # 如果该经理名下暂时没有关联的工单/客户，返回空列表
+                return []
+        
+        if search:
+            query = query.filter(
+                (Customer.company_name.contains(search)) |
+                (Customer.contact_name.contains(search))
+            )
+        
+        customers = query.all()
         
         # 为了兼容前端 CustomerList 页面，我们附带上从属于它的联系人列表
         for customer in customers:
-            # SQLAlchemy 的关系可能会延迟加载或者没设置 back_populates 到 contact
-            # 因为 models/customer.py 里 Contact 表没有声明关联。我们手动查询一下
             from models.customer import Contact
             contacts = self.repo.db.query(Contact).filter(Contact.customer_id == customer.id).all()
             customer.contacts = contacts

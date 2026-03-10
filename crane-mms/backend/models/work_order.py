@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Date, DateTime, Enum
+from sqlalchemy import Column, Integer, String, Date, DateTime, ForeignKey, Enum, Float, Text, Enum
 from sqlalchemy.orm import relationship
 from core.database import Base
 import enum
@@ -24,6 +24,10 @@ class WorkOrder(Base):
     technician_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     plan_date = Column(Date, nullable=False)
     status = Column(Enum(OrderStatus), default=OrderStatus.PENDING, nullable=False)
+    
+    template_id = Column(Integer, ForeignKey("check_templates.id"), nullable=True, comment="派单时锁定的检查模板ID")
+    template_version = Column(Integer, nullable=True, comment="派单时锁定的模板版本号，防止模板变更影响历史记录")
+    
     checkin_time = Column(DateTime)
     checkin_address = Column(Text)
     checkin_photo = Column(String(255))
