@@ -1,86 +1,100 @@
 <template>
   <div class="equipment-form">
-    <el-page-header @back="goBack" :title="isEdit ? '返回' : '返回'" style="margin-bottom: 20px;">
-      <template #content>
-        <span class="text-large font-600 mr-3"> {{ isEdit ? '编辑设备档案' : '新建设备档案' }} </span>
-      </template>
-    </el-page-header>
+    <!-- 页面标题 -->
+    <div class="page-header">
+      <div class="header-left">
+        <el-button @click="goBack" circle class="back-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+        </el-button>
+        <div class="title-group">
+          <h1 class="page-title">{{ isEdit ? '编辑设备档案' : '新建设备档案' }}</h1>
+          <p class="page-subtitle">{{ isEdit ? '修改现有设备的详细技术参数与部件清单' : '录入新设备的基础信息及核心技术参数' }}</p>
+        </div>
+      </div>
+    </div>
 
-    <el-card shadow="never" v-loading="loading">
-      <el-form :model="form" :rules="rules" ref="formRef" label-width="120px" class="form-container">
-        <el-divider content-position="left">基础类别信息</el-divider>
-        <el-row :gutter="20">
-          <el-col :span="12">
+    <el-form :model="form" :rules="rules" ref="formRef" label-position="top" class="form-wrapper" v-loading="loading">
+      
+      <!-- 第一部分：基础信息 -->
+      <div class="form-card">
+        <div class="card-section-title">
+          <span class="icon">🏗️</span> 基础类别与名称
+        </div>
+        <el-row :gutter="24">
+          <el-col :span="8">
             <el-form-item label="设备大类" prop="category">
-              <el-select v-model="form.category" placeholder="选择设备大类" @change="handleCategoryChange" style="width: 100%">
+              <el-select v-model="form.category" placeholder="请选择" @change="handleCategoryChange" style="width: 100%">
                 <el-option label="桥式起重机" value="桥式起重机" />
                 <el-option label="门式起重机" value="门式起重机" />
                 <el-option label="悬臂起重机" value="悬臂起重机" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="型式" prop="model_type">
-              <el-select v-model="form.model_type" placeholder="选择型式" style="width: 100%">
+          <el-col :span="8">
+            <el-form-item label="设备型式" prop="model_type">
+              <el-select v-model="form.model_type" placeholder="请先选择大类" style="width: 100%" :disabled="!form.category">
                 <el-option v-for="type in availableModelTypes" :key="type" :label="type" :value="type" />
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-
-        <el-divider content-position="left">基础参数输入</el-divider>
-        <el-row :gutter="20">
           <el-col :span="8">
             <el-form-item label="设备名称" prop="name">
               <el-input v-model="form.name" placeholder="请输入设备名称" />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="吨位" prop="tonnage">
-              <el-input v-model="form.tonnage" placeholder="例如: 10t" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="跨度" prop="span">
-              <el-input v-model="form.span" placeholder="例如: 16m" />
-            </el-form-item>
-          </el-col>
         </el-row>
-        
+      </div>
+
+      <!-- 第二部分：技术参数 -->
+      <div class="form-card">
+        <div class="card-section-title">
+          <span class="icon">📐</span> 关键技术参数
+        </div>
         <el-row :gutter="20">
-          <el-col :span="8">
-            <el-form-item label="起升高度" prop="lifting_height">
-              <el-input v-model="form.lifting_height" placeholder="例如: 8m" />
+          <el-col :span="6">
+            <el-form-item label="吨位 (Tonnage)" prop="tonnage">
+              <el-input v-model="form.tonnage" placeholder="例: 10t" />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
+            <el-form-item label="跨度 (Span)" prop="span">
+              <el-input v-model="form.span" placeholder="例: 16.5m" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="起升高度" prop="lifting_height">
+              <el-input v-model="form.lifting_height" placeholder="例: 9m" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item label="工作级别" prop="work_class">
-              <el-select v-model="form.work_class" placeholder="选择工作级别" style="width: 100%">
-                <el-option label="A3" value="A3" />
-                <el-option label="A4" value="A4" />
-                <el-option label="A5" value="A5" />
-                <el-option label="A6" value="A6" />
-                <el-option label="A7" value="A7" />
+              <el-select v-model="form.work_class" placeholder="选择" style="width: 100%">
+                <el-option v-for="v in ['A3','A4','A5','A6','A7','A8']" :key="v" :label="v" :value="v" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="安装位置" prop="installation_location">
-              <el-input v-model="form.installation_location" placeholder="例如: 一号车间" />
-            </el-form-item>
-          </el-col>
         </el-row>
+        <el-form-item label="安装/运行位置" prop="installation_location">
+          <el-input v-model="form.installation_location" placeholder="例如: 总装二号车间 3号线" />
+        </el-form-item>
+      </div>
 
-        <el-divider content-position="left">特检与质保信息</el-divider>
-        <el-row :gutter="20">
+      <!-- 第三部分：特检日期 -->
+      <div class="form-card">
+        <div class="card-section-title">
+          <span class="icon">📅</span> 维保与特检计划
+        </div>
+        <el-row :gutter="24">
           <el-col :span="8">
             <el-form-item label="上次特检日期" prop="last_inspection_date">
               <el-date-picker v-model="form.last_inspection_date" type="date" placeholder="选择日期" value-format="YYYY-MM-DD" style="width: 100%" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="下次特检日期" prop="next_inspection_date">
-              <el-date-picker v-model="form.next_inspection_date" type="date" placeholder="选择日期" value-format="YYYY-MM-DD" style="width: 100%" />
+            <el-form-item label="下次特检预警日" prop="next_inspection_date">
+              <el-date-picker v-model="form.next_inspection_date" type="date" placeholder="预警日期" value-format="YYYY-MM-DD" style="width: 100%" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -89,44 +103,57 @@
             </el-form-item>
           </el-col>
         </el-row>
+      </div>
 
-        <el-divider content-position="left">
-          部件清单
-          <el-button type="success" size="small" plain @click="fetchTemplates" style="margin-left: 20px;" :loading="templateLoading">
-            智能填充部件清单
+      <!-- 第四部分：部件清单 -->
+      <div class="form-card parts-card">
+        <div class="card-section-title flex-between">
+          <span><span class="icon">🔩</span> 核心部件清单</span>
+          <el-button type="success" size="small" plain @click="fetchTemplates" :loading="templateLoading">
+            ✨ 智能填充部件模板
           </el-button>
-        </el-divider>
-        
-        <el-table :data="form.parts" style="width: 100%" border size="small">
-          <el-table-column label="部件名称" width="200">
-            <template #default="{ row, $index }">
-              <el-input v-model="row.part_name" placeholder="部件名" />
-            </template>
-          </el-table-column>
-          <el-table-column label="规格参数">
-            <template #default="{ row }">
-              <el-input v-model="row.specification" placeholder="规格如: Ф12mm" />
-            </template>
-          </el-table-column>
-          <el-table-column label="数量" width="150">
-            <template #default="{ row }">
-              <el-input-number v-model="row.quantity" :min="1" />
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" width="100" align="center">
-            <template #default="{ $index }">
-              <el-button type="danger" icon="Delete" circle plain @click="removePart($index)" />
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-button class="mt-2" type="primary" plain icon="Plus" @click="addPart">手动添加一行</el-button>
-
-        <div style="margin-top: 40px; text-align: center;">
-          <el-button @click="goBack" size="large">取消</el-button>
-          <el-button type="primary" size="large" @click="submitForm" :loading="submitLoading">保存设备档案</el-button>
         </div>
-      </el-form>
-    </el-card>
+        
+        <div class="parts-table-wrapper">
+          <el-table :data="form.parts" style="width: 100%" size="small">
+            <el-table-column label="部件名称" width="220">
+              <template #default="{ row }">
+                <el-input v-model="row.part_name" placeholder="部件名" />
+              </template>
+            </el-table-column>
+            <el-table-column label="详细规格/参数">
+              <template #default="{ row }">
+                <el-input v-model="row.specification" placeholder="如: Ф16mm, 长度200m" />
+              </template>
+            </el-table-column>
+            <el-table-column label="数量" width="140" align="center">
+              <template #default="{ row }">
+                <el-input-number v-model="row.quantity" :min="1" size="small" style="width: 100px" />
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="80" align="center">
+              <template #default="{ $index }">
+                <el-button type="danger" link @click="removePart($index)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          
+          <div class="table-add-btn" @click="addPart">
+            <span>＋ 手动增加部件行</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部操作栏 -->
+      <div class="form-footer">
+        <el-button @click="goBack" size="large" style="width: 120px">取消</el-button>
+        <el-button type="primary" size="large" @click="submitForm" :loading="submitLoading" style="width: 200px">
+          {{ isEdit ? '保存所有修改' : '确认并录入档案' }}
+        </el-button>
+      </div>
+    </el-form>
   </div>
 </template>
 
@@ -150,27 +177,19 @@ const formRef = ref(null)
 
 const form = reactive({
   customer_id: customerId || null,
-  category: '',
-  model_type: '',
-  name: '',
-  tonnage: '',
-  span: '',
-  lifting_height: '',
-  work_class: '',
-  installation_location: '',
-  last_inspection_date: null,
-  next_inspection_date: null,
-  warranty_end_date: null,
+  category: '', model_type: '', name: '',
+  tonnage: '', span: '', lifting_height: '',
+  work_class: '', installation_location: '',
+  last_inspection_date: null, next_inspection_date: null, warranty_end_date: null,
   parts: []
 })
 
 const rules = {
   category: [{ required: true, message: '请选择大类', trigger: 'change' }],
   model_type: [{ required: true, message: '请选择型式', trigger: 'change' }],
-  name: [{ required: true, message: '请输入设备名称', trigger: 'blur' }]
+  name: [{ required: true, message: '请输入名称', trigger: 'blur' }]
 }
 
-// 联动数据
 const typeMap = {
   '桥式起重机': ['QD型', 'LDA型', 'LH型', 'QZ型'],
   '门式起重机': ['MH型', 'MG型', 'BMH型'],
@@ -178,47 +197,33 @@ const typeMap = {
 }
 const availableModelTypes = computed(() => typeMap[form.category] || [])
 
-const handleCategoryChange = () => {
-  form.model_type = ''
-}
-
-const addPart = () => {
-  form.parts.push({ part_name: '', specification: '', quantity: 1 })
-}
-
-const removePart = (index) => {
-  form.parts.splice(index, 1)
-}
+const handleCategoryChange = () => { form.model_type = '' }
+const addPart = () => form.parts.push({ part_name: '', specification: '', quantity: 1 })
+const removePart = (i) => form.parts.splice(i, 1)
 
 const fetchTemplates = async () => {
   if (!form.category || !form.model_type) {
-    ElMessage.warning('请先选择设备大类和型式')
+    ElMessage.warning('请先完成大类和型式的选择')
     return
   }
   templateLoading.value = true
   try {
     const res = await getEquipmentTemplates({ category: form.category, model_type: form.model_type })
-    if (res && res.length) {
-      form.parts = res.map(t => ({
-        part_name: t.part_name,
-        specification: t.specification || '',
-        quantity: 1
-      }))
-      ElMessage.success('已自动填充常见部件列表')
+    if (res?.length) {
+      form.parts = res.map(t => ({ part_name: t.part_name, specification: t.specification || '', quantity: 1 }))
+      ElMessage.success('✅ 已根据型号预填充核心部件清单')
     } else {
-      ElMessage.info('该型号暂无可填充部件模板')
+      ElMessage.info('暂无对应型号的预设模板')
     }
-  } catch (err) {
-    // mock fallback
+  } catch {
+    // 降级 MOCK 数据
     form.parts = [
-      { part_name: '钢丝绳', specification: '', quantity: 1 },
-      { part_name: '吊钩', specification: '', quantity: 1 },
-      { part_name: '减速器', specification: '', quantity: 1 }
+      { part_name: '控制柜', specification: '标准配置', quantity: 1 },
+      { part_name: '钢丝绳', specification: 'Ф12mm/14mm', quantity: 1 },
+      { part_name: '核心制动器', specification: '电磁/液压', quantity: 2 }
     ]
-    ElMessage.success('已自动填充通用部件模板(Mock)')
-  } finally {
-    templateLoading.value = false
-  }
+    ElMessage.success('已应用通用部件模板')
+  } finally { templateLoading.value = false }
 }
 
 const loadData = async () => {
@@ -226,19 +231,11 @@ const loadData = async () => {
   loading.value = true
   try {
     const res = await getEquipmentDetail(equipmentId)
-    if (res) {
-      Object.assign(form, res)
-    }
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loading.value = false
-  }
+    if (res) Object.assign(form, res)
+  } finally { loading.value = false }
 }
 
-const goBack = () => {
-  router.back()
-}
+const goBack = () => router.back()
 
 const submitForm = async () => {
   if (!formRef.value) return
@@ -248,34 +245,80 @@ const submitForm = async () => {
       try {
         if (isEdit.value) {
           await updateEquipment(equipmentId, form)
-          ElMessage.success('更新设备成功')
+          ElMessage.success('✅ 设备档案已成功更新')
         } else {
           await createEquipment(form)
-          ElMessage.success('创建设备成功')
+          ElMessage.success('✅ 新设备档案录入成功')
         }
         goBack()
-      } catch (err) {
-        console.warn(err)
-      } finally {
-        submitLoading.value = false
-      }
+      } finally { submitLoading.value = false }
     }
   })
 }
 
-onMounted(() => {
-  if (isEdit.value) {
-    loadData()
-  }
-})
+onMounted(() => { if (isEdit.value) loadData() })
 </script>
 
 <style scoped>
-.form-container {
-  max-width: 1000px;
-  margin: 0 auto;
+.equipment-form { padding: 0; }
+
+.header-left { display: flex; align-items: center; gap: 16px; }
+.back-btn { 
+  border-color: var(--color-border); 
+  color: var(--color-text-secondary);
 }
-.mt-2 {
-  margin-top: 10px;
+.back-btn:hover { color: var(--color-primary); border-color: var(--color-primary); }
+
+.form-wrapper { max-width: 1000px; margin: 0 auto; }
+
+.form-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border-light);
 }
+
+.card-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-section-title .icon { font-size: 18px; }
+.card-section-title.flex-between { justify-content: space-between; margin-bottom: 16px; }
+
+.parts-card { padding: 20px 0 0; }
+.parts-card .card-section-title { padding: 0 24px; }
+
+.parts-table-wrapper { border-top: 1px solid var(--color-border-light); }
+.table-add-btn {
+  padding: 14px;
+  text-align: center;
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  background: #fafbfc;
+  transition: var(--transition-fast);
+}
+.table-add-btn:hover { background: var(--color-primary-light); }
+
+.form-footer {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 40px 0 60px;
+}
+
+:deep(.el-form-item__label) { 
+  font-size: 13px !important; 
+  color: var(--color-text-secondary) !important;
+  margin-bottom: 6px !important;
+}
+:deep(.el-divider__text) { background: var(--color-bg-page); }
 </style>
