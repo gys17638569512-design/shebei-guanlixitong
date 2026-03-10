@@ -1,0 +1,33 @@
+/* CSS Reset & Variable Baseline */
+:root {
+  --van-primary-color: #1989fa;
+  --van-background-2: #f7f8fa;
+  --van-font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica,
+    Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei',
+    sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--van-font-family);
+  background-color: var(--van-background-2);
+  color: #323233;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+#app {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}

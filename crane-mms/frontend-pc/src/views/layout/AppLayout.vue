@@ -22,6 +22,21 @@
       <nav class="sidebar-nav">
         <router-link
           v-if="hasPermission(['ADMIN', 'MANAGER'])"
+          to="/dashboard"
+          class="nav-item"
+          :class="{ active: isActive('/dashboard') }"
+        >
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </span>
+          <span class="nav-label">控制看板</span>
+        </router-link>
+
+        <router-link
+          v-if="hasPermission(['ADMIN', 'MANAGER'])"
           to="/customers"
           class="nav-item"
           :class="{ active: isActive('/customers') }"
@@ -39,10 +54,9 @@
 
         <router-link
           v-if="hasPermission(['ADMIN', 'MANAGER'])"
-          to="/customers"
+          to="/equipments"
           class="nav-item"
           :class="{ active: isActive('/equipments') }"
-          @click.prevent="router.push('/customers')"
         >
           <span class="nav-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -57,7 +71,7 @@
         <router-link
           to="/orders"
           class="nav-item"
-          :class="{ active: isActive('/orders') }"
+          :class="{ active: route.path === '/orders' }"
         >
           <span class="nav-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -69,10 +83,25 @@
         </router-link>
 
         <router-link
+          v-if="hasPermission(['ADMIN', 'MANAGER'])"
+          to="/orders/batch"
+          class="nav-item"
+          :class="{ active: isActive('/orders/batch') }"
+        >
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="4" width="18" height="18" rx="2"/>
+              <path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>
+            </svg>
+          </span>
+          <span class="nav-label">批量排期</span>
+        </router-link>
+
+        <router-link
           v-if="hasPermission(['ADMIN'])"
           to="/system/users"
           class="nav-item"
-          :class="{ active: isActive('/system') }"
+          :class="{ active: isActive('/system/users') }"
         >
           <span class="nav-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -81,6 +110,51 @@
             </svg>
           </span>
           <span class="nav-label">人员管理</span>
+        </router-link>
+
+        <router-link
+          v-if="hasPermission(['ADMIN', 'MANAGER'])"
+          to="/system/parts"
+          class="nav-item"
+          :class="{ active: isActive('/system/parts') }"
+        >
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/>
+              <line x1="7" y1="7" x2="7.01" y2="7"/>
+            </svg>
+          </span>
+          <span class="nav-label">备件库</span>
+        </router-link>
+
+        <router-link
+          v-if="hasPermission(['ADMIN'])"
+          to="/system/audit"
+          class="nav-item"
+          :class="{ active: isActive('/system/audit') }"
+        >
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M12 8v4M12 16h.01"/>
+            </svg>
+          </span>
+          <span class="nav-label">安全审计</span>
+        </router-link>
+
+        <router-link
+          v-if="hasPermission(['ADMIN', 'MANAGER'])"
+          to="/system/reports"
+          class="nav-item"
+          :class="{ active: isActive('/system/reports') }"
+        >
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+          </span>
+          <span class="nav-label">集中报告</span>
         </router-link>
       </nav>
 
@@ -109,6 +183,40 @@
           <span class="page-name">{{ currentPageName }}</span>
         </div>
         <div class="topbar-right">
+          <!-- 通知铃铛 -->
+          <el-popover
+            placement="bottom-end"
+            width="320"
+            trigger="click"
+            popper-class="notification-popover"
+          >
+            <template #reference>
+              <div class="notification-bell">
+                <el-badge :value="notifications.length" :hidden="notifications.length === 0" :max="99">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 01-3.46 0"/>
+                  </svg>
+                </el-badge>
+              </div>
+            </template>
+            <div class="notification-list">
+              <div class="notif-header">
+                <span>消息通知</span>
+                <span class="notif-count" v-if="notifications.length">{{ notifications.length }} 条</span>
+              </div>
+              <div class="notif-body">
+                <div v-if="notifications.length === 0" class="notif-empty">暂无新通知</div>
+                <div v-for="n in notifications" :key="n.id" class="notif-item" @click="handleNotifClick(n)">
+                  <div class="notif-icon" :class="`icon-${n.level}`">!</div>
+                  <div class="notif-content">
+                    <div class="notif-title">{{ n.title }}</div>
+                    <div class="notif-msg">{{ n.message }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </el-popover>
           <div class="topbar-time">{{ currentTime }}</div>
         </div>
       </header>
@@ -126,6 +234,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
 import { ElMessage } from 'element-plus'
+import request from '@/utils/request'
 
 const router = useRouter()
 const route = useRoute()
@@ -144,10 +253,13 @@ const isActive = (path) => {
 }
 
 const pageNameMap = {
+  '/dashboard': '控制看板',
   '/customers': '客户管理',
   '/equipments': '设备档案',
   '/orders': '工单中心',
-  '/system': '人员管理',
+  '/system/users': '人员管理',
+  '/system/audit': '安全审计',
+  '/system/reports': '集中报告'
 }
 
 const currentPageName = computed(() => {
@@ -176,9 +288,22 @@ const updateTime = () => {
   currentTime.value = now.toLocaleTimeString('zh-CN', { hour12: false })
 }
 
+const notifications = ref([])
+const fetchNotifications = async () => {
+  try {
+    const res = await request.get('/stats/notifications')
+    notifications.value = res || []
+  } catch (err) { }
+}
+
+const handleNotifClick = (n) => {
+  if (n.link) router.push(n.link)
+}
+
 onMounted(() => {
   updateTime()
   timer = setInterval(updateTime, 1000)
+  fetchNotifications()
 })
 onUnmounted(() => clearInterval(timer))
 </script>
@@ -370,4 +495,89 @@ onUnmounted(() => clearInterval(timer))
 .main-content::-webkit-scrollbar { width: 6px; }
 .main-content::-webkit-scrollbar-track { background: transparent; }
 .main-content::-webkit-scrollbar-thumb { background: #d0d0d0; border-radius: 3px; }
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.notification-bell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--color-text-regular);
+  transition: all 0.2s;
+}
+.notification-bell:hover {
+  background: var(--color-bg-page);
+  color: var(--color-primary);
+}
+.notification-bell svg { width: 20px; height: 20px; }
+
+:deep(.notification-popover) {
+  padding: 0 !important;
+}
+.notification-list {
+  display: flex;
+  flex-direction: column;
+}
+.notif-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+.notif-count {
+  font-size: 12px;
+  color: var(--color-primary);
+  background: var(--color-primary-light-9);
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+.notif-body {
+  max-height: 300px;
+  overflow-y: auto;
+}
+.notif-empty {
+  padding: 30px;
+  text-align: center;
+  color: var(--color-text-placeholder);
+  font-size: 13px;
+}
+.notif-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border-light);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.notif-item:hover {
+  background: #f5f7fa;
+}
+.notif-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+  color: #fff;
+  flex-shrink: 0;
+}
+.icon-danger { background: var(--color-danger); }
+.icon-warning { background: var(--color-warning); }
+.icon-info { background: var(--color-info); }
+.notif-content { flex: 1; }
+.notif-title { font-size: 13px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 4px; }
+.notif-msg { font-size: 12px; color: var(--color-text-secondary); line-height: 1.4; }
 </style>

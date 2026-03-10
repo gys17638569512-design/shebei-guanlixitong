@@ -41,6 +41,21 @@ class WorkOrder(Base):
     equipment = relationship("Equipment", back_populates="work_orders", lazy="select")
     technician = relationship("User", back_populates="work_orders", lazy="select")
     inspection_items = relationship("InspectionItem", back_populates="work_order", lazy="select")
+    used_parts = relationship("WorkOrderPart", back_populates="work_order", lazy="select")
+
+
+class WorkOrderPart(Base):
+    """工单与备件的多对多关联并记录消耗数量"""
+    __tablename__ = "work_order_parts"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    work_order_id = Column(Integer, ForeignKey("work_orders.id"), nullable=False)
+    part_id = Column(Integer, ForeignKey("parts.id"), nullable=False)
+    quantity = Column(Integer, nullable=False, default=1) # 本次消耗使用的数量
+    
+    work_order = relationship("WorkOrder", back_populates="used_parts")
+    # 不要懒加载 part，以便之后前端查库能顺利拿到零件明细
+    part = relationship("Part", lazy="joined")
 
 
 class InspectionItem(Base):

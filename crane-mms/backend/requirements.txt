@@ -11,3 +11,4 @@ cos-python-sdk-v5
 Pillow
 weasyprint
 jinja2
+pydantic-settings

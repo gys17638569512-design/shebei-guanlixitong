@@ -8,8 +8,11 @@ from core.response import ok
 from core.audit import write_audit_log
 from models.user import User
 from models.work_order import WorkOrder, OrderStatus
-from schemas.work_order import WorkOrderCreate
-from services import order_service
+from schemas.work_order import WorkOrderCreate, WorkOrderBatch
+from services import order_service, pdf_service
+from core import sms
+from core.settings import settings
+from models.customer import Customer
 
 router = APIRouter(prefix="/orders", tags=["工单中心"])
 
@@ -54,15 +57,39 @@ async def complete_order_route(
 ):
     order_service.complete_order(db, id, completion_data, current_user)
     
-    # 异步生成PDF报告 TODO
-    # background_tasks.add_task(pdf_service.generate_maintenance_report, id, db)
+    # 异步生成电子维保单 PDF 并自动归档
+    background_tasks.add_task(pdf_service.generate_maintenance_report, id)
     
     return ok(None, msg="Order completed successfully")
+
+
+@router.put("/{id}/push_sign", summary="推送客户签字", description="维修员不直接结单，而是先保存排查结果并把状态推向 [待签字]，将签环节转移给客户。")
+async def push_order_for_sign(
+    id: int = Path(..., description="要推给客户签字的工单 ID"),
+    push_data: dict = Body(...),
+    background_tasks: BackgroundTasks = None,
+    current_user: User = Depends(require_role(["TECH"])),
+    db: Session = Depends(get_db)
+):
+    order_id = order_service.push_for_sign(db, id, push_data, current_user)
+    
+    # 【二期】触发短信提醒客户签字
+    order = db.query(WorkOrder).filter(WorkOrder.id == id).first()
+    if order and order.customer and order.customer.contact_phone:
+        background_tasks.add_task(
+            sms.send_sign_request_sms, 
+            phone=order.customer.contact_phone, 
+            order_id=order.id,
+            portal_url=settings.CUSTOMER_PORTAL_URL
+        )
+    
+    return ok(None, msg="已成功保存内容，并推送至客户等待签字！")
 
 
 @router.post("", summary="创建新工单（派单）", description="管理员或经理将维保任务指派给特定工程师，指定设备、日期、工单类型。创建成功后工程师小程序端将收到推送。")
 async def create_order(
     order_in: WorkOrderCreate,
+    background_tasks: BackgroundTasks,
     current_user: User = Depends(require_role(["ADMIN", "MANAGER"])),
     db: Session = Depends(get_db)
 ):
@@ -101,6 +128,18 @@ async def create_order(
 
     db.commit()
     db.refresh(new_order)
+    
+    # 【二期】新工单派单，通知执行工程师
+    from models.user import User as UserModel
+    tech = db.query(UserModel).filter(UserModel.id == new_order.technician_id).first()
+    if tech and tech.phone:
+        background_tasks.add_task(
+            sms.send_dispatch_sms,
+            phone=tech.phone,
+            order_id=new_order.id,
+            customer_name=new_order.customer.company_name if new_order.customer else "未知客户"
+        )
+        
     return ok(data=new_order)
 
 
@@ -151,4 +190,56 @@ async def get_orders(
             "technician_name": technician.name if technician else "—",
         })
 
-    return ok(data=result)
+    return ok(data=result)
+
+
+@router.post("/batch", summary="批量排期下单", description="管理员或经理一次性对多台设备批量创建例行维保工单，支持不同设备指定不同工程师和日期。")
+async def batch_create_orders(
+    batch_in: WorkOrderBatch,
+    current_user: User = Depends(require_role(["ADMIN", "MANAGER"])),
+    db: Session = Depends(get_db)
+):
+    """
+    批量新建工单业务逻辑：
+    1. 循环逐条创建工单
+    2. 重复检测（同一设备同一天已有PENDING/IN_PROGRESS工单则跳过）
+    3. 全部成功后一次性提交（原子性事务）
+    """
+    created = []
+    skipped = []
+
+    for item in batch_in.items:
+        # 重复检测
+        existing = db.query(WorkOrder).filter(
+            WorkOrder.equipment_id == item.equipment_id,
+            WorkOrder.plan_date == item.plan_date,
+            WorkOrder.status.in_([OrderStatus.PENDING, OrderStatus.IN_PROGRESS])
+        ).first()
+
+        if existing:
+            skipped.append({"equipment_id": item.equipment_id, "reason": "设备在该日期已有未完成工单"})
+            continue
+
+        new_order = WorkOrder(
+            order_type=batch_in.order_type,
+            customer_id=item.customer_id,
+            equipment_id=item.equipment_id,
+            technician_id=item.technician_id,
+            plan_date=item.plan_date,
+            status=OrderStatus.PENDING
+        )
+        db.add(new_order)
+        db.flush()
+
+        write_audit_log(
+            db=db,
+            user_id=current_user.id,
+            action="BATCH_CREATE",
+            table_name="work_orders",
+            record_id=new_order.id,
+            new_value={"order_type": batch_in.order_type, "equipment_id": item.equipment_id, "plan_date": str(item.plan_date)}
+        )
+        created.append(new_order.id)
+
+    db.commit()
+    return ok(data={"created_count": len(created), "skipped_count": len(skipped), "skipped_items": skipped}, msg=f"成功创建 {len(created)} 条工单")

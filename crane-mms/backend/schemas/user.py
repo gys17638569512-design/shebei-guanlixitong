@@ -10,6 +10,16 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str = Field(..., description="初始登录密码")
 
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "username": "tech001",
+                "role": "TECH",
+                "name": "张技术员",
+                "password": "123"
+            }
+        }
+
 class UserUpdate(BaseModel):
     username: Optional[str] = Field(None, description="登录账号 (可选更新)")
     role: Optional[RoleEnum] = Field(None, description="用户角色类别 (可选更新)")

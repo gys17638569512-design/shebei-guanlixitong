@@ -1,110 +1,92 @@
-from weasyprint import HTML
-from jinja2 import Environment, FileSystemLoader
-from models.work_order import WorkOrder, InspectionItem
-from core.database import get_db
-from services.cos_service import upload_bytes
-import base64
-import requests
 import os
-from datetime import datetime
+import io
+import requests
+from jinja2 import Environment, FileSystemLoader
+from xhtml2pdf import pisa
+from sqlalchemy.orm import Session
+from models.work_order import WorkOrder
+from services.cos_service import upload_bytes
+import logging
 
+logger = logging.getLogger(__name__)
 
-def generate_maintenance_report(order_id: int, db) -> str:
-    """生成维保报告并上传到COS"""
+def fetch_image_local(url, temp_dir="uploads/tmp"):
+    if not url: return None
+    # Skip data: URIs (base64 embedded images) - can't download them
+    if url.startswith("data:"):
+        return None
+    if url.startswith("/"):
+        # Local file path
+        local_path = url.lstrip("/")
+        if os.path.exists(local_path):
+            return os.path.abspath(local_path)
+        return url
+        
     try:
-        # 查询工单数据
+        if not os.path.exists(temp_dir):
+            os.makedirs(temp_dir)
+        filename = os.path.join(temp_dir, os.path.basename(url.split("?")[0]))
+        if not os.path.exists(filename):
+            res = requests.get(url, timeout=10)
+            if res.status_code == 200:
+                with open(filename, "wb") as f:
+                    f.write(res.content)
+            else:
+                return url
+        return os.path.abspath(filename)
+    except Exception as e:
+        logger.error(f"Failed to fetch image {url}: {e}")
+        return url
+
+def generate_maintenance_report(order_id: int):
+    # This runs in a background task, so we create a new DB session
+    from core.database import SessionLocal
+    db = SessionLocal()
+    try:
         order = db.query(WorkOrder).filter(WorkOrder.id == order_id).first()
-        if not order:
-            raise Exception("工单不存在")
+        if not order: 
+            return
+            
+        env = Environment(loader=FileSystemLoader("templates"))
+        template = env.get_template("report.html")
         
-        # 查询检查项目
-        inspection_items = db.query(InspectionItem).filter(InspectionItem.work_order_id == order_id).all()
+        # Prefetch signature image for PDF embedding
+        sign_img_local = fetch_image_local(order.sign_url) if order.sign_url else None
         
-        # 准备数据
-        report_data = {
-            "report_number": f"CRANE-{order_id}-{datetime.now().strftime('%Y%m%d')}",
-            "generate_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "company_name": order.customer.company_name,
-            "equipment": {
-                "name": order.equipment.name,
-                "model_type": order.equipment.model_type,
-                "installation_location": order.equipment.installation_location
-            },
-            "customer": {
-                "company_name": order.customer.company_name,
-                "contact_name": order.customer.contact_name,
-                "contact_phone": order.customer.contact_phone
-            },
-            "technician": order.technician.name,
-            "inspection_items": [],
-            "photos": [],
-            "signature": "",
-            "checkin_info": {
-                "time": order.checkin_time.strftime("%Y-%m-%d %H:%M:%S") if order.checkin_time else "",
-                "address": order.checkin_address or ""
-            }
-        }
+        html_content = template.render(
+            order=order,
+            customer=order.customer,
+            equipment=order.equipment,
+            items=order.inspection_items,
+            sign_img_local=sign_img_local
+        )
         
-        # 处理检查项目
-        for item in inspection_items:
-            report_data["inspection_items"].append({
-                "item_name": item.item_name,
-                "result": "正常" if item.result == "NORMAL" else "异常",
-                "result_icon": "✓" if item.result == "NORMAL" else "✗",
-                "comment": item.comment or ""
-            })
+        pdf_file = io.BytesIO()
+        # Use xhtml2pdf to render
+        pisa_status = pisa.CreatePDF(io.StringIO(html_content), dest=pdf_file, encoding='utf-8')
         
-        # 处理照片
-        if order.photo_urls:
-            import json
-            try:
-                photo_urls = json.loads(order.photo_urls)
-                for i, url in enumerate(photo_urls[:6]):  # 最多6张
-                    try:
-                        # 下载照片并转为base64
-                        response = requests.get(url)
-                        if response.status_code == 200:
-                            img_base64 = base64.b64encode(response.content).decode('utf-8')
-                            report_data["photos"].append(f"data:image/jpeg;base64,{img_base64}")
-                        else:
-                            # 照片下载失败，使用占位图
-                            report_data["photos"].append("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='150' viewBox='0 0 200 150'%3E%3Crect width='200' height='150' fill='%23f0f0f0'/%3E%3Ctext x='100' y='80' font-family='Arial' font-size='14' text-anchor='middle' fill='%23999'%3E照片加载失败%3C/text%3E%3C/svg%3E")
-                    except Exception:
-                        # 异常时使用占位图
-                        report_data["photos"].append("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='150' viewBox='0 0 200 150'%3E%3Crect width='200' height='150' fill='%23f0f0f0'/%3E%3Ctext x='100' y='80' font-family='Arial' font-size='14' text-anchor='middle' fill='%23999'%3E照片加载失败%3C/text%3E%3C/svg%3E")
-            except json.JSONDecodeError:
-                pass
+        if pisa_status.err:
+            logger.error(f"PDF generation error for order {order_id}")
+            return
+            
+        pdf_bytes = pdf_file.getvalue()
         
-        # 处理签名
-        if order.sign_url:
-            try:
-                response = requests.get(order.sign_url)
-                if response.status_code == 200:
-                    sign_base64 = base64.b64encode(response.content).decode('utf-8')
-                    report_data["signature"] = f"data:image/png;base64,{sign_base64}"
-            except Exception:
-                pass
-        
-        # 加载Jinja2模板
-        env = Environment(loader=FileSystemLoader('templates'))
-        template = env.get_template('report_maintenance.html')
-        
-        # 渲染HTML
-        html_content = template.render(**report_data)
-        
-        # 生成PDF
-        pdf_bytes = HTML(string=html_content).write_pdf()
-        
-        # 上传到COS
-        pdf_key = f"reports/maintenance_report_{order_id}_{datetime.now().strftime('%Y%m%d%H%M%S')}.pdf"
-        pdf_url = upload_bytes(pdf_bytes, pdf_key, "application/pdf")
-        
-        # 更新数据库
+        # Upload to COS or local fallback
+        filename = f"reports/work_order_{order.id}.pdf"
+        try:
+            pdf_url = upload_bytes(pdf_bytes, filename, "application/pdf")
+        except Exception as e:
+            local_path = f"uploads/reports/work_order_{order.id}.pdf"
+            os.makedirs(os.path.dirname(local_path), exist_ok=True)
+            with open(local_path, "wb") as f:
+                 f.write(pdf_bytes)
+            pdf_url = f"/{local_path}"
+            
         order.pdf_report_url = pdf_url
         db.commit()
-        
-        return pdf_url
+        logger.info(f"Report generated successfully: {pdf_url}")
     except Exception as e:
-        print(f"PDF生成失败: {e}")
-        # 生成失败时返回空
-        return ""
+        import traceback
+        logger.error(f"Error generating PDF: {traceback.format_exc()}")
+    finally:
+        db.close()

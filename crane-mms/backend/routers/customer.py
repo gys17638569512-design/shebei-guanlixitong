@@ -4,9 +4,9 @@ from typing import List
 
 from core.database import get_db
 from core.response import ok
-from schemas.customer import CustomerCreate, CustomerResponse
+from schemas.customer import CustomerCreate, CustomerResponse, CustomerUpdate
 from services.customer_service import CustomerService
-from core.permissions import get_current_user
+from core.permissions import get_current_user, require_role
 from models.user import User
 
 router = APIRouter(
@@ -47,3 +47,23 @@ def get_customer_detail(
     customer = service.get_customer_detail(customer_id)
     return ok(data=customer)
 
+@router.put("/{customer_id}", summary="修改客户资料")
+def update_customer(
+    customer_id: int,
+    customer_in: CustomerUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role(["ADMIN", "MANAGER"]))
+):
+    service = CustomerService(db)
+    customer = service.update_customer(customer_id, customer_in, current_user.id)
+    return ok(data=customer, msg="客户信息已更新")
+
+@router.delete("/{customer_id}", summary="删除客户")
+def delete_customer(
+    customer_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role(["ADMIN"]))
+):
+    service = CustomerService(db)
+    service.delete_customer(customer_id, current_user.id)
+    return ok(None, msg="客户已删除")

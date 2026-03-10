@@ -24,6 +24,17 @@ def create_equipment(
     equipment = service.create_equipment(equipment_in, current_user.id)
     return ok(data=equipment)
 
+@router.get("", summary="获取设备列表", description="支持按应轷盟筛选或名称搜索的全量设备应云列表。")
+def get_equipments(
+    search: str = Query(None, description="按设备名称模糊搜索"),
+    customer_id: int = Query(None, description="按客户ID筛选"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    service = EquipmentService(db)
+    items = service.get_equipment_list(search=search, customer_id=customer_id)
+    return ok(data=items)
+
 @router.get("/templates", summary="根据大类和型式智能获取部件清单模板")
 def get_equipment_templates(
     category: str = Query(..., description="设备大类"),

@@ -47,6 +47,7 @@ def init_db():
             company_name="测试公司",
             contact_name="张三",
             contact_phone="13800138000",
+            login_phone="13800138000",
             address="北京市朝阳区"
         )
         db.add(customer)

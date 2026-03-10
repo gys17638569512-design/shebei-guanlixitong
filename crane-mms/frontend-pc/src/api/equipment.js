@@ -1,5 +1,9 @@
 import request from '../utils/request'
 
+export const getEquipments = (params) => {
+    return request.get('/equipments', { params })
+}
+
 export const getEquipmentDetail = (id) => {
     return request.get(`/equipments/${id}`)
 }
@@ -10,6 +14,10 @@ export const createEquipment = (data) => {
 
 export const updateEquipment = (id, data) => {
     return request.put(`/equipments/${id}`, data)
+}
+
+export const deleteEquipment = (id) => {
+    return request.delete(`/equipments/${id}`)
 }
 
 export const getEquipmentTemplates = (params) => {

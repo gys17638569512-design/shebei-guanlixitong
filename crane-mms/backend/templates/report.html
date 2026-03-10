@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+    /* xhtml2pdf requires exact styling */
+    @page {
+        size: a4;
+        margin: 2cm;
+    }
+    body {
+        font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+        font-size: 14px;
+        color: #333;
+        line-height: 1.5;
+    }
+    .header {
+        text-align: center;
+        border-bottom: 2px solid #1677ff;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+    .title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #1677ff;
+        margin-bottom: 10px;
+    }
+    .meta-info {
+        font-size: 14px;
+        color: #666;
+    }
+    .section-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        background-color: #f0f5ff;
+        border-left: 4px solid #1677ff;
+        padding: 5px 10px;
+    }
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 25px;
+    }
+    .table th, .table td {
+        border: 1px solid #d9d9d9;
+        padding: 8px 12px;
+        text-align: left;
+    }
+    .table th {
+        background-color: #fafafa;
+        font-weight: bold;
+        width: 120px;
+        color: #333;
+    }
+    .signature-area {
+        margin-top: 40px;
+        text-align: right;
+        padding-right: 20px;
+    }
+    .sign-img {
+        width: 160px;
+        height: 80px;
+    }
+    .footer {
+        margin-top: 50px;
+        text-align: center;
+        font-size: 12px;
+        color: #999;
+        border-top: 1px solid #eee;
+        padding-top: 10px;
+    }
+    .text-success { color: #52c41a; }
+    .text-danger { color: #ff4d4f; }
+</style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">Crane MMS - 智能起重机维保服务报告单</div>
+        <div class="meta-info">
+            工单编号：#{{ order.id }} &nbsp;&nbsp;|&nbsp;&nbsp; 
+            维保日期：{{ order.plan_date }} &nbsp;&nbsp;|&nbsp;&nbsp;
+            维护工程师：{{ order.technician.name }}
+        </div>
+    </div>
+    
+    <div class="section-title">一、 客户与设备信息</div>
+    <table class="table">
+        <tr>
+            <th>客户名称</th><td>{{ customer.company_name }}</td>
+            <th>联系人</th><td>{{ customer.contact_name }} ({{ customer.contact_phone }})</td>
+        </tr>
+        <tr>
+            <th>设备名称</th><td>{{ equipment.name }}</td>
+            <th>规格型号</th><td>{{ equipment.model_type }}</td>
+        </tr>
+        <tr>
+            <th>设备类别</th><td>{{ equipment.category }}</td>
+            <th>安装地址</th><td>{{ customer.address }}</td>
+        </tr>
+    </table>
+
+    <div class="section-title">二、 现场检修项明细</div>
+    <table class="table">
+        <tr>
+            <th>检查内容与项目</th>
+            <th style="width: 80px;">结果</th>
+            <th>详细说明/参数</th>
+        </tr>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.item_name }}</td>
+            <td>
+                {% if item.result == 'NORMAL' %}
+                <span class="text-success">正常/通过</span>
+                {% else %}
+                <span class="text-danger">异常/需修复</span>
+                {% endif %}
+            </td>
+            <td>{{ item.comment or '无备注' }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="3" style="text-align: center; color: #999;">该工单未包含细粒度检查明细项目。</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="section-title">三、 总体结论与处理意见</div>
+    <table class="table">
+        <tr>
+            <th>故障与隐患描述</th>
+            <td colspan="3">{{ order.problem_description or '设备经检查各项指标运行正常，未见明显异常隐患。' }}</td>
+        </tr>
+        <tr>
+            <th>实施方案与建议</th>
+            <td colspan="3">{{ order.solution or '已执行例行常规维护保养，紧固核心零部件，润滑运转机构。' }}</td>
+        </tr>
+    </table>
+
+    <div class="signature-area">
+        <p style="font-weight: bold; margin-bottom: 10px;">现场负责人（客户代表）签字确认：</p>
+        {% if sign_img_local %}
+        <img src="{{ sign_img_local }}" class="sign-img" />
+        {% else %}
+        <div style="height: 80px; width: 160px; border: 1px dashed #ccc; float: right; line-height: 80px; text-align: center; color: #ccc;">未提取到签字</div>
+        <div style="clear: both;"></div>
+        {% endif %}
+        <p style="margin-top: 10px;">确认日期：{{ order.updated_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+    </div>
+
+    <div class="footer">
+        本报告由 智能起重机维保管理系统 V1.0 自动归档生成，具备法律效力防篡改认证。
+    </div>
+</body>
+</html>

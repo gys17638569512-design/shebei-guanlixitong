@@ -1,0 +1,36 @@
+# Python 编译文件
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 数据库文件
+*.db
+*.sqlite3
+
+# 环境变量文件
+.env
+.env.*
+
+# 日志文件
+*.log
+
+# 二进制文件
+*.png
+*.jpg
+*.pdf
+*.ico
+
+# Node.js 依赖
+node_modules/
+package-lock.json
+yarn.lock
+
+# 虚拟环境
+.venv/
+venv/
+env/
+
+# IDE 配置
+.vscode/
+.idea/

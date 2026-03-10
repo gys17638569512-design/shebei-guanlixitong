@@ -85,9 +85,11 @@
             <span class="address-cell">{{ row.address || '—' }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="100" fixed="right" align="center">
+        <el-table-column label="操作" width="180" fixed="right" align="center">
           <template #default="{ row }">
             <el-button type="primary" link size="small" @click="goToDetail(row.id)">查看</el-button>
+            <el-button type="warning" link size="small" @click="openEdit(row)">编辑</el-button>
+            <el-button type="danger" link size="small" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -127,6 +129,12 @@
         </el-row>
         <el-form-item label="公司地址">
           <el-input v-model="form.address" placeholder="详细地址" />
+        </el-form-item>
+
+        <div class="form-section-title" style="margin-top:16px">门户访问配置</div>
+        <el-form-item label="门户登录手机号" prop="login_phone">
+          <el-input v-model="form.login_phone" placeholder="用于客户登录 H5 门户收验证码" />
+          <div style="font-size: 12px; color: #999; margin-top: 4px;">设置后，客户即可使用此号码登录并查看其专属维保单</div>
         </el-form-item>
 
         <div class="form-section-title" style="margin-top:16px">
@@ -173,8 +181,8 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { getCustomers, createCustomer } from '@/api/customer'
-import { ElMessage } from 'element-plus'
+import { getCustomers, createCustomer, updateCustomer, deleteCustomer } from '@/api/customer'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const router = useRouter()
 const loading = ref(false)
@@ -189,6 +197,7 @@ const form = reactive({
   contact_name: '',
   contact_phone: '',
   address: '',
+  login_phone: '',
   contacts: []
 })
 
@@ -231,10 +240,41 @@ const loadData = async () => {
 
 const goToDetail = (id) => router.push(`/customers/${id}`)
 
+const editingId = ref(null)
+
 const openDrawer = () => {
-  Object.assign(form, { company_name: '', contact_name: '', contact_phone: '', address: '', contacts: [] })
+  editingId.value = null
+  Object.assign(form, { company_name: '', contact_name: '', contact_phone: '', address: '', login_phone: '', contacts: [] })
   drawerVisible.value = true
   formRef.value?.clearValidate()
+}
+
+const openEdit = (row) => {
+  editingId.value = row.id
+  Object.assign(form, {
+    company_name: row.company_name,
+    contact_name: row.contact_name,
+    contact_phone: row.contact_phone,
+    address: row.address,
+    login_phone: row.login_phone,
+    contacts: []
+  })
+  drawerVisible.value = true
+  formRef.value?.clearValidate()
+}
+
+const handleDelete = (row) => {
+  ElMessageBox.confirm(
+    `确定要删除客户「${row.company_name}」吗？该客户名下若有历史工单将拒绝删除。`,
+    '高危警告',
+    { confirmButtonText: '确定删除', cancelButtonText: '取消', type: 'warning' }
+  ).then(async () => {
+    try {
+      await deleteCustomer(row.id)
+      ElMessage.success('客户已删除')
+      loadData()
+    } catch (err) {}
+  }).catch(() => {})
 }
 
 const addContact = () => form.contacts.push({ name: '', phone: '', position: '' })
@@ -246,8 +286,13 @@ const submitForm = async () => {
     if (valid) {
       submitLoading.value = true
       try {
-        await createCustomer(form)
-        ElMessage.success('✅ 客户创建成功')
+        if (editingId.value) {
+          await updateCustomer(editingId.value, form)
+          ElMessage.success('客户信息已更新')
+        } else {
+          await createCustomer(form)
+          ElMessage.success('✅ 客户创建成功')
+        }
         drawerVisible.value = false
         loadData()
       } catch (err) {

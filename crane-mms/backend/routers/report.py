@@ -29,3 +29,26 @@ async def get_order_report(
         }
     else:
         return {"status": "generating"}
+        
+@router.get("/reports/archive", summary="获取所有已归档报告", description="拉取所有具备 PDF 连接的已完成工单列表")
+async def get_report_archive(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    from core.exceptions import ForbiddenError
+    from core.response import ok
+    if current_user.role not in ["ADMIN", "MANAGER"]:
+        raise ForbiddenError("权限不足")
+        
+    orders = db.query(WorkOrder).filter(WorkOrder.pdf_report_url != None).order_by(WorkOrder.completed_at.desc()).all()
+    result = []
+    for order in orders:
+        result.append({
+            "order_id": order.id,
+            "equipment_name": order.equipment.name if order.equipment else "未知设备",
+            "customer_name": order.customer.company_name if order.customer else "未知客户",
+            "completed_at": str(order.completed_at) if order.completed_at else None,
+            "pdf_url": order.pdf_report_url,
+            "esign_cert_url": order.esign_cert_url
+        })
+    return ok(data=result)

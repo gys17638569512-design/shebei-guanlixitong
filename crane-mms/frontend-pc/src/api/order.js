@@ -23,3 +23,7 @@ export const checkinOrder = (id, data) => {
 export const completeOrder = (id, data) => {
     return request.put(`/orders/${id}/complete`, data)
 }
+
+export const pushForSignOrder = (id, data) => {
+    return request.put(`/orders/${id}/push_sign`, data)
+}

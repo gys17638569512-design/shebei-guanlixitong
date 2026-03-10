@@ -11,3 +11,11 @@ export const getCustomerDetail = (id) => {
 export const createCustomer = (data) => {
     return request.post('/customers', data)
 }
+
+export const updateCustomer = (id, data) => {
+    return request.put(`/customers/${id}`, data)
+}
+
+export const deleteCustomer = (id) => {
+    return request.delete(`/customers/${id}`)
+}
