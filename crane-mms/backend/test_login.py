@@ -1,25 +1,28 @@
-import requests
-import json
 
-# 测试登录接口
-url = "http://localhost:8000/api/v1/auth/login"
-headers = {"Content-Type": "application/json"}
-data = {
-    "username": "admin",
-    "password": "admin123"
-}
+from core.database import SessionLocal
+from models.user import User
+from core.security import verify_password
 
-print("Testing login API...")
-print(f"URL: {url}")
-print(f"Data: {json.dumps(data)}")
+def test_login(username, password):
+    db = SessionLocal()
+    try:
+        user = db.query(User).filter(User.username == username).first()
+        if not user:
+            print(f"User {username} not found")
+            return
+        
+        match = verify_password(password, user.password_hash)
+        print(f"User: {username}")
+        print(f"Hashed Password in DB: {user.password_hash}")
+        print(f"Password Provided: {password}")
+        print(f"Match: {match}")
+    finally:
+        db.close()
 
-try:
-    response = requests.post(url, headers=headers, json=data)
-    print(f"Status code: {response.status_code}")
-    print(f"Response: {response.text}")
-    if response.status_code != 200:
-        print("Login failed!")
-    else:
-        print("Login successful!")
-except Exception as e:
-    print(f"Error: {e}")
+if __name__ == "__main__":
+    print("Testing admin login:")
+    test_login("admin", "Admin@2024")
+    print("\nTesting manager01 login:")
+    test_login("manager01", "Manager@2024")
+    print("\nTesting tech01 login:")
+    test_login("tech01", "Tech@2024")

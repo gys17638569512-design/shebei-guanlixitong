@@ -7,16 +7,46 @@ from sqlalchemy.orm import Session
 from models.work_order import WorkOrder
 from services.cos_service import upload_bytes
 import logging
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.fonts import addMapping
 
 logger = logging.getLogger(__name__)
 
+# 注册中文字体 (微软雅黑)
+FONT_PATH = "C:/Windows/Fonts/msyh.ttc"
+try:
+    if os.path.exists(FONT_PATH):
+        # 注册字体，subfontIndex=0 表示 TTC 中的第一个字体
+        pdfmetrics.registerFont(TTFont('YaHei', FONT_PATH, subfontIndex=0))
+        logger.info(f"Successfully registered font YaHei from {FONT_PATH}")
+    else:
+        logger.warning(f"Font file not found: {FONT_PATH}")
+except Exception as e:
+    logger.error(f"Failed to register font: {e}")
+
+def link_callback(uri, rel):
+    """
+    Convert HTML URIs to absolute system paths so xhtml2pdf can access those resources
+    """
+    # handle fonts
+    if uri == "msyh.ttc" or uri.endswith("msyh.ttc"):
+        return FONT_PATH
+        
+    # handle images and other resources
+    if not uri.startswith('http'):
+        # Local paths
+        path = os.path.join(os.getcwd(), uri.replace('/', os.sep))
+        if os.path.exists(path):
+            return path
+            
+    return uri
+
 def fetch_image_local(url, temp_dir="uploads/tmp"):
     if not url: return None
-    # Skip data: URIs (base64 embedded images) - can't download them
     if url.startswith("data:"):
         return None
     if url.startswith("/"):
-        # Local file path
         local_path = url.lstrip("/")
         if os.path.exists(local_path):
             return os.path.abspath(local_path)
@@ -39,7 +69,6 @@ def fetch_image_local(url, temp_dir="uploads/tmp"):
         return url
 
 def generate_maintenance_report(order_id: int):
-    # This runs in a background task, so we create a new DB session
     from core.database import SessionLocal
     db = SessionLocal()
     try:
@@ -50,7 +79,6 @@ def generate_maintenance_report(order_id: int):
         env = Environment(loader=FileSystemLoader("templates"))
         template = env.get_template("report.html")
         
-        # Prefetch signature image for PDF embedding
         sign_img_local = fetch_image_local(order.sign_url) if order.sign_url else None
         
         html_content = template.render(
@@ -62,8 +90,13 @@ def generate_maintenance_report(order_id: int):
         )
         
         pdf_file = io.BytesIO()
-        # Use xhtml2pdf to render
-        pisa_status = pisa.CreatePDF(io.StringIO(html_content), dest=pdf_file, encoding='utf-8')
+        # Use link_callback to resolve paths
+        pisa_status = pisa.CreatePDF(
+            io.StringIO(html_content), 
+            dest=pdf_file, 
+            encoding='utf-8',
+            link_callback=link_callback
+        )
         
         if pisa_status.err:
             logger.error(f"PDF generation error for order {order_id}")
@@ -71,7 +104,6 @@ def generate_maintenance_report(order_id: int):
             
         pdf_bytes = pdf_file.getvalue()
         
-        # Upload to COS or local fallback
         filename = f"reports/work_order_{order.id}.pdf"
         try:
             pdf_url = upload_bytes(pdf_bytes, filename, "application/pdf")

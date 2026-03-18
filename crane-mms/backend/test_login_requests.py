@@ -6,7 +6,7 @@ url = "http://localhost:8001/api/v1/auth/login"
 headers = {"Content-Type": "application/json"}
 data = {
     "username": "admin",
-    "password": "123"
+    "password": "Admin@2024"
 }
 
 print("Testing login API with requests...")

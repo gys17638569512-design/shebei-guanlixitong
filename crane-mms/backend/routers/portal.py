@@ -3,9 +3,11 @@
 ---
 POST /api/v1/portal/auth/send_code  - 发送短信验证码
 POST /api/v1/portal/auth/login      - 验证码登录，返回客户 JWT
-GET  /api/v1/portal/orders          - 客户查看自己的工单列表
-GET  /api/v1/portal/orders/{id}     - 查看工单详情
-POST /api/v1/portal/orders/{id}/sign - 提交客户签字
+GET  /api/v1/portal/me              - 获取当前客户单位资料
+GET  /api/v1/portal/equipments      - 获取客户设备一览表
+GET  /api/v1/portal/orders          - 客户查看自己的维保/维修记录
+GET  /api/v1/portal/orders/{id}     - 查看详细记录
+POST /api/v1/portal/orders/{id}/sign - 提交客户签字确认
 """
 import random
 import string
@@ -140,6 +142,99 @@ def submit_sign(
         "company_name": customer.company_name,
         "contact_name": customer.contact_name
     }, msg="登录成功")
+
+
+@router.get("/me", summary="获取当前客户单位信息")
+def get_my_info(
+    authorization: str = Header(None, alias="Authorization"),
+    db: Session = Depends(get_db)
+):
+    customer = customer_auth(authorization, db)
+    return ok(data={
+        "id": customer.id,
+        "company_name": customer.company_name,
+        "contact_name": customer.contact_name,
+        "contact_phone": customer.contact_phone,
+        "address": customer.address,
+        "created_at": str(customer.created_at) if hasattr(customer, "created_at") else None
+    })
+
+
+@router.get("/equipments", summary="获取客户设备一览表及状态")
+def get_my_equipments(
+    authorization: str = Header(None, alias="Authorization"),
+    db: Session = Depends(get_db)
+):
+    customer = customer_auth(authorization, db)
+    from models.equipment import Equipment
+    items = db.query(Equipment).filter(Equipment.customer_id == customer.id).all()
+    
+    result = []
+    for e in items:
+        # 简单逻辑判断状态：若超过下次检验日期则为异常，否则正常
+        status = "正常"
+        if e.next_inspection_date and e.next_inspection_date < datetime.now().date():
+            status = "待检"
+            
+        result.append({
+            "id": e.id,
+            "name": e.name,
+            "model_type": e.model_type,
+            "category": e.category,
+            "tonnage": e.tonnage,
+            "status": status,
+            "next_inspection_date": str(e.next_inspection_date) if e.next_inspection_date else "未排期"
+        })
+    return ok(data=result)
+
+
+@router.get("/stats", summary="获取客户门户首页统计数据")
+def get_portal_stats(
+    authorization: str = Header(None, alias="Authorization"),
+    db: Session = Depends(get_db)
+):
+    customer = customer_auth(authorization, db)
+    from models.equipment import Equipment
+    
+    equip_count = db.query(Equipment).filter(Equipment.customer_id == customer.id).count()
+    pending_orders = db.query(WorkOrder).filter(
+        WorkOrder.customer_id == customer.id,
+        WorkOrder.status.in_([OrderStatus.PENDING, OrderStatus.IN_PROGRESS, OrderStatus.PENDING_SIGN])
+    ).count()
+    
+    return ok(data={
+        "equipment_count": equip_count,
+        "pending_order_count": pending_orders,
+        "customer_name": customer.company_name
+    })
+
+
+@router.get("/repairs", summary="客户查看我的维修记录")
+def get_customer_repairs(
+    authorization: str = Header(None, alias="Authorization"),
+    db: Session = Depends(get_db)
+):
+    customer = customer_auth(authorization, db)
+    from models.repair_order import RepairOrder
+    from models.equipment import Equipment
+    
+    # 查找该客户名下所有设备的维修记录
+    repairs = db.query(RepairOrder).join(Equipment).filter(
+        Equipment.customer_id == customer.id
+    ).order_by(RepairOrder.created_at.desc()).all()
+    
+    result = []
+    for r in repairs:
+        result.append({
+            "id": r.id,
+            "equipment_name": r.equipment.name if r.equipment else "未知设备",
+            "fault_symptom": r.fault_symptom,
+            "status": r.status,
+            "total_fee": float(r.total_fee) if r.total_fee else 0.0,
+            "created_at": r.created_at.strftime("%Y-%m-%d %H:%M") if r.created_at else None,
+            "pdf_report_url": r.pdf_report_url
+        })
+    return ok(data=result)
 
 
 @router.get("/orders", summary="客户查看历史工单列表")

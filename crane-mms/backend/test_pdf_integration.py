@@ -23,7 +23,7 @@ def wait_for_pdf(order_id, headers):
     return None
 
 def main():
-    admin_token = login("admin", "123")
+    admin_token = login("admin", "Admin@2024")
     if not admin_token: return
     headers = {"Authorization": f"Bearer {admin_token}"}
     
@@ -38,7 +38,7 @@ def main():
         print("未找到测试用 TECH 账号")
         return
     
-    tech_token = login(tech["username"], "123")
+    tech_token = login(tech["username"], "Tech@2024")
     tech_headers = {"Authorization": f"Bearer {tech_token}"}
     
     print("1. Admin 发起工单...")

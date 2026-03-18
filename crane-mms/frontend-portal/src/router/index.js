@@ -9,21 +9,39 @@ const routes = [
   },
   {
     path: '/',
+    name: 'Home',
+    component: () => import('../views/Home.vue'),
+    meta: { title: '首页', requiresAuth: true }
+  },
+  {
+    path: '/equipments',
+    name: 'EquipmentList',
+    component: () => import('../views/EquipmentList.vue'),
+    meta: { title: '设备一览', requiresAuth: true }
+  },
+  {
+    path: '/records',
     name: 'OrderList',
     component: () => import('../views/OrderList.vue'),
-    meta: { title: '我的维保工单', requiresAuth: true }
+    meta: { title: '我的维保记录', requiresAuth: true }
   },
   {
     path: '/orders/:id',
     name: 'OrderDetail',
     component: () => import('../views/OrderDetail.vue'),
-    meta: { title: '工单详情', requiresAuth: true }
+    meta: { title: '详情', requiresAuth: true }
   },
   {
     path: '/sign/:id',
     name: 'OrderSign',
     component: () => import('../views/OrderSign.vue'),
     meta: { title: '确认签字', requiresAuth: true }
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('../views/Profile.vue'),
+    meta: { title: '个人中心', requiresAuth: true }
   }
 ]
 

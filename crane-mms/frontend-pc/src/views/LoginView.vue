@@ -89,7 +89,7 @@
           </el-button>
         </el-form>
 
-        <p class="login-tip">默认账号：admin / 密码：123</p>
+        <p class="login-tip">管理员账号：admin / 密码：Admin@2024</p>
       </div>
     </div>
   </div>
