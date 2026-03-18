@@ -13,8 +13,8 @@
           </svg>
         </div>
         <div class="logo-text">
-          <div class="logo-name">维保管理系统</div>
-          <div class="logo-sub">智能起重机 v1.0</div>
+          <div class="logo-name">数字化起重机维修维保系统</div>
+          <div class="logo-sub">管理端</div>
         </div>
       </div>
 

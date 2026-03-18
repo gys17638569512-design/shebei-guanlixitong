@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     SMS_PROVIDER: str = "aliyun"
     SMS_ACCESS_KEY_ID: Optional[str] = None
     SMS_ACCESS_KEY_SECRET: Optional[str] = None
-    SMS_SIGN_NAME: str = "维保管理系统"
+    SMS_SIGN_NAME: str = "数字化起重机维修维保系统"
     SMS_TEMPLATE_CODE_DISPATCH: Optional[str] = None
     SMS_TEMPLATE_CODE_SIGN: Optional[str] = None
     SMS_TEMPLATE_CODE_REPORT: Optional[str] = None

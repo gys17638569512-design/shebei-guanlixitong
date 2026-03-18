@@ -7,8 +7,8 @@ from routers import auth, order, upload, report
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="智能起重机维保管理系统",
-    description="起重机维保管理系统 API",
+    title="数字化起重机维修维保系统",
+    description="数字化起重机维修维保系统 API",
     version="1.0.0"
 )
 
@@ -29,7 +29,7 @@ app.include_router(report.router, prefix="/api/v1")
 
 @app.get("/")
 def read_root():
-    return {"message": "智能起重机维保管理系统 API"}
+    return {"message": "数字化起重机维修维保系统 API"}
 
 @app.get("/health")
 def health_check():

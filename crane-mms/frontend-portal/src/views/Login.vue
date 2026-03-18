@@ -3,8 +3,8 @@
     <div class="login-container">
       <div class="login-header">
         <div class="logo-box">🏗️</div>
-        <h1>客户维保门户</h1>
-        <p>专业 · 透明 · 高效的设备管理专家</p>
+        <h1>数字化起重机维修维保系统</h1>
+        <p>客户服务门户 · 专业 · 透明 · 高效</p>
       </div>
 
       <div class="login-card">
@@ -106,7 +106,7 @@
           <span class="divider">|</span>
           <span>隐私政策</span>
         </div>
-        <p>© 2024 智管起重机 · 运维管理中心</p>
+        <p>© 2024 数字化起重机维修维保系统</p>
       </div>
     </div>
   </div>

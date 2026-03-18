@@ -11,7 +11,7 @@
             <circle cx="24" cy="24" r="4" fill="white"/>
           </svg>
         </div>
-        <h1 class="brand-name">智能起重机<br/>维保管理系统</h1>
+        <h1 class="brand-name">数字化起重机<br/>维修维保系统</h1>
         <p class="brand-tagline">全生命周期数字化维保 · 安全可靠 · 高效运营</p>
 
         <div class="feature-list">

@@ -53,7 +53,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   // 设置页面标题
   if (to.meta.title) {
-    document.title = to.meta.title
+    document.title = `${to.meta.title} - 数字化起重机维修维保系统`
+  } else {
+    document.title = '数字化起重机维修维保系统'
   }
 
   const token = localStorage.getItem('portal_token')

@@ -5,8 +5,8 @@
     <view class="content-box">
       <view class="login-header">
         <view class="logo-circle">🏗️</view>
-        <text class="title">维保工作台</text>
-        <text class="subtitle">智能设备维保 · 现场作业中心</text>
+        <text class="title">数字化起重机维修维保系统</text>
+        <text class="subtitle">工人操作端 · 现场作业中心</text>
       </view>
   
       <view class="login-form">
@@ -23,7 +23,7 @@
       </view>
   
       <view class="login-footer">
-        <text>© 2024 智管运维 · 版权所有</text>
+        <text>© 2024 数字化起重机维修维保系统</text>
       </view>
     </view>
   </view>

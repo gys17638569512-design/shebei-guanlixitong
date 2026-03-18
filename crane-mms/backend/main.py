@@ -28,7 +28,7 @@ import uvicorn
 description = """
 <div align="center">
   <img src="/static/logo.png" width="120" style="margin-bottom: 20px; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
-  <h1>智能起重机维保管理系统 V1.0</h1>
+        <h1>数字化起重机维修维保系统 V1.0</h1>
   <p><i>基于工业互联网技术的特种设备全生命周期管理后端核心集群</i></p>
 </div>
 
@@ -66,7 +66,7 @@ tags_metadata = [
 ]
 
 app = FastAPI(
-    title="智能起重机维保管理系统 API 接口平台",
+    title="数字化起重机维修维保系统 API 接口平台",
     description=description,
     version="1.0.0",
     openapi_tags=tags_metadata,
@@ -146,7 +146,7 @@ app.include_router(template.router, prefix="/api/v1")
 
 @app.get("/", tags=["默认连接"], summary="查询服务根节点状态")
 def read_root():
-    return {"message": "欢迎抵达智能起重机维保管理系统后端接口集群节点！"}
+    return {"message": "欢迎抵达数字化起重机维修维保系统后端接口集群节点！"}
 
 @app.get("/health", tags=["默认连接"], summary="后端核心存活检测")
 def health_check():
