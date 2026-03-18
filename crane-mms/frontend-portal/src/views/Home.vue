@@ -32,6 +32,10 @@
         <div class="icon-wrap bg-orange"><van-icon name="records-o" /></div>
         <span>维保记录</span>
       </div>
+      <div class="nav-item" @click="router.push('/account-center')">
+        <div class="icon-wrap bg-green"><van-icon name="friends-o" /></div>
+        <span>账号中心</span>
+      </div>
     </div>
 
     <!-- 单位基础信息 -->
@@ -164,6 +168,7 @@ onMounted(() => {
 }
 .bg-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
 .bg-orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.bg-green { background: linear-gradient(135deg, #22c55e, #16a34a); }
 
 /* Info Section */
 .info-section { margin-bottom: 24px; }

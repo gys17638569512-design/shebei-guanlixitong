@@ -22,6 +22,13 @@ from core.settings import settings
 from core.sms import send_verify_code_sms
 from models.customer import Customer
 from models.work_order import WorkOrder, OrderStatus
+from schemas.customer_account import (
+    CustomerCompanyProfileUpdate,
+    CustomerMainAccountUpdate,
+    PortalSubAccountCreate,
+)
+from schemas.wechat_binding import WechatBindingPayload
+from services import customer_account_service
 
 router = APIRouter(prefix="/portal", tags=["客户门户"])
 
@@ -158,6 +165,63 @@ def get_my_info(
         "address": customer.address,
         "created_at": str(customer.created_at) if hasattr(customer, "created_at") else None
     })
+
+
+@router.get("/customer/account-center", summary="获取客户账号中心概览")
+def get_account_center(
+    current_customer: Customer = Depends(get_current_customer),
+    db: Session = Depends(get_db)
+):
+    data = customer_account_service.get_portal_account_center(db, current_customer)
+    return ok(data)
+
+
+@router.put("/customer/account-center/main-account", summary="更新客户主账号信息")
+def update_main_account(
+    payload: CustomerMainAccountUpdate,
+    current_customer: Customer = Depends(get_current_customer),
+    db: Session = Depends(get_db)
+):
+    data = customer_account_service.update_portal_main_account(db, current_customer, payload)
+    return ok(data, msg="主账号信息已更新")
+
+
+@router.post("/customer/account-center/sub-accounts", summary="创建客户子账号")
+def create_sub_account(
+    payload: PortalSubAccountCreate,
+    current_customer: Customer = Depends(get_current_customer),
+    db: Session = Depends(get_db)
+):
+    data = customer_account_service.create_portal_sub_account(db, current_customer, payload)
+    return ok(data, msg="子账号创建成功")
+
+
+@router.put("/customer/account-center/company-profile", summary="更新客户公司资料")
+def update_company_profile(
+    payload: CustomerCompanyProfileUpdate,
+    current_customer: Customer = Depends(get_current_customer),
+    db: Session = Depends(get_db)
+):
+    data = customer_account_service.update_portal_company_profile(db, current_customer, payload)
+    return ok(data, msg="公司资料已更新")
+
+
+@router.post("/customer/account-center/wechat-bindings", summary="绑定客户微信账号")
+def bind_customer_wechat(
+    payload: WechatBindingPayload,
+    current_customer: Customer = Depends(get_current_customer),
+    db: Session = Depends(get_db)
+):
+    data = customer_account_service.bind_customer_wechat(
+        db,
+        current_customer,
+        scene=payload.scene,
+        openid=payload.openid,
+        unionid=payload.unionid,
+        nickname=payload.nickname,
+        avatar_url=payload.avatar_url,
+    )
+    return ok(data, msg="微信绑定成功")
 
 
 @router.get("/equipments", summary="获取客户设备一览表及状态")

@@ -38,10 +38,11 @@ const routes = [
     meta: { title: '确认签字', requiresAuth: true }
   },
   {
-    path: '/profile',
-    name: 'Profile',
+    path: '/account-center',
+    alias: ['/profile'],
+    name: 'AccountCenter',
     component: () => import('../views/Profile.vue'),
-    meta: { title: '个人中心', requiresAuth: true }
+    meta: { title: '账号中心', requiresAuth: true }
   }
 ]
 

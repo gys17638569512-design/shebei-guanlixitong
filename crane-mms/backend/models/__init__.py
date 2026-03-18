@@ -6,3 +6,8 @@ from .audit_log import AuditLog
 from .part import Part
 from .repair_order import RepairOrder
 from .check_template import CheckTemplate
+from .platform_setting import PlatformSetting
+from .employee_profile import EmployeeProfile
+from .customer_profile import CustomerProfile
+from .customer_account import CustomerAccount
+from .wechat_binding import WechatBinding

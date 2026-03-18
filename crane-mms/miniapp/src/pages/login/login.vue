@@ -54,14 +54,8 @@ const handleLogin = async () => {
   loading.value = true
   try {
     const res: any = await login({ username: username.value, password: password.value })
-    
-    // Set authentication token and user data. Note: The portal response structure
-    // may have customized user structure, mapping it directly.
-    authStore.setAuth(res.access_token, {
-        id: res.customer_id,
-        username: res.contact_name,
-        company_name: res.company_name
-    })
+
+    authStore.setAuth(res.access_token, res.user || {})
 
     uni.showToast({ title: '登录成功', icon: 'success' })
     setTimeout(() => {

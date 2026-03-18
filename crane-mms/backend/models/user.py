@@ -23,3 +23,4 @@ class User(Base):
     
     # 关系
     work_orders = relationship("WorkOrder", back_populates="technician")
+    profile = relationship("EmployeeProfile", back_populates="user", uselist=False, cascade="all, delete-orphan")

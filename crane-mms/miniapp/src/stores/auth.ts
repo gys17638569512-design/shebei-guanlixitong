@@ -5,11 +5,15 @@ export const useAuthStore = defineStore('auth', () => {
   const token = ref(uni.getStorageSync('token') || '')
   const userInfo = ref(uni.getStorageSync('userInfo') ? JSON.parse(uni.getStorageSync('userInfo')) : null)
 
+  const setUserInfo = (user: any) => {
+    userInfo.value = user
+    uni.setStorageSync('userInfo', JSON.stringify(user))
+  }
+
   const setAuth = (newToken: string, user: any) => {
     token.value = newToken
-    userInfo.value = user
     uni.setStorageSync('token', newToken)
-    uni.setStorageSync('userInfo', JSON.stringify(user))
+    setUserInfo(user)
   }
 
   const logout = () => {
@@ -23,6 +27,7 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     token,
     userInfo,
+    setUserInfo,
     setAuth,
     logout
   }

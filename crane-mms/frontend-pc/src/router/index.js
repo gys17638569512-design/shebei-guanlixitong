@@ -8,7 +8,8 @@ import EquipmentList from '../views/equipments/EquipmentList.vue'
 import OrderList from '../views/orders/OrderList.vue'
 import OrderDetail from '../views/orders/OrderDetail.vue'
 import BatchSchedule from '../views/orders/BatchSchedule.vue'
-import UserList from '../views/system/UserList.vue'
+import EmployeeCenter from '../views/system/EmployeeCenter.vue'
+import BrandConfig from '../views/system/BrandConfig.vue'
 import PartList from '../views/system/PartList.vue'
 import Dashboard from '../views/Dashboard.vue'
 import { useAuthStore } from '../stores/auth'
@@ -85,8 +86,18 @@ const router = createRouter({
         },
         {
           path: 'system/users',
-          name: 'userList',
-          component: UserList,
+          redirect: '/system/employees'
+        },
+        {
+          path: 'system/employees',
+          name: 'employeeCenter',
+          component: EmployeeCenter,
+          meta: { requiresRole: ['ADMIN'] }
+        },
+        {
+          path: 'system/brand-config',
+          name: 'brandConfig',
+          component: BrandConfig,
           meta: { requiresRole: ['ADMIN'] }
         },
         {
@@ -134,7 +145,7 @@ router.beforeEach((to, from, next) => {
     if (to.meta.requiresRole.includes(authStore.user?.role)) {
       next()
     } else {
-      next('/orders')
+      next('/dashboard')
     }
   } else {
     next()

@@ -12,6 +12,11 @@ from models.work_order import WorkOrder, InspectionItem, WorkOrderPart
 from models.audit_log import AuditLog
 from models.part import Part
 from models.repair_order import RepairOrder
+from models.platform_setting import PlatformSetting
+from models.employee_profile import EmployeeProfile
+from models.customer_profile import CustomerProfile
+from models.customer_account import CustomerAccount
+from models.wechat_binding import WechatBinding
 
 # 创建数据库表
 Base.metadata.create_all(bind=engine)
@@ -22,7 +27,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from core.exceptions import BusinessError, UnauthorizedError, ForbiddenError, NotFoundError, ConflictError
 from core.response import err
 from routers import auth, order, upload, report, user, customer, equipment, part, audit_log, stats
-from routers import portal, repair, template
+from routers import portal, repair, template, platform_setting, customer_account
 import uvicorn
 
 description = """
@@ -62,7 +67,9 @@ tags_metadata = [
     {"name": "报告生成", "description": "维保结单后可触达客户的 PDF 维修报告单生成引擎。"},
     {"name": "安全审计", "description": "系统痕迹追踪：记录所有敏感数据的增删改记录。"},
     {"name": "检查模板管理", "description": "标准作业程序管理：维护各型号起重机的检查标准模板。"},
-    {"name": "统计中心", "description": "数据驾驶舱：聚合全业务线指标，透视运营效率。"}
+    {"name": "统计中心", "description": "数据驾驶舱：聚合全业务线指标，透视运营效率。"},
+    {"name": "平台配置", "description": "平台公司信息、品牌、系统展示与报告抬头管理。"},
+    {"name": "客户账号中心", "description": "客户公司主账号、子账号与公司资料管理。"},
 ]
 
 app = FastAPI(
@@ -143,6 +150,8 @@ app.include_router(stats.router, prefix="/api/v1")
 app.include_router(portal.router, prefix="/api/v1")
 app.include_router(repair.router, prefix="/api/v1")
 app.include_router(template.router, prefix="/api/v1")
+app.include_router(platform_setting.router, prefix="/api/v1")
+app.include_router(customer_account.router, prefix="/api/v1")
 
 @app.get("/", tags=["默认连接"], summary="查询服务根节点状态")
 def read_root():

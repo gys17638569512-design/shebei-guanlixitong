@@ -6,7 +6,7 @@
       <van-tabbar-item replace to="/" icon="wap-home-outline">首页</van-tabbar-item>
       <van-tabbar-item replace to="/equipments" icon="apps-o">设备一览</van-tabbar-item>
       <van-tabbar-item replace to="/records" icon="orders-o">维保记录</van-tabbar-item>
-      <van-tabbar-item replace to="/profile" icon="user-o">我的</van-tabbar-item>
+      <van-tabbar-item replace to="/account-center" icon="manager-o">账号中心</van-tabbar-item>
     </van-tabbar>
   </div>
 </template>

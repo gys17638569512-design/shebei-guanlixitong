@@ -20,6 +20,8 @@ class Customer(Base):
     # 关系
     equipments = relationship("Equipment", back_populates="customer")
     work_orders = relationship("WorkOrder", back_populates="customer")
+    accounts = relationship("CustomerAccount", back_populates="customer", cascade="all, delete-orphan")
+    profile = relationship("CustomerProfile", back_populates="customer", uselist=False, cascade="all, delete-orphan")
 
 
 class Contact(Base):

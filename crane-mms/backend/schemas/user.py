@@ -8,6 +8,13 @@ class UserBase(BaseModel):
     name: str = Field(..., description="用户真实姓名 (例如: 张工)")
     phone: Optional[str] = Field(None, description="手机号，用于短信通知")
     manager_id: Optional[int] = Field(None, description="所属经理ID")
+    display_name: Optional[str] = Field(None, description="显示名称")
+    department: Optional[str] = Field(None, description="部门")
+    job_title: Optional[str] = Field(None, description="岗位")
+    email: Optional[str] = Field(None, description="邮箱")
+    avatar_url: Optional[str] = Field(None, description="头像地址")
+    status: Optional[str] = Field("ACTIVE", description="账号状态")
+    must_change_password: Optional[bool] = Field(False, description="是否强制改密")
 
 class UserCreate(UserBase):
     password: str = Field(..., description="初始登录密码")
@@ -29,9 +36,37 @@ class UserUpdate(BaseModel):
     phone: Optional[str] = Field(None, description="手机号 (可选更新)")
     manager_id: Optional[int] = Field(None, description="所属经理ID (可选更新)")
     password: Optional[str] = Field(None, description="新密码，如果传递则重置密码")
+    display_name: Optional[str] = Field(None, description="显示名称")
+    department: Optional[str] = Field(None, description="部门")
+    job_title: Optional[str] = Field(None, description="岗位")
+    email: Optional[str] = Field(None, description="邮箱")
+    avatar_url: Optional[str] = Field(None, description="头像地址")
+    status: Optional[str] = Field(None, description="账号状态")
+    must_change_password: Optional[bool] = Field(None, description="是否强制改密")
+
+
+class UserPasswordReset(BaseModel):
+    password: str = Field(..., description="重置后的密码")
+
+
+class UserStatusUpdate(BaseModel):
+    status: str = Field(..., description="ACTIVE/INACTIVE")
+
+
+class UserSelfUpdate(BaseModel):
+    name: Optional[str] = Field(None, description="姓名")
+    phone: Optional[str] = Field(None, description="手机号")
+    display_name: Optional[str] = Field(None, description="显示名称")
+    email: Optional[str] = Field(None, description="邮箱")
+    avatar_url: Optional[str] = Field(None, description="头像")
+    password: Optional[str] = Field(None, description="新密码")
 
 class UserResponse(UserBase):
     id: int = Field(..., description="用户系统唯一自增主键ID")
+    mobile_bound: Optional[bool] = False
+    wechat_bound: Optional[bool] = False
+    last_login_at: Optional[str] = None
+    password_updated_at: Optional[str] = None
 
     class Config:
         from_attributes = True

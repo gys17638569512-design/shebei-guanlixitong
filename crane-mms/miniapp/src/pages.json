@@ -15,6 +15,12 @@
       }
     },
     {
+      "path": "pages/profile/profile",
+      "style": {
+        "navigationBarTitleText": "个人中心"
+      }
+    },
+    {
       "path": "pages/orderDetail/orderDetail",
       "style": {
         "navigationBarTitleText": "工单详情"

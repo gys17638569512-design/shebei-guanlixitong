@@ -4,11 +4,16 @@
     <view class="header-bg">
       <view class="user-card">
         <view class="user-info">
-          <text class="greeting">你好, {{ authStore.userInfo?.full_name || '工程师' }} 👋</text>
-          <text class="role">维保部 · 执行工程师</text>
+          <text class="greeting">你好, {{ displayName }} 👋</text>
+          <text class="role">{{ roleLabel }}</text>
         </view>
-        <view class="logout-btn" @click="handleLogout">
-          <text class="icon">🚪</text>
+        <view class="header-actions">
+          <view class="profile-btn" @click="goProfile">
+            <text class="icon">👤</text>
+          </view>
+          <view class="logout-btn" @click="handleLogout">
+            <text class="icon">🚪</text>
+          </view>
         </view>
       </view>
     </view>
@@ -89,6 +94,23 @@ const tabs = ['全部', '待完成', '已完工']
 const currentTab = ref(1) // 默认显示待完成
 const triggered = ref(false)
 
+const displayName = computed(() => {
+  const user = authStore.userInfo || {}
+  return user.display_name || user.name || user.username || '工程师'
+})
+
+const roleLabel = computed(() => {
+  const user = authStore.userInfo || {}
+  const labelMap: Record<string, string> = {
+    ADMIN: '平台管理员',
+    MANAGER: '维保经理',
+    TECH: '现场工程师'
+  }
+  const department = user.department ? `${user.department} · ` : ''
+  const title = user.job_title || labelMap[user.role] || '工人操作端账号'
+  return `${department}${title}`
+})
+
 const loadOrders = async () => {
   try {
     const res: any = await getMyOrders()
@@ -115,6 +137,10 @@ const getStatusLabel = (s: string) => {
 
 const goDetail = (id: number) => {
   uni.navigateTo({ url: `/pages/orderDetail/orderDetail?id=${id}` })
+}
+
+const goProfile = () => {
+  uni.navigateTo({ url: '/pages/profile/profile' })
 }
 
 const handleLogout = () => {
@@ -160,6 +186,12 @@ onMounted(() => {
   align-items: center;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+}
+
 .greeting {
   font-size: 40rpx;
   font-weight: 800;
@@ -175,6 +207,7 @@ onMounted(() => {
   display: block;
 }
 
+.profile-btn,
 .logout-btn {
   width: 72rpx;
   height: 72rpx;
@@ -187,6 +220,7 @@ onMounted(() => {
   border: 2rpx solid rgba(255, 255, 255, 0.3);
 }
 
+.profile-btn .icon,
 .logout-btn .icon {
   font-size: 32rpx;
 }

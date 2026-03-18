@@ -3,16 +3,11 @@
     <!-- 侧边栏 -->
     <aside class="sidebar">
       <!-- Logo 区域 -->
-      <div class="sidebar-logo">
-        <div class="logo-icon">
-          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="32" height="32" rx="8" fill="#1677ff"/>
-            <path d="M6 24V12l10-6 10 6v12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M16 6v18M6 16h20" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
-            <circle cx="16" cy="16" r="3" fill="white"/>
-          </svg>
-        </div>
-        <div class="logo-text">
+        <div class="sidebar-logo">
+          <div class="logo-icon">
+            <img src="/brand-mark.svg" alt="品牌标识" />
+          </div>
+          <div class="logo-text">
           <div class="logo-name">数字化起重机维修维保系统</div>
           <div class="logo-sub">管理端</div>
         </div>
@@ -112,9 +107,9 @@
 
         <router-link
           v-if="hasPermission(['ADMIN'])"
-          to="/system/users"
+          to="/system/employees"
           class="nav-item"
-          :class="{ active: isActive('/system/users') }"
+          :class="{ active: isActive('/system/employees') }"
         >
           <span class="nav-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -122,7 +117,22 @@
               <path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M2 12h2M20 12h2M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41"/>
             </svg>
           </span>
-          <span class="nav-label">人员管理</span>
+          <span class="nav-label">员工账号中心</span>
+        </router-link>
+
+        <router-link
+          v-if="hasPermission(['ADMIN'])"
+          to="/system/brand-config"
+          class="nav-item"
+          :class="{ active: isActive('/system/brand-config') }"
+        >
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="3" width="18" height="18" rx="3"/>
+              <path d="M7 17l3-4 3 3 4-5"/>
+            </svg>
+          </span>
+          <span class="nav-label">平台品牌配置</span>
         </router-link>
 
         <router-link
@@ -270,8 +280,9 @@ const pageNameMap = {
   '/customers': '客户管理',
   '/equipments': '设备档案',
   '/orders': '工单中心',
+  '/system/employees': '员工账号中心',
+  '/system/brand-config': '平台品牌配置',
   '/repairs': '故障维修',
-  '/system/users': '人员管理',
   '/system/audit': '安全审计',
   '/system/reports': '集中报告'
 }
@@ -355,6 +366,12 @@ onUnmounted(() => clearInterval(timer))
   width: 36px;
   height: 36px;
   flex-shrink: 0;
+}
+.logo-icon img {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: block;
 }
 .logo-name {
   font-size: 13px;
