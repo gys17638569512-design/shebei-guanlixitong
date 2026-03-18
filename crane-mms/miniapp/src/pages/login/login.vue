@@ -13,6 +13,11 @@
         </view>
         <text class="title">数字化起重机维修维保系统</text>
         <text class="subtitle">工人操作端 · 现场作业中心</text>
+        <view class="header-tags">
+          <text class="header-tag">离线可用</text>
+          <text class="header-tag">微信协同</text>
+          <text class="header-tag">电子签字</text>
+        </view>
       </view>
   
       <view class="login-form">
@@ -73,7 +78,6 @@ const handleLogin = async () => {
 <style scoped>
 .login-container {
   min-height: 100vh;
-  background-color: #f7f8fa;
   position: relative;
   overflow: hidden;
 }
@@ -83,35 +87,46 @@ const handleLogin = async () => {
   top: 0;
   left: 0;
   right: 0;
-  height: 450rpx;
-  background: linear-gradient(135deg, #2979ff 0%, #1565c0 100%);
-  border-bottom-left-radius: 80rpx;
-  border-bottom-right-radius: 80rpx;
+  height: 520rpx;
+  background: linear-gradient(145deg, rgba(8, 21, 33, 0.96) 0%, rgba(12, 38, 61, 0.94) 56%, rgba(19, 74, 113, 0.9) 100%);
+  border-bottom-left-radius: 110rpx;
+  border-bottom-right-radius: 110rpx;
+}
+
+.login-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 2rpx, transparent 2rpx),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 2rpx, transparent 2rpx);
+  background-size: 90rpx 90rpx;
+  opacity: 0.3;
 }
 
 .content-box {
   position: relative;
   z-index: 10;
-  padding: 0 60rpx;
+  padding: 0 52rpx;
 }
 
 .login-header {
   text-align: center;
-  padding: 120rpx 0 60rpx;
+  padding: 120rpx 0 56rpx;
   color: #fff;
 }
 
 .logo-circle {
   width: 140rpx;
   height: 140rpx;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.96);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 30rpx;
   font-size: 80rpx;
-  box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.15);
+  box-shadow: 0 24rpx 46rpx rgba(8, 24, 40, 0.18);
 }
 
 .logo-mark {
@@ -162,10 +177,10 @@ const handleLogin = async () => {
 }
 
 .title {
-  font-size: 44rpx;
+  font-size: 42rpx;
   font-weight: 800;
   display: block;
-  letter-spacing: 2rpx;
+  letter-spacing: 4rpx;
 }
 
 .subtitle {
@@ -175,19 +190,41 @@ const handleLogin = async () => {
   display: block;
 }
 
+.header-tags {
+  margin-top: 24rpx;
+  display: flex;
+  justify-content: center;
+  gap: 12rpx;
+  flex-wrap: wrap;
+}
+
+.header-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48rpx;
+  padding: 0 18rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 196, 124, 0.96);
+  font-size: 20rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+}
+
 .login-form {
-  background: #fff;
-  border-radius: 30rpx;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(246, 249, 252, 0.9));
+  border-radius: 40rpx;
   padding: 60rpx 40rpx;
-  box-shadow: 0 20rpx 40rpx rgba(0,0,0,0.05);
+  box-shadow: 0 30rpx 60rpx rgba(8, 24, 40, 0.12);
   margin-top: 40rpx;
+  border: 2rpx solid rgba(16, 33, 48, 0.06);
 }
 
 .input-item {
   display: flex;
   align-items: center;
-  background-color: #f5f6f7;
-  border-radius: 16rpx;
+  background-color: rgba(239, 244, 249, 0.9);
+  border-radius: 24rpx;
   margin-bottom: 30rpx;
   padding: 0 30rpx;
   height: 100rpx;
@@ -196,29 +233,30 @@ const handleLogin = async () => {
 .input-icon {
   font-size: 32rpx;
   margin-right: 20rpx;
-  color: #999;
+  color: #75889a;
 }
 
 .input {
   flex: 1;
   font-size: 30rpx;
-  color: #333;
+  color: #102130;
 }
 
 .placeholder {
-  color: #bbb;
+  color: #90a1b1;
 }
 
 .login-btn {
   margin-top: 60rpx;
   height: 100rpx;
   line-height: 100rpx;
-  background: linear-gradient(90deg, #2979ff 0%, #0056e0 100%);
+  background: linear-gradient(135deg, #136fda 0%, #094d8d 100%);
   color: #fff;
-  border-radius: 50rpx;
-  font-size: 34rpx;
+  border-radius: 999rpx;
+  font-size: 32rpx;
   font-weight: bold;
-  box-shadow: 0 10rpx 30rpx rgba(41, 121, 255, 0.3);
+  box-shadow: 0 22rpx 42rpx rgba(19, 111, 218, 0.24);
+  letter-spacing: 6rpx;
 }
 
 .login-tip {
@@ -227,13 +265,14 @@ const handleLogin = async () => {
   text-align: center;
   font-size: 24rpx;
   color: #7f8ea3;
+  line-height: 1.7;
 }
 
 .login-footer {
   text-align: center;
   margin-top: 100rpx;
   font-size: 24rpx;
-  color: #999;
+  color: #7f8ea3;
 }
 </style>
 

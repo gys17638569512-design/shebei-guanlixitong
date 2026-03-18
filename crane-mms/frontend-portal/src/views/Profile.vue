@@ -744,18 +744,37 @@ onMounted(() => {
 .pb-safe { padding-bottom: calc(env(safe-area-inset-bottom) + 80px); }
 
 .profile-header {
-  background: linear-gradient(135deg, #1677ff, #3b82f6);
+  background: linear-gradient(145deg, rgba(8, 21, 33, 0.96) 0%, rgba(12, 38, 61, 0.94) 56%, rgba(19, 74, 113, 0.9) 100%);
   padding: 60px 24px 40px;
   display: flex;
   align-items: center;
   gap: 16px;
   color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 90px 90px;
+  opacity: 0.3;
+}
+
+.avatar-wrap,
+.user-meta {
+  position: relative;
+  z-index: 1;
 }
 
 .avatar-wrap {
   width: 64px;
   height: 64px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.16);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -764,7 +783,7 @@ onMounted(() => {
 }
 
 .avatar-icon { font-size: 32px; }
-.name { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: 0.5px; }
+.name { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: 0.08em; font-family: var(--portal-font-display); }
 .role { font-size: 13px; opacity: 0.9; margin-top: 4px; display: block; }
 .permission-tip {
   display: block;
@@ -785,10 +804,11 @@ onMounted(() => {
 .self-card,
 .section-card {
   margin: 16px;
-  background: #fff;
-  border-radius: 20px;
-  padding: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(246, 249, 252, 0.9));
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 18px 34px rgba(8, 24, 40, 0.06);
+  border: 1px solid rgba(16, 33, 48, 0.06);
 }
 
 .shortcut-row {
@@ -831,8 +851,8 @@ onMounted(() => {
 
 .self-item {
   padding: 12px;
-  border-radius: 14px;
-  background: #f8fafc;
+  border-radius: 18px;
+  background: rgba(239, 244, 249, 0.9);
 }
 
 .self-item span {
@@ -886,8 +906,8 @@ onMounted(() => {
 
 .sub-account-card {
   padding: 14px 16px;
-  border-radius: 16px;
-  background: #f8fafc;
+  border-radius: 20px;
+  background: rgba(239, 244, 249, 0.9);
 }
 
 .sub-account-tags,
@@ -918,8 +938,8 @@ onMounted(() => {
 .company-logo {
   width: 56px;
   height: 56px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #1677ff, #3b82f6);
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--portal-primary), var(--portal-primary-dark));
   color: #fff;
   display: flex;
   align-items: center;
@@ -964,9 +984,9 @@ onMounted(() => {
 .action-group { padding: 20px 16px; margin-top: 10px; }
 
 .logout-btn {
-  background: #fff !important;
+  background: rgba(255, 255, 255, 0.92) !important;
   color: #ef4444 !important;
-  border-color: #fee2e2 !important;
+  border-color: rgba(240, 95, 97, 0.16) !important;
   font-weight: 700;
   font-size: 15px;
 }
@@ -1004,8 +1024,8 @@ onMounted(() => {
 .role-card {
   margin: 0 16px;
   padding: 14px 16px;
-  border-radius: 16px;
-  background: #f8fafc;
+  border-radius: 18px;
+  background: rgba(239, 244, 249, 0.9);
 }
 
 .role-group {
@@ -1018,7 +1038,7 @@ onMounted(() => {
   margin: 0 16px 12px;
   padding: 12px 14px;
   border-radius: 14px;
-  background: #fff7ed;
+  background: rgba(255, 179, 71, 0.16);
   color: #9a3412;
   font-size: 13px;
   font-weight: 600;

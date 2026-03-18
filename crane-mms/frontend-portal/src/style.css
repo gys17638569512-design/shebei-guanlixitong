@@ -1,10 +1,35 @@
-/* CSS Reset & Variable Baseline */
+/* Portal global theme */
 :root {
-  --van-primary-color: #1989fa;
-  --van-background-2: #f7f8fa;
-  --van-font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica,
-    Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei',
-    sans-serif;
+  --portal-primary: #0c75d8;
+  --portal-primary-dark: #094d8d;
+  --portal-primary-soft: rgba(12, 117, 216, 0.12);
+  --portal-accent: #ffb347;
+  --portal-accent-strong: #ff8a24;
+  --portal-success: #1fa56d;
+  --portal-danger: #f05f61;
+  --portal-ink: #102130;
+  --portal-text: #42586a;
+  --portal-muted: #7f93a5;
+  --portal-border: rgba(16, 33, 48, 0.08);
+  --portal-surface: #ffffff;
+  --portal-surface-soft: rgba(255, 255, 255, 0.78);
+  --portal-bg: #eef3f8;
+  --portal-bg-deep: #dde7ef;
+  --portal-font-display: "Bahnschrift", "Trebuchet MS", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --portal-font-body: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  --van-primary-color: var(--portal-primary);
+  --van-success-color: var(--portal-success);
+  --van-danger-color: var(--portal-danger);
+  --van-text-color: var(--portal-ink);
+  --van-text-color-2: var(--portal-text);
+  --van-text-color-3: var(--portal-muted);
+  --van-background-2: transparent;
+  --van-border-color: rgba(16, 33, 48, 0.08);
+  --van-nav-bar-icon-color: var(--portal-ink);
+  --van-nav-bar-text-color: var(--portal-ink);
+  --van-nav-bar-title-text-color: var(--portal-ink);
+  --van-tab-text-color: var(--portal-muted);
+  --van-tab-active-text-color: var(--portal-primary);
 }
 
 * {
@@ -13,21 +38,118 @@
   box-sizing: border-box;
 }
 
+html,
 body {
-  font-family: var(--van-font-family);
-  background-color: var(--van-background-2);
-  color: #323233;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top left, rgba(12, 117, 216, 0.16), transparent 22%),
+    radial-gradient(circle at 92% 12%, rgba(255, 179, 71, 0.18), transparent 20%),
+    linear-gradient(180deg, var(--portal-bg-deep) 0%, var(--portal-bg) 34%, #f8fbfe 100%);
+  font-family: var(--portal-font-body);
+  color: var(--portal-ink);
   -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
+}
+
+body {
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.34) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.34) 1px, transparent 1px);
+  background-size: 110px 110px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.32), transparent 72%);
+  opacity: 0.32;
 }
 
 #app {
-  width: 100%;
   min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
-/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 0;
   background: transparent;
+}
+
+.van-nav-bar {
+  background: transparent !important;
+}
+
+.van-nav-bar__title {
+  font-family: var(--portal-font-display);
+  letter-spacing: 0.06em;
+}
+
+.van-hairline--top-bottom::after,
+.van-hairline--bottom::after,
+.van-hairline--top::after {
+  border-width: 0 !important;
+}
+
+.van-search {
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.van-search__content {
+  border-radius: 18px !important;
+  background: rgba(255, 255, 255, 0.86) !important;
+  box-shadow: 0 14px 28px rgba(8, 24, 40, 0.06);
+  border: 1px solid rgba(16, 33, 48, 0.06);
+}
+
+.van-field__control {
+  color: var(--portal-ink) !important;
+}
+
+.van-cell-group--inset {
+  margin: 0 !important;
+  border-radius: 24px !important;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.92) !important;
+  box-shadow: 0 18px 34px rgba(8, 24, 40, 0.06);
+}
+
+.van-cell {
+  background: transparent !important;
+}
+
+.van-button--primary {
+  border: none !important;
+  background: linear-gradient(135deg, var(--portal-primary) 0%, var(--portal-primary-dark) 100%) !important;
+  box-shadow: 0 14px 28px rgba(12, 117, 216, 0.24);
+}
+
+.van-button--default,
+.van-button--plain {
+  border-color: rgba(16, 33, 48, 0.1) !important;
+  color: var(--portal-ink) !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+}
+
+.van-button {
+  transition: transform 0.18s ease, box-shadow 0.18s ease !important;
+}
+
+.van-button:active {
+  transform: scale(0.98);
+}
+
+.van-tab--active {
+  font-weight: 700;
+}
+
+.interactive-card {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.interactive-card:active {
+  transform: scale(0.98);
 }

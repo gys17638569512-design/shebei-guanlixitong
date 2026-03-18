@@ -133,12 +133,16 @@ const submitOrder = async (signPath) => {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #f8f9fa;
   padding: 30rpx;
 }
 
 .header {
-  margin-bottom: 40rpx;
+  margin-bottom: 30rpx;
+  padding: 28rpx;
+  border-radius: 28rpx;
+  background: linear-gradient(145deg, rgba(8, 21, 33, 0.96) 0%, rgba(12, 38, 61, 0.94) 56%, rgba(19, 74, 113, 0.9) 100%);
+  color: #fff;
+  box-shadow: 0 24rpx 40rpx rgba(8, 24, 40, 0.14);
 }
 
 .title {
@@ -150,19 +154,20 @@ const submitOrder = async (signPath) => {
 .tag {
   display: inline-block;
   font-size: 22rpx;
-  background: #e6f7ff;
-  color: #1890ff;
-  padding: 4rpx 12rpx;
-  border-radius: 4rpx;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 196, 124, 0.96);
+  padding: 6rpx 14rpx;
+  border-radius: 999rpx;
   margin-top: 10rpx;
 }
 
 .canvas-wrapper {
-  background: #fff;
-  border: 2rpx solid #ddd;
-  border-radius: 16rpx;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 249, 252, 0.92));
+  border: 2rpx solid rgba(16, 33, 48, 0.06);
+  border-radius: 28rpx;
   flex: 1;
   overflow: hidden;
+  box-shadow: 0 24rpx 38rpx rgba(8, 24, 40, 0.08);
 }
 
 .signature-canvas {
@@ -173,12 +178,12 @@ const submitOrder = async (signPath) => {
 .tips {
   text-align: center;
   font-size: 24rpx;
-  color: #999;
+  color: #7f93a5;
   margin-top: 20rpx;
 }
 
 .footer {
-  margin-top: 40rpx;
+  margin-top: 30rpx;
   display: flex;
   gap: 20rpx;
 }
@@ -187,13 +192,18 @@ const submitOrder = async (signPath) => {
   flex: 1;
   height: 100rpx;
   line-height:100rpx;
-  border-radius: 50rpx;
+  border-radius: 999rpx;
   font-size: 32rpx;
 }
 
 .btn-clear {
-  background: #fff;
-  color: #666;
-  border: 2rpx solid #ddd;
+  background: rgba(255, 255, 255, 0.92);
+  color: #42586a;
+  border: 2rpx solid rgba(16, 33, 48, 0.08);
+}
+
+.btn-submit {
+  background: linear-gradient(135deg, #136fda, #094d8d) !important;
+  box-shadow: 0 20rpx 36rpx rgba(19, 111, 218, 0.22);
 }
 </style>

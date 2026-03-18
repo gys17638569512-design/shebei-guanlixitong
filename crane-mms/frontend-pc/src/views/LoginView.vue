@@ -32,9 +32,25 @@
             特检预警与维保计划智能排期
           </div>
         </div>
+
+        <div class="signal-matrix">
+          <div class="signal-card">
+            <span class="signal-label">系统定位</span>
+            <strong>工业服务指挥舱</strong>
+          </div>
+          <div class="signal-card">
+            <span class="signal-label">多端协同</span>
+            <strong>管理端 / 客户门户 / 微信作业端</strong>
+          </div>
+          <div class="signal-card">
+            <span class="signal-label">闭环能力</span>
+            <strong>排期、执行、签字、归档一体化</strong>
+          </div>
+        </div>
       </div>
 
       <!-- 装饰圆圈 -->
+      <div class="deco-grid"></div>
       <div class="deco-circle c1"></div>
       <div class="deco-circle c2"></div>
       <div class="deco-circle c3"></div>
@@ -90,6 +106,12 @@
         </el-form>
 
         <p class="login-tip">测试账号：admin / Admin@2024，manager01 / Manager@2024，tech01 / Tech@2024</p>
+
+        <div class="login-footer-note">
+          <span class="footer-pill">实时看板</span>
+          <span class="footer-pill">工单闭环</span>
+          <span class="footer-pill">移动协同</span>
+        </div>
       </div>
     </div>
   </div>
@@ -164,12 +186,16 @@ const handleLogin = async () => {
   display: flex;
   height: 100vh;
   overflow: hidden;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(36, 146, 242, 0.18), transparent 24%),
+    radial-gradient(circle at 88% 16%, rgba(255, 179, 71, 0.14), transparent 24%),
+    linear-gradient(135deg, #d9e5ef 0%, #eff4f8 36%, #fbfdff 100%);
 }
 
-/* 左侧品牌区 */
 .login-left {
   flex: 1;
-  background: linear-gradient(135deg, #0d1b2a 0%, #0e2a4a 40%, #0a3d7a 100%);
+  background:
+    linear-gradient(145deg, rgba(7, 21, 33, 0.96) 0%, rgba(12, 38, 61, 0.94) 48%, rgba(18, 58, 92, 0.96) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -180,30 +206,32 @@ const handleLogin = async () => {
 .brand-content {
   position: relative;
   z-index: 2;
-  padding: 40px;
-  max-width: 420px;
+  padding: 48px;
+  max-width: 520px;
 }
 
 .brand-logo svg {
-  width: 56px;
-  height: 56px;
-  margin-bottom: 24px;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 28px;
 }
 
 .brand-name {
-  font-size: 32px;
+  font-family: var(--font-display);
+  font-size: 38px;
   font-weight: 800;
   color: #fff;
-  line-height: 1.3;
-  margin: 0 0 16px;
-  letter-spacing: -0.02em;
+  line-height: 1.18;
+  margin: 0 0 18px;
+  letter-spacing: 0.04em;
 }
 
 .brand-tagline {
   font-size: 15px;
-  color: rgba(255,255,255,.55);
-  margin: 0 0 36px;
-  line-height: 1.6;
+  color: rgba(255,255,255,.62);
+  margin: 0 0 32px;
+  line-height: 1.7;
+  max-width: 420px;
 }
 
 .feature-list { display: flex; flex-direction: column; gap: 14px; }
@@ -219,89 +247,173 @@ const handleLogin = async () => {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #1677ff;
-  box-shadow: 0 0 8px rgba(22,119,255,.6);
+  background: var(--color-accent);
+  box-shadow: 0 0 16px rgba(255, 179, 71, 0.48);
   flex-shrink: 0;
 }
 
-/* 装饰圆圈 */
+.signal-matrix {
+  margin-top: 34px;
+  display: grid;
+  gap: 14px;
+}
+
+.signal-card {
+  border-radius: 20px;
+  padding: 16px 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+}
+
+.signal-label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 196, 124, 0.85);
+  margin-bottom: 8px;
+}
+
+.signal-card strong {
+  display: block;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.deco-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 84px 84px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.4), transparent 70%);
+  opacity: 0.28;
+}
+
 .deco-circle {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.06;
-  background: radial-gradient(circle, #fff 0%, transparent 70%);
+  opacity: 0.12;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
 }
-.c1 { width: 400px; height: 400px; top: -100px; right: -100px; }
-.c2 { width: 250px; height: 250px; bottom: 50px; left: -80px; opacity: 0.04; }
-.c3 { width: 150px; height: 150px; bottom: 200px; right: 80px; opacity: 0.05; }
+.c1 { width: 420px; height: 420px; top: -100px; right: -100px; }
+.c2 { width: 280px; height: 280px; bottom: 50px; left: -80px; opacity: 0.08; }
+.c3 { width: 170px; height: 170px; bottom: 200px; right: 90px; opacity: 0.1; }
 
-/* 右侧表单区 */
 .login-right {
-  width: 460px;
+  width: 500px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
-  padding: 40px;
+  background: rgba(251, 253, 255, 0.74);
+  padding: 48px 42px;
+  backdrop-filter: blur(18px);
 }
 
-.login-box { width: 100%; max-width: 360px; }
+.login-box {
+  width: 100%;
+  max-width: 380px;
+  padding: 34px 30px 28px;
+  border-radius: 30px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 250, 253, 0.9));
+  border: 1px solid rgba(16, 33, 48, 0.08);
+  box-shadow: 0 28px 56px rgba(10, 24, 39, 0.12);
+}
 
 .login-header { margin-bottom: 32px; }
 .login-title {
-  font-size: 26px;
+  font-family: var(--font-display);
+  font-size: 28px;
   font-weight: 800;
   color: var(--color-text-primary);
-  margin: 0 0 8px;
-  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+  letter-spacing: 0.04em;
 }
 .login-subtitle {
   font-size: 14px;
   color: var(--color-text-secondary);
   margin: 0;
+  line-height: 1.6;
 }
 
 .login-form :deep(.el-form-item__label) {
-  font-size: 13px !important;
+  font-size: 12px !important;
   font-weight: 600 !important;
-  color: var(--color-text-regular) !important;
+  color: var(--color-text-secondary) !important;
   padding-bottom: 6px !important;
   line-height: 1 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 .login-form :deep(.el-input__wrapper) {
-  border-radius: var(--radius-md) !important;
-  padding: 0 14px !important;
-  height: 44px;
+  border-radius: 18px !important;
+  padding: 0 16px !important;
+  height: 48px;
+  background: rgba(245, 248, 251, 0.92) !important;
 }
 
 .login-btn {
   width: 100%;
   margin-top: 28px;
-  height: 46px !important;
+  height: 50px !important;
   font-size: 15px !important;
   font-weight: 600 !important;
-  border-radius: var(--radius-md) !important;
-  background: linear-gradient(135deg, #1677ff 0%, #0958d9 100%) !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%) !important;
   border: none !important;
-  letter-spacing: 2px;
-  box-shadow: 0 6px 20px rgba(22,119,255,.4) !important;
+  letter-spacing: 0.28em;
+  box-shadow: 0 16px 32px rgba(12, 117, 216, 0.24) !important;
   transition: all 0.2s ease !important;
 }
 .login-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(22,119,255,.5) !important;
+  box-shadow: 0 18px 34px rgba(12, 117, 216, 0.3) !important;
 }
 
 .login-tip {
   text-align: center;
   font-size: 12px;
-  color: var(--color-text-placeholder);
-  margin: 20px 0 0;
+  color: var(--color-text-secondary);
+  margin: 18px 0 0;
+  line-height: 1.6;
+}
+
+.login-footer-note {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.footer-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(12, 117, 216, 0.08);
+  color: var(--color-primary-dark);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 @media (max-width: 768px) {
   .login-left { display: none; }
-  .login-right { width: 100%; padding: 24px; }
+  .login-right {
+    width: 100%;
+    padding: 24px;
+    background: transparent;
+  }
+  .login-box {
+    padding: 28px 22px 24px;
+  }
 }
 </style>

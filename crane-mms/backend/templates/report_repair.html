@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page {
+            size: a4;
+            margin: 2cm;
+        }
+
+        body {
+            font-family: 'YaHei';
+            font-size: 13px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .title,
+        .section-title,
+        th,
+        td,
+        p {
+            font-family: 'YaHei';
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #1677ff;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1677ff;
+            margin-bottom: 10px;
+        }
+
+        .meta-info {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background-color: #f0f5ff;
+            border-left: 4px solid #1677ff;
+            padding: 5px 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 22px;
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #d9d9d9;
+            padding: 8px 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .table th {
+            background-color: #fafafa;
+            font-weight: bold;
+            width: 120px;
+            color: #333;
+        }
+
+        .photo-table img {
+            width: 220px;
+            height: 140px;
+        }
+
+        .signature-area {
+            margin-top: 36px;
+            text-align: right;
+            padding-right: 20px;
+        }
+
+        .sign-img {
+            width: 160px;
+            height: 80px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="title">数字化起重机维修维保系统 - 故障检修报告单</div>
+        <div class="meta-info">
+            维修单号：#RM-{{ "%05d"|format(repair.id) }} &nbsp;&nbsp;|&nbsp;&nbsp;
+            完工时间：{{ generated_at }} &nbsp;&nbsp;|&nbsp;&nbsp;
+            检修工程师：{{ technician.name if technician else '未分配' }}
+        </div>
+    </div>
+
+    <div class="section-title">一、 客户与设备信息</div>
+    <table class="table">
+        <tr>
+            <th>客户名称</th>
+            <td>{{ customer.company_name if customer else '未绑定客户' }}</td>
+            <th>联系人</th>
+            <td>
+                {% if customer %}
+                {{ customer.contact_name }} ({{ customer.contact_phone }})
+                {% else %}
+                —
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>设备名称</th>
+            <td>{{ equipment.name if equipment else '未知设备' }}</td>
+            <th>规格型号</th>
+            <td>{{ equipment.model_type if equipment else '—' }}</td>
+        </tr>
+        <tr>
+            <th>设备类别</th>
+            <td>{{ equipment.category if equipment else '—' }}</td>
+            <th>安装位置</th>
+            <td>{{ equipment.installation_location if equipment else '—' }}</td>
+        </tr>
+        <tr>
+            <th>工单状态</th>
+            <td>{{ status_label }}</td>
+            <th>质保状态</th>
+            <td>{{ '质保内' if repair.is_warranty else '质保外' }}</td>
+        </tr>
+    </table>
+
+    <div class="section-title">二、 故障诊断与处理</div>
+    <table class="table">
+        <tr>
+            <th>故障现象</th>
+            <td colspan="3">{{ repair.fault_symptom or '无' }}</td>
+        </tr>
+        <tr>
+            <th>故障部位</th>
+            <td>{{ repair.fault_component or '未填写' }}</td>
+            <th>故障原因</th>
+            <td>{{ repair.fault_cause or '未填写' }}</td>
+        </tr>
+        <tr>
+            <th>防范建议</th>
+            <td colspan="3">{{ repair.prevention_advice or '暂无额外建议' }}</td>
+        </tr>
+    </table>
+
+    <div class="section-title">三、 配件与费用信息</div>
+    <table class="table">
+        <tr>
+            <th>更换配件</th>
+            <td colspan="3">
+                {% if parts_used %}
+                {% for part in parts_used %}
+                {{ part.name or part.part_name or '未命名配件' }} × {{ part.quantity or 1 }}{{ part.unit or '' }}{% if not loop.last %}<br />{% endif %}
+                {% endfor %}
+                {% else %}
+                本次未记录更换配件
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>人工费</th>
+            <td>¥ {{ "%.2f"|format(repair.labor_fee or 0) }}</td>
+            <th>其他费用</th>
+            <td>¥ {{ "%.2f"|format(repair.other_fee or 0) }}</td>
+        </tr>
+        <tr>
+            <th>合计金额</th>
+            <td>¥ {{ "%.2f"|format(repair.total_fee or 0) }}</td>
+            <th>费用确认</th>
+            <td>{{ '已确认' if repair.fee_confirmed else '待确认' }}</td>
+        </tr>
+    </table>
+
+    {% if site_photo_locals %}
+    <div class="section-title">四、 现场照片</div>
+    <table class="table photo-table">
+        {% for photo in site_photo_locals %}
+        <tr>
+            <th>照片 {{ loop.index }}</th>
+            <td><img src="{{ photo }}" /></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    <div class="section-title">五、 客户确认</div>
+    <table class="table">
+        <tr>
+            <th>客户签字</th>
+            <td>
+                {% if sign_img_local %}
+                <img src="{{ sign_img_local }}" class="sign-img" />
+                {% else %}
+                未上传客户签字
+                {% endif %}
+            </td>
+            <th>签字时间</th>
+            <td>{{ generated_at }}</td>
+        </tr>
+    </table>
+
+    <div class="footer">
+        本报告由 数字化起重机维修维保系统 自动生成并归档。
+    </div>
+</body>
+
+</html>

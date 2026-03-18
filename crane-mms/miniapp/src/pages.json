@@ -42,7 +42,7 @@
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "数字化起重机维修维保系统",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "navigationBarBackgroundColor": "#EEF3F8",
+    "backgroundColor": "#EEF3F8"
   }
 }

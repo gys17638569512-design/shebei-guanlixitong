@@ -15,3 +15,7 @@ export const updateRepairOrder = (id, data) => {
 export const getRepairDetail = (id) => {
     return request.get(`/repairs/${id}`)
 }
+
+export const getRepairReport = (id) => {
+    return request.get(`/repairs/${id}/report`)
+}

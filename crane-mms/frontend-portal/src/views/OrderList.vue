@@ -165,10 +165,10 @@ const getStatusColor = (s) => {
 
 <style scoped>
 .pb-safe { padding-bottom: calc(env(safe-area-inset-bottom) + 80px); }
-.order-list { min-height: 100vh; background-color: #f6f7f9; }
+.order-list { min-height: 100vh; }
 
 .glass-nav :deep(.van-nav-bar) {
-  background: rgba(255, 255, 255, 0.85) !important;
+  background: rgba(255, 255, 255, 0.64) !important;
   backdrop-filter: saturate(180%) blur(20px);
 }
 
@@ -176,60 +176,60 @@ const getStatusColor = (s) => {
   position: sticky;
   top: 46px;
   z-index: 100;
-  background: rgba(246, 247, 249, 0.9);
-  backdrop-filter: blur(10px);
-  padding-bottom: 8px;
+  background: rgba(238, 243, 248, 0.84);
+  backdrop-filter: blur(14px);
+  padding: 0 0 10px;
 }
 
 .order-cards { padding: 12px 16px; }
 
 .order-card {
   position: relative;
-  background: #ffffff;
-  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(246, 249, 252, 0.9));
+  border-radius: 24px;
   padding: 20px;
   margin-bottom: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.02);
+  box-shadow: 0 18px 34px rgba(8, 24, 40, 0.06);
+  border: 1px solid rgba(16, 33, 48, 0.06);
   transition: transform 0.2s;
 }
 
 .status-badge {
   position: absolute;
-  top: 0;
-  right: 0;
-  padding: 6px 16px;
-  border-bottom-left-radius: 16px;
+  top: 16px;
+  right: 16px;
+  padding: 6px 14px;
+  border-radius: 999px;
   font-size: 11px;
   font-weight: 800;
   color: #fff;
+  letter-spacing: 0.04em;
+  box-shadow: 0 12px 20px rgba(8, 24, 40, 0.08);
 }
 .badge-warning { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
 .badge-primary { background: linear-gradient(135deg, #2563eb, #3b82f6); }
 .badge-danger { background: linear-gradient(135deg, #dc2626, #ef4444); }
 .badge-success { background: linear-gradient(135deg, #059669, #10b981); }
 
-.order-serial { font-size: 12px; color: #94a3b8; font-family: monospace; margin-bottom: 8px; }
-.equipment-name { margin: 0 0 16px 0; font-size: 17px; font-weight: 800; color: #1e293b; }
+.order-serial { font-size: 12px; color: var(--portal-muted); font-family: monospace; margin-bottom: 8px; }
+.equipment-name { margin: 0 80px 16px 0; font-size: 17px; font-weight: 800; color: var(--portal-ink); }
 
 .info-grid { display: flex; gap: 10px; margin-bottom: 12px; }
-.info-cell { flex: 1; padding: 10px; border-radius: 12px; }
-.bg-slate { background-color: #f8fafc; }
-.cell-label { display: block; font-size: 10px; color: #64748b; margin-bottom: 4px; }
-.cell-value { font-size: 13px; font-weight: 700; color: #334155; }
+.info-cell { flex: 1; padding: 12px; border-radius: 16px; }
+.bg-slate { background-color: rgba(239, 244, 249, 0.92); }
+.cell-label { display: block; font-size: 10px; color: var(--portal-muted); margin-bottom: 6px; letter-spacing: 0.08em; text-transform: uppercase; }
+.cell-value { font-size: 13px; font-weight: 700; color: var(--portal-ink); }
 .text-primary { color: #2563eb; }
 .text-orange { color: #f59e0b; }
 
-.description { font-size: 12px; color: #64748b; line-height: 1.5; margin: 8px 0; }
+.description { font-size: 12px; color: var(--portal-text); line-height: 1.6; margin: 8px 0; }
 
 .card-actions {
   margin-top: 16px;
   padding-top: 12px;
-  border-top: 1px dashed #e2e8f0;
+  border-top: 1px dashed rgba(16, 33, 48, 0.08);
   display: flex;
   justify-content: flex-end;
 }
-.report-btn { border-radius: 8px; font-weight: 600; font-size: 12px; }
-
-.interactive-card:active { transform: scale(0.97); }
+.report-btn { border-radius: 999px; font-weight: 700; font-size: 12px; }
 </style>

@@ -111,13 +111,15 @@ const handleSubmit = () => {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #f8f9fa;
 }
 
 .header {
+  margin: 24rpx 24rpx 0;
   padding: 30rpx;
-  background: #fff;
-  border-bottom: 2rpx solid #eee;
+  background: linear-gradient(145deg, rgba(8, 21, 33, 0.96) 0%, rgba(12, 38, 61, 0.94) 56%, rgba(19, 74, 113, 0.9) 100%);
+  border-radius: 28rpx;
+  color: #fff;
+  box-shadow: 0 24rpx 40rpx rgba(8, 24, 40, 0.14);
 }
 
 .title {
@@ -128,20 +130,21 @@ const handleSubmit = () => {
 
 .subtitle {
   font-size: 24rpx;
-  color: #999;
+  color: rgba(236, 242, 247, 0.72);
 }
 
 .item-list {
   flex: 1;
-  padding: 20rpx;
+  padding: 20rpx 24rpx;
 }
 
 .inspection-item {
-  background: #fff;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(246, 249, 252, 0.9));
   padding: 30rpx;
-  border-radius: 12rpx;
+  border-radius: 24rpx;
   margin-bottom: 20rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+  box-shadow: 0 20rpx 34rpx rgba(8, 24, 40, 0.08);
+  border: 2rpx solid rgba(16, 33, 48, 0.05);
 }
 
 .item-header {
@@ -164,17 +167,17 @@ const handleSubmit = () => {
 .abnormal-detail {
   margin-top: 20rpx;
   padding-top: 20rpx;
-  border-top: 2rpx dashed #eee;
+  border-top: 2rpx dashed rgba(16, 33, 48, 0.08);
 }
 
 .remark-input {
   width: 100%;
   height: 150rpx;
-  background: #fcfcfc;
-  border: 2rpx solid #eee;
+  background: rgba(239, 244, 249, 0.92);
+  border: 2rpx solid rgba(16, 33, 48, 0.06);
   padding: 15rpx;
   font-size: 28rpx;
-  border-radius: 8rpx;
+  border-radius: 18rpx;
 }
 
 .photo-area {
@@ -187,19 +190,21 @@ const handleSubmit = () => {
 .preview-img {
   width: 200rpx;
   height: 120rpx;
-  background: #eee;
-  border-radius: 8rpx;
+  background: rgba(239, 244, 249, 0.92);
+  border-radius: 16rpx;
 }
 
 .footer {
-  padding: 30rpx;
-  background: #fff;
-  border-top: 2rpx solid #eee;
+  padding: 30rpx 24rpx;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(18rpx);
 }
 
 .submit-btn {
   width: 100%;
-  border-radius: 44rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(135deg, #136fda, #094d8d) !important;
+  box-shadow: 0 20rpx 36rpx rgba(19, 111, 218, 0.22);
 }
 
 .text-success { color: #52c41a; }

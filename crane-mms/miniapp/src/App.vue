@@ -35,14 +35,20 @@ onHide(() => {
 <style>
 /* 每个页面公共css */
 page {
-  background-color: #f5f6f7;
-  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica,
-    Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei',
-    sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(19, 111, 218, 0.16), transparent 26%),
+    radial-gradient(circle at 88% 10%, rgba(255, 179, 71, 0.16), transparent 22%),
+    linear-gradient(180deg, #dfe8f0 0%, #edf3f8 34%, #f8fbfe 100%);
+  color: #102130;
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
 }
 
 button::after {
   border: none;
+}
+
+button {
+  border-radius: 999rpx;
 }
 
 .text-ellipsis {

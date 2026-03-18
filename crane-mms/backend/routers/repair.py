@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from datetime import datetime
+
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from core.database import get_db
 from core.response import ok
@@ -6,11 +8,16 @@ from schemas.repair_order import RepairOrderCreate, RepairOrderUpdate, RepairOrd
 from models.repair_order import RepairOrder
 from models.user import User
 from core.permissions import get_current_user
+from services import pdf_service
 
 router = APIRouter(
     prefix="/repairs",
     tags=["维修工单管理"]
 )
+
+
+def _is_completed_status(status: str | None) -> bool:
+    return status in {"COMPLETED", "已完成"}
 
 @router.post("", summary="新建维修工单")
 def create_repair_order(
@@ -63,10 +70,38 @@ def get_repair_detail(
         raise HTTPException(status_code=404, detail="维修工单不存在")
     return ok(data=order)
 
+
+@router.get("/{repair_id}/report", summary="获取维修工单 PDF 报告")
+def get_repair_report(
+    repair_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    order = db.query(RepairOrder).filter(RepairOrder.id == repair_id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="维修工单不存在")
+
+    if current_user.role == "TECH" and order.tech_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+
+    if not order.pdf_report_url and _is_completed_status(order.status):
+        pdf_service.generate_repair_report(repair_id)
+        db.expire_all()
+        order = db.query(RepairOrder).filter(RepairOrder.id == repair_id).first()
+
+    if order.pdf_report_url:
+        return ok(data={
+            "pdf_url": order.pdf_report_url,
+            "esign_cert_url": order.esign_cert_url,
+        })
+
+    return ok(data={"status": "generating"})
+
 @router.put("/{repair_id}", summary="更新维修工单")
 def update_repair_order(
     repair_id: int,
     payload: RepairOrderUpdate,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -77,6 +112,14 @@ def update_repair_order(
     update_data = payload.model_dump(exclude_unset=True)
     for k, v in update_data.items():
         setattr(order, k, v)
+
+    if ("labor_fee" in update_data or "other_fee" in update_data) and "total_fee" not in update_data:
+        labor_fee = float(order.labor_fee or 0)
+        other_fee = float(order.other_fee or 0)
+        order.total_fee = labor_fee + other_fee
+
+    if _is_completed_status(order.status) and not order.completed_at:
+        order.completed_at = datetime.utcnow()
         
     db.flush()
     from core.audit import write_audit_log
@@ -84,4 +127,8 @@ def update_repair_order(
     
     db.commit()
     db.refresh(order)
+
+    if _is_completed_status(order.status) and not order.pdf_report_url:
+        background_tasks.add_task(pdf_service.generate_repair_report, order.id)
+
     return ok(data=order)

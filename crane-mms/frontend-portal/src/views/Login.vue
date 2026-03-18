@@ -12,6 +12,11 @@
         </div>
         <h1>数字化起重机维修维保系统</h1>
         <p>客户服务门户 · 专业 · 透明 · 高效</p>
+        <div class="header-chips">
+          <span>设备总览</span>
+          <span>电子签字</span>
+          <span>微信协同</span>
+        </div>
       </div>
 
       <div class="login-card">
@@ -190,41 +195,42 @@ onUnmounted(() => {
 <style scoped>
 .login-wrapper {
   min-height: 100vh;
-  /* 适配多端：在大屏上显示带背景图片的宽屏设计，在小屏上回退到纯色渐变 */
-  background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+  background:
+    radial-gradient(circle at top left, rgba(12, 117, 216, 0.18), transparent 26%),
+    radial-gradient(circle at 90% 12%, rgba(255, 179, 71, 0.16), transparent 24%),
+    linear-gradient(140deg, #dfe8f0 0%, #eff4f8 34%, #fbfdff 100%);
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
 }
 
-/* 媒体查询：大屏 (PC/Tablet) 环境下的样式覆盖 */
+.login-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.26) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.26) 1px, transparent 1px);
+  background-size: 110px 110px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.28), transparent 76%);
+  opacity: 0.5;
+}
+
 @media (min-width: 768px) {
-  .login-wrapper {
-    position: relative; /* 添加相对定位，建立 stacking context */
-    background: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
-    background-size: cover;
-  }
-  .login-wrapper::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    backdrop-filter: blur(8px);
-    background: rgba(15, 23, 42, 0.4);
-    z-index: 0; /* 降低 z-index */
-  }
   .login-container {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 40px;
-    border-radius: 24px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(247, 250, 253, 0.9));
+    padding: 42px 40px 34px;
+    border-radius: 30px;
+    box-shadow: 0 32px 64px rgba(8, 24, 40, 0.14);
+    border: 1px solid rgba(16, 33, 48, 0.08);
     position: relative;
-    z-index: 10; /* 确保大幅高于 0 */
-    transform: scale(1.05); /* 大屏稍作放大 */
+    z-index: 1;
+    transform: scale(1.02);
   }
-  .login-header h1 { color: #1e293b !important; }
-  .login-header p { color: #64748b !important; }
-  .login-card { box-shadow: none !important; padding: 10px 0 !important; }
+  .login-card { box-shadow: none !important; padding: 12px 0 0 !important; background: transparent !important; }
   .login-footer p { color: #94a3b8 !important; }
 }
 
@@ -239,15 +245,17 @@ onUnmounted(() => {
 
 .login-header {
   text-align: center;
-  color: #1e293b;
+  color: var(--portal-ink);
   margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
 }
 
 .logo-box {
   width: 88px;
   height: 88px;
   margin: 0 auto 16px;
-  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.1));
+  filter: drop-shadow(0 12px 20px rgba(12, 117, 216, 0.18));
 }
 
 .logo-box svg {
@@ -258,25 +266,49 @@ onUnmounted(() => {
 
 .login-header h1 {
   margin: 0;
-  font-size: 28px;
+  font-family: var(--portal-font-display);
+  font-size: 30px;
   font-weight: 800;
-  letter-spacing: 1px;
+  letter-spacing: 0.06em;
 }
 
 .login-header p {
-  margin: 8px 0 0;
+  margin: 10px 0 0;
   font-size: 14px;
-  color: #64748b;
+  color: var(--portal-text);
+}
+
+.header-chips {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.header-chips span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--portal-primary-dark);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 8px 18px rgba(8, 24, 40, 0.05);
 }
 
 .login-card {
-  background: #fff;
-  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 250, 253, 0.92));
+  border-radius: 26px;
   padding: 30px 10px 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+  box-shadow: 0 24px 46px rgba(8, 24, 40, 0.1);
+  border: 1px solid rgba(16, 33, 48, 0.08);
 }
 
-/* 登录方式切换 */
 .login-tabs {
   display: flex;
   justify-content: center;
@@ -285,15 +317,15 @@ onUnmounted(() => {
 }
 .tab-item {
   font-size: 16px;
-  color: #64748b;
-  font-weight: 500;
+  color: var(--portal-muted);
+  font-weight: 600;
   padding-bottom: 8px;
   cursor: pointer;
   position: relative;
   transition: all 0.3s;
 }
 .tab-item.active {
-  color: #1677ff;
+  color: var(--portal-primary);
   font-weight: 700;
 }
 .tab-item.active::after {
@@ -302,17 +334,18 @@ onUnmounted(() => {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 24px;
+  width: 32px;
   height: 3px;
-  background: #1677ff;
+  background: linear-gradient(135deg, var(--portal-primary), var(--portal-accent));
   border-radius: 2px;
 }
 
 .custom-field {
   padding: 16px 12px;
-  background: #f8fafc;
-  border-radius: 12px;
+  background: rgba(245, 248, 251, 0.9);
+  border-radius: 18px;
   margin-bottom: 12px;
+  border: 1px solid rgba(16, 33, 48, 0.05);
 }
 
 .code-btn {
@@ -325,15 +358,15 @@ onUnmounted(() => {
 }
 
 .login-btn {
-  height: 48px;
+  height: 50px;
   font-size: 16px;
   font-weight: 700;
-  background: linear-gradient(135deg, #1677ff 0%, #0958d9 100%) !important;
+  background: linear-gradient(135deg, var(--portal-primary) 0%, var(--portal-primary-dark) 100%) !important;
   border: none !important;
-  box-shadow: 0 6px 16px rgba(22, 137, 250, 0.3) !important;
+  box-shadow: 0 16px 30px rgba(12, 117, 216, 0.24) !important;
+  letter-spacing: 0.12em;
 }
 
-/* 其他登录方式 */
 .other-methods {
   display: flex;
   justify-content: center;
@@ -344,26 +377,27 @@ onUnmounted(() => {
   margin: 18px 0 0;
   text-align: center;
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--portal-muted);
 }
 
 .wechat-btn {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: #f0fdf4;
+  background: rgba(255, 255, 255, 0.88);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: transform 0.2s;
+  box-shadow: 0 12px 22px rgba(8, 24, 40, 0.08);
 }
 .wechat-btn:active { transform: scale(0.9); }
 
 .login-footer {
   text-align: center;
-  margin-top: 40px;
-  color: #94a3b8;
+  margin-top: 34px;
+  color: var(--portal-muted);
 }
 
 .footer-links {

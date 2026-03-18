@@ -3,13 +3,14 @@
     <!-- 侧边栏 -->
     <aside class="sidebar">
       <!-- Logo 区域 -->
-        <div class="sidebar-logo">
-          <div class="logo-icon">
-            <img src="/brand-mark.svg" alt="品牌标识" />
-          </div>
-          <div class="logo-text">
+      <div class="sidebar-logo">
+        <div class="logo-icon">
+          <img src="/brand-mark.svg" alt="品牌标识" />
+        </div>
+        <div class="logo-text">
           <div class="logo-name">数字化起重机维修维保系统</div>
           <div class="logo-sub">管理端</div>
+          <div class="logo-status">多端协同 · 指挥中枢</div>
         </div>
       </div>
 
@@ -203,9 +204,11 @@
       <!-- 顶栏 -->
       <header class="topbar">
         <div class="breadcrumb-area">
+          <span class="page-overline">Operation Deck</span>
           <span class="page-name">{{ currentPageName }}</span>
         </div>
         <div class="topbar-right">
+          <div class="status-chip">{{ getRoleName(user?.role) }}</div>
           <!-- 通知铃铛 -->
           <el-popover
             placement="bottom-end"
@@ -336,87 +339,133 @@ onUnmounted(() => clearInterval(timer))
 <style scoped>
 .app-layout {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
   overflow: hidden;
-  background: var(--color-bg-page);
+  background: transparent;
 }
 
-/* ─── 侧边栏 ─── */
 .sidebar {
   width: var(--sidebar-width);
   min-width: var(--sidebar-width);
-  height: 100vh;
+  min-height: 100vh;
   background: linear-gradient(180deg, var(--sidebar-bg-from) 0%, var(--sidebar-bg-to) 100%);
   display: flex;
   flex-direction: column;
   position: relative;
   z-index: 100;
-  box-shadow: 2px 0 12px rgba(0,0,0,.15);
+  box-shadow: 24px 0 42px rgba(5, 17, 31, 0.18);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* Logo */
+.sidebar::before,
+.sidebar::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.sidebar::before {
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 30%),
+    radial-gradient(circle at top right, rgba(71, 179, 255, 0.18), transparent 26%);
+}
+
+.sidebar::after {
+  inset: 20px 18px auto;
+  height: 120px;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent);
+}
+
 .sidebar-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 20px 16px;
+  gap: 14px;
+  padding: 24px 20px 18px;
   border-bottom: 1px solid rgba(255,255,255,.08);
+  position: relative;
+  z-index: 1;
 }
-.logo-icon svg {
-  width: 36px;
-  height: 36px;
-  flex-shrink: 0;
+
+.logo-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.04));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
+
 .logo-icon img {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   flex-shrink: 0;
   display: block;
 }
+.logo-text {
+  min-width: 0;
+}
 .logo-name {
-  font-size: 13px;
+  font-family: var(--font-display);
+  font-size: 14px;
   font-weight: 700;
   color: #fff;
-  line-height: 1.3;
-  letter-spacing: 0.02em;
+  line-height: 1.35;
+  letter-spacing: 0.04em;
 }
 .logo-sub {
-  font-size: 10px;
-  color: rgba(255,255,255,.45);
-  margin-top: 2px;
+  font-size: 11px;
+  color: rgba(255,255,255,.54);
+  margin-top: 4px;
+}
+.logo-status {
+  margin-top: 8px;
+  font-size: 11px;
+  color: rgba(255, 196, 124, 0.9);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-/* 导航 */
 .sidebar-nav {
   flex: 1;
-  padding: 12px 10px;
+  padding: 18px 14px;
   overflow-y: auto;
   scrollbar-width: none;
+  position: relative;
+  z-index: 1;
 }
 .sidebar-nav::-webkit-scrollbar { display: none; }
 
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: var(--radius-md);
-  color: rgba(255,255,255,.6);
+  gap: 12px;
+  padding: 13px 14px;
+  border-radius: 18px;
+  color: rgba(255,255,255,.62);
   text-decoration: none;
   font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 2px;
+  font-weight: 600;
+  margin-bottom: 6px;
   transition: var(--transition-fast);
   cursor: pointer;
+  border: 1px solid transparent;
 }
 .nav-item:hover {
   color: rgba(255,255,255,.9);
   background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.08);
+  transform: translateX(2px);
 }
 .nav-item.active {
-  background: linear-gradient(135deg, #1677ff 0%, #0958d9 100%);
+  background: linear-gradient(135deg, rgba(12, 117, 216, 0.9) 0%, rgba(9, 77, 141, 0.96) 100%);
   color: #fff;
-  box-shadow: 0 4px 12px rgba(22,119,255,.4);
+  box-shadow: 0 16px 28px rgba(12, 117, 216, 0.24);
+  border-color: rgba(255,255,255,.08);
 }
 .nav-icon {
   width: 20px;
@@ -424,26 +473,31 @@ onUnmounted(() => clearInterval(timer))
   flex-shrink: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 .nav-icon svg { width: 18px; height: 18px; }
-.nav-label { line-height: 1; }
+.nav-label {
+  line-height: 1;
+  white-space: nowrap;
+}
 
-/* 底部用户 */
 .sidebar-user {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 16px;
+  gap: 12px;
+  padding: 16px 18px 20px;
   border-top: 1px solid rgba(255,255,255,.08);
   background: rgba(0,0,0,.2);
+  position: relative;
+  z-index: 1;
 }
 .user-avatar {
-  width: 32px;
-  height: 32px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1677ff, #0958d9);
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-strong));
   color: #fff;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -458,17 +512,17 @@ onUnmounted(() => clearInterval(timer))
 }
 .user-role {
   font-size: 11px;
-  color: rgba(255,255,255,.45);
-  margin-top: 2px;
+  color: rgba(255,255,255,.5);
+  margin-top: 4px;
 }
 .user-info { flex: 1; min-width: 0; }
 .logout-btn {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border: none;
   background: rgba(255,255,255,.08);
-  border-radius: var(--radius-sm);
-  color: rgba(255,255,255,.5);
+  border-radius: 12px;
+  color: rgba(255,255,255,.6);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -483,43 +537,72 @@ onUnmounted(() => clearInterval(timer))
 }
 .logout-btn svg { width: 14px; height: 14px; }
 
-/* ─── 主内容区 ─── */
 .main-wrapper {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   overflow: hidden;
+  position: relative;
+}
+
+.main-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 100% 0, rgba(255, 179, 71, 0.12), transparent 24%),
+    radial-gradient(circle at 0 18%, rgba(12, 117, 216, 0.1), transparent 26%);
 }
 
 .topbar {
-  height: 56px;
-  background: #fff;
-  border-bottom: 1px solid var(--color-border-light);
+  height: 78px;
+  margin: 18px 18px 0;
+  padding: 0 24px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(247, 250, 252, 0.78));
+  border: 1px solid rgba(16, 33, 48, 0.08);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
   flex-shrink: 0;
-  box-shadow: var(--shadow-xs);
+  box-shadow: 0 16px 32px rgba(10, 24, 39, 0.06);
+  backdrop-filter: blur(16px);
+}
+
+.breadcrumb-area {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page-overline {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-text-placeholder);
+  font-weight: 700;
 }
 .page-name {
-  font-size: 15px;
+  font-family: var(--font-display);
+  font-size: 20px;
   font-weight: 600;
   color: var(--color-text-primary);
+  letter-spacing: 0.04em;
 }
 .topbar-time {
   font-size: 13px;
   color: var(--color-text-secondary);
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.08em;
 }
 
 .main-content {
   flex: 1;
   overflow-y: auto;
-  padding: 24px;
+  padding: 22px 18px 20px;
   scrollbar-width: thin;
   scrollbar-color: #d0d0d0 transparent;
 }
@@ -530,34 +613,63 @@ onUnmounted(() => clearInterval(timer))
 .topbar-right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 14px;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(12, 117, 216, 0.09);
+  color: var(--color-primary-dark);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.status-chip::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 6px rgba(255, 179, 71, 0.18);
 }
 .notification-bell {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
   cursor: pointer;
   color: var(--color-text-regular);
   transition: all 0.2s;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(16, 33, 48, 0.08);
 }
 .notification-bell:hover {
-  background: var(--color-bg-page);
+  background: rgba(12, 117, 216, 0.08);
   color: var(--color-primary);
 }
 .notification-bell svg { width: 20px; height: 20px; }
 
 :deep(.notification-popover) {
   padding: 0 !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(16, 33, 48, 0.08) !important;
+  box-shadow: var(--shadow-lg) !important;
 }
 .notification-list {
   display: flex;
   flex-direction: column;
 }
 .notif-header {
-  padding: 12px 16px;
+  padding: 16px 18px;
   border-bottom: 1px solid var(--color-border-light);
   display: flex;
   justify-content: space-between;
@@ -568,9 +680,9 @@ onUnmounted(() => clearInterval(timer))
 .notif-count {
   font-size: 12px;
   color: var(--color-primary);
-  background: var(--color-primary-light-9);
-  padding: 2px 6px;
-  border-radius: 10px;
+  background: rgba(12, 117, 216, 0.08);
+  padding: 4px 8px;
+  border-radius: 999px;
 }
 .notif-body {
   max-height: 300px;
@@ -585,13 +697,13 @@ onUnmounted(() => clearInterval(timer))
 .notif-item {
   display: flex;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 16px 18px;
   border-bottom: 1px solid var(--color-border-light);
   cursor: pointer;
   transition: background 0.2s;
 }
 .notif-item:hover {
-  background: #f5f7fa;
+  background: rgba(12, 117, 216, 0.04);
 }
 .notif-icon {
   width: 32px;

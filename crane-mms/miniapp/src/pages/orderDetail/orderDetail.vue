@@ -160,18 +160,20 @@ const getStatusDesc = (s: string) => {
 <style scoped>
 .detail-container {
   min-height: 100vh;
-  background-color: #f5f6f7;
   padding-bottom: 60rpx;
 }
 
 .status-banner {
+  margin: 24rpx 24rpx 0;
   padding: 60rpx 40rpx;
   color: #fff;
+  border-radius: 34rpx;
+  box-shadow: 0 28rpx 44rpx rgba(8, 24, 40, 0.14);
 }
-.status-banner.pending { background-color: #f9a825; }
-.status-banner.in_progress { background-color: #1976d2; }
-.status-banner.pending_sign { background-color: #e53935; }
-.status-banner.completed { background-color: #43a047; }
+.status-banner.pending { background: linear-gradient(135deg, #ffb347, #ff8a24); }
+.status-banner.in_progress { background: linear-gradient(135deg, #136fda, #47b3ff); }
+.status-banner.pending_sign { background: linear-gradient(135deg, #e53935, #f05f61); }
+.status-banner.completed { background: linear-gradient(135deg, #1fa56d, #39c489); }
 
 .status-label {
   font-size: 44rpx;
@@ -187,9 +189,12 @@ const getStatusDesc = (s: string) => {
 }
 
 .cell-group {
-  background-color: #fff;
-  margin-top: 20rpx;
-  padding: 0 30rpx;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(246, 249, 252, 0.9));
+  margin: 24rpx;
+  padding: 0 30rpx 24rpx;
+  border-radius: 30rpx;
+  box-shadow: 0 24rpx 38rpx rgba(8, 24, 40, 0.08);
+  border: 2rpx solid rgba(16, 33, 48, 0.05);
 }
 
 .group-title {
@@ -202,7 +207,7 @@ const getStatusDesc = (s: string) => {
   display: flex;
   justify-content: space-between;
   padding: 24rpx 0;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid rgba(16, 33, 48, 0.08);
   font-size: 30rpx;
 }
 
@@ -224,10 +229,11 @@ const getStatusDesc = (s: string) => {
 }
 
 .btn-main {
-  background-color: #2979ff;
+  background: linear-gradient(135deg, #136fda, #094d8d);
   color: #fff;
-  border-radius: 12rpx;
+  border-radius: 999rpx;
   font-size: 32rpx;
+  box-shadow: 0 18rpx 32rpx rgba(19, 111, 218, 0.2);
 }
 
 .form-area {
@@ -249,8 +255,8 @@ const getStatusDesc = (s: string) => {
 .textarea {
   width: 100%;
   height: 200rpx;
-  background-color: #f7f7f7;
-  border-radius: 12rpx;
+  background-color: rgba(239, 244, 249, 0.9);
+  border-radius: 18rpx;
   padding: 20rpx;
   font-size: 28rpx;
   box-sizing: border-box;
@@ -264,18 +270,18 @@ const getStatusDesc = (s: string) => {
 
 .btn-inspection {
   flex: 1.5;
-  background-color: #f3e5f5;
-  color: #7b1fa2;
+  background-color: rgba(255, 179, 71, 0.16);
+  color: #9a3412;
   font-size: 28rpx;
-  border-radius: 12rpx;
+  border-radius: 999rpx;
 }
 
 .btn-sub {
   flex: 1;
-  background-color: #e3f2fd;
-  color: #1976d2;
+  background-color: rgba(19, 111, 218, 0.12);
+  color: #136fda;
   font-size: 28rpx;
-  border-radius: 12rpx;
+  border-radius: 999rpx;
 }
 
 .btn-main {
@@ -284,8 +290,8 @@ const getStatusDesc = (s: string) => {
 
 .memo-box {
   padding: 30rpx;
-  background-color: #fafafa;
-  border-radius: 12rpx;
+  background-color: rgba(239, 244, 249, 0.92);
+  border-radius: 20rpx;
 }
 
 .memo-text {

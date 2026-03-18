@@ -225,24 +225,44 @@ onMounted(() => {
 .profile-page {
   min-height: 100vh;
   padding: 30rpx;
-  background: linear-gradient(180deg, #f7f8fa 0%, #eef4ff 100%);
 }
 
 .hero-card,
 .section-card {
-  background: #fff;
-  border-radius: 24rpx;
-  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.05);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(246, 249, 252, 0.9));
+  border-radius: 28rpx;
+  box-shadow: 0 22rpx 38rpx rgba(8, 24, 40, 0.08);
   padding: 30rpx;
   margin-bottom: 24rpx;
+  border: 2rpx solid rgba(16, 33, 48, 0.05);
 }
 
 .hero-card {
   display: flex;
   align-items: center;
   gap: 24rpx;
-  background: linear-gradient(135deg, #2979ff 0%, #1565c0 100%);
+  background: linear-gradient(145deg, rgba(8, 21, 33, 0.96) 0%, rgba(12, 38, 61, 0.94) 56%, rgba(19, 74, 113, 0.9) 100%);
   color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 2rpx, transparent 2rpx),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 2rpx, transparent 2rpx);
+  background-size: 90rpx 90rpx;
+  opacity: 0.28;
+}
+
+.avatar,
+.hero-info,
+.status-tag {
+  position: relative;
+  z-index: 1;
 }
 
 .avatar {
@@ -302,8 +322,8 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 18rpx 20rpx;
-  border-radius: 16rpx;
-  background: #f8fafc;
+  border-radius: 18rpx;
+  background: rgba(239, 244, 249, 0.92);
 }
 
 .label {
@@ -328,8 +348,8 @@ onMounted(() => {
 .form-item,
 .bind-item {
   padding: 22rpx;
-  border-radius: 18rpx;
-  background: #f8fafc;
+  border-radius: 22rpx;
+  background: rgba(239, 244, 249, 0.92);
 }
 
 .form-label {
@@ -343,8 +363,8 @@ onMounted(() => {
   height: 84rpx;
   line-height: 84rpx;
   padding: 0 22rpx;
-  border-radius: 14rpx;
-  background: #fff;
+  border-radius: 18rpx;
+  background: rgba(255, 255, 255, 0.95);
   color: #111827;
   font-size: 26rpx;
 }
@@ -367,7 +387,7 @@ onMounted(() => {
 .action-btn {
   margin-top: 16rpx;
   border-radius: 999rpx;
-  background: #2979ff;
+  background: linear-gradient(135deg, #136fda, #094d8d);
   color: #fff;
   font-size: 26rpx;
 }
@@ -382,7 +402,7 @@ onMounted(() => {
 
 .bind-btn.secondary,
 .action-btn.secondary {
-  background: #94a3b8;
+  background: #7f93a5;
 }
 
 .action-btn.danger {

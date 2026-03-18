@@ -6,6 +6,10 @@
         <view class="user-info">
           <text class="greeting">你好, {{ displayName }} 👋</text>
           <text class="role">{{ roleLabel }}</text>
+          <view class="hero-badges">
+            <text class="hero-badge">任务闭环</text>
+            <text class="hero-badge">现场执行</text>
+          </view>
         </view>
         <view class="header-actions">
           <view class="profile-btn" @click="goProfile">
@@ -167,17 +171,33 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #f7f8fa;
 }
 
-/* 顶部背景与用户信息 */
 .header-bg {
-  background: linear-gradient(135deg, #2979ff 0%, #1565c0 100%);
-  padding: 100rpx 40rpx 80rpx;
-  border-bottom-left-radius: 60rpx;
-  border-bottom-right-radius: 60rpx;
+  background: linear-gradient(145deg, rgba(8, 21, 33, 0.96) 0%, rgba(12, 38, 61, 0.94) 56%, rgba(19, 74, 113, 0.9) 100%);
+  padding: 100rpx 40rpx 90rpx;
+  border-bottom-left-radius: 82rpx;
+  border-bottom-right-radius: 82rpx;
   position: relative;
   z-index: 10;
+  overflow: hidden;
+}
+
+.header-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 2rpx, transparent 2rpx),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 2rpx, transparent 2rpx);
+  background-size: 90rpx 90rpx;
+  opacity: 0.28;
+}
+
+.user-card,
+.tabs-container {
+  position: relative;
+  z-index: 1;
 }
 
 .user-card {
@@ -197,7 +217,7 @@ onMounted(() => {
   font-weight: 800;
   color: #fff;
   display: block;
-  letter-spacing: 2rpx;
+  letter-spacing: 4rpx;
 }
 
 .role {
@@ -205,6 +225,26 @@ onMounted(() => {
   color: rgba(255, 255, 255, 0.8);
   margin-top: 10rpx;
   display: block;
+}
+
+.hero-badges {
+  display: flex;
+  gap: 12rpx;
+  margin-top: 18rpx;
+  flex-wrap: wrap;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48rpx;
+  padding: 0 18rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 196, 124, 0.96);
+  font-size: 20rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
 }
 
 .profile-btn,
@@ -228,17 +268,17 @@ onMounted(() => {
 /* 悬浮选项卡 */
 .tabs-container {
   padding: 0 40rpx;
-  margin-top: -46rpx;
+  margin-top: -54rpx;
   position: relative;
   z-index: 20;
 }
 
 .task-tabs {
   display: flex;
-  background-color: #fff;
-  height: 92rpx;
-  border-radius: 20rpx;
-  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.05);
+  background-color: rgba(255, 255, 255, 0.96);
+  height: 98rpx;
+  border-radius: 26rpx;
+  box-shadow: 0 24rpx 40rpx rgba(8, 24, 40, 0.1);
   overflow: hidden;
 }
 
@@ -256,7 +296,7 @@ onMounted(() => {
 }
 
 .tab-item.active {
-  color: #2979ff;
+  color: #136fda;
   font-size: 30rpx;
   font-weight: bold;
 }
@@ -264,17 +304,16 @@ onMounted(() => {
 .active-line {
   position: absolute;
   bottom: 0;
-  width: 32rpx;
+  width: 40rpx;
   height: 6rpx;
-  background: #2979ff;
+  background: linear-gradient(135deg, #136fda, #ffb347);
   border-radius: 6rpx 6rpx 0 0;
 }
 
-/* 列表区 */
 .list-area {
   flex: 1;
   overflow: hidden;
-  margin-top: 20rpx;
+  margin-top: 22rpx;
 }
 
 .order-list {
@@ -287,12 +326,12 @@ onMounted(() => {
 
 /* 现代卡片样式 */
 .order-card {
-  background-color: #fff;
-  border-radius: 24rpx;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(246, 249, 252, 0.9));
+  border-radius: 28rpx;
   padding: 32rpx;
   margin-bottom: 30rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.03);
-  border: 1rpx solid rgba(0, 0, 0, 0.02);
+  box-shadow: 0 20rpx 34rpx rgba(8, 24, 40, 0.08);
+  border: 2rpx solid rgba(16, 33, 48, 0.05);
   transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -310,10 +349,10 @@ onMounted(() => {
 .type-badge {
   font-size: 22rpx;
   font-weight: bold;
-  background-color: #f1f5f9;
-  color: #475569;
+  background-color: rgba(239, 244, 249, 0.92);
+  color: #42586a;
   padding: 6rpx 16rpx;
-  border-radius: 12rpx;
+  border-radius: 999rpx;
   letter-spacing: 1rpx;
 }
 
@@ -349,15 +388,16 @@ onMounted(() => {
 .equipment-title {
   font-size: 34rpx;
   font-weight: 800;
-  color: #1e293b;
+  color: #102130;
   margin-bottom: 20rpx;
   display: block;
   line-height: 1.4;
+  letter-spacing: 1rpx;
 }
 
 .info-group {
-  background: #f8fafc;
-  border-radius: 16rpx;
+  background: rgba(239, 244, 249, 0.92);
+  border-radius: 20rpx;
   padding: 16rpx 20rpx;
 }
 
@@ -392,7 +432,7 @@ onMounted(() => {
 
 .card-footer {
   padding-top: 24rpx;
-  border-top: 2rpx dashed #e2e8f0;
+  border-top: 2rpx dashed rgba(16, 33, 48, 0.08);
   display: flex;
   justify-content: space-between;
   align-items: center;

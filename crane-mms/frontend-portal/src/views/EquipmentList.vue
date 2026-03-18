@@ -90,28 +90,28 @@ onMounted(() => {
 .pb-safe { padding-bottom: calc(env(safe-area-inset-bottom) + 30px); }
 
 .glass-nav :deep(.van-nav-bar) {
-  background: rgba(255, 255, 255, 0.8) !important;
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.62) !important;
+  backdrop-filter: blur(18px);
 }
 
 .filter-sticky {
   position: sticky;
   top: 46px;
   z-index: 100;
-  background: rgba(247, 248, 250, 0.9);
-  backdrop-filter: blur(10px);
-  padding-bottom: 8px;
+  background: rgba(238, 243, 248, 0.84);
+  backdrop-filter: blur(16px);
+  padding: 0 0 10px;
 }
 
 .equip-list { padding: 12px 16px; }
 
 .equip-card {
-  background: #fff;
-  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(246, 249, 252, 0.9));
+  border-radius: 24px;
   padding: 18px;
   margin-bottom: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-  border: 1px solid rgba(0,0,0,0.01);
+  box-shadow: 0 18px 32px rgba(8, 24, 40, 0.06);
+  border: 1px solid rgba(16, 33, 48, 0.06);
 }
 
 .card-header {
@@ -120,9 +120,9 @@ onMounted(() => {
   align-items: flex-start;
   margin-bottom: 16px;
 }
-.name { margin: 0; font-size: 16px; font-weight: 800; color: #1e293b; margin-bottom: 4px; }
-.category { font-size: 12px; color: #94a3b8; }
-.status-tag { padding: 4px 10px; font-weight: 700; }
+.name { margin: 0; font-size: 17px; font-weight: 800; color: var(--portal-ink); margin-bottom: 4px; }
+.category { font-size: 12px; color: var(--portal-muted); }
+.status-tag { padding: 4px 10px; font-weight: 700; box-shadow: 0 10px 18px rgba(8, 24, 40, 0.08); }
 
 .specs-grid {
   display: flex;
@@ -131,22 +131,20 @@ onMounted(() => {
 }
 .spec-item {
   flex: 1;
-  background: #f8fafc;
-  padding: 10px;
-  border-radius: 12px;
+  background: rgba(239, 244, 249, 0.9);
+  padding: 12px;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
 }
-.spec-label { font-size: 10px; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
-.spec-val { font-size: 13px; font-weight: 700; color: #334155; }
+.spec-label { font-size: 10px; color: var(--portal-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.08em; }
+.spec-val { font-size: 13px; font-weight: 700; color: var(--portal-ink); }
 .text-danger { color: #ef4444; }
 
 .detail-btn {
-  border-color: #e2e8f0 !important;
-  color: #64748b !important;
+  border-color: rgba(16, 33, 48, 0.1) !important;
+  color: var(--portal-text) !important;
   font-weight: 600;
   font-size: 12px;
 }
-
-.interactive-card:active { transform: scale(0.98); }
 </style>

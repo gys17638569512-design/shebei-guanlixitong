@@ -93,7 +93,8 @@ onMounted(loadData)
 <style scoped>
 .order-detail { min-height: 100vh; padding-bottom: 30px; }
 .status-banner {
-  padding: 24px;
+  margin: 12px 16px 14px;
+  padding: 28px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -101,13 +102,14 @@ onMounted(loadData)
   color: #fff;
   font-weight: bold;
   font-size: 18px;
-  margin-bottom: 12px;
+  border-radius: 28px;
+  box-shadow: 0 22px 38px rgba(8, 24, 40, 0.12);
 }
 .status-banner.completed { background: linear-gradient(135deg, #07c160, #39d38d); }
 .status-banner.pending_sign { background: linear-gradient(135deg, #ee0a24, #ff4c4c); }
-.status-banner.in_progress { background: linear-gradient(135deg, #1989fa, #5cadff); }
-.status-banner.pending { background: linear-gradient(135deg, #ff976a, #ffbb9a); }
+.status-banner.in_progress { background: linear-gradient(135deg, #0c75d8, #47b3ff); }
+.status-banner.pending { background: linear-gradient(135deg, #ffb347, #ff8a24); }
 
-.text-content { color: #323233; padding-top: 4px; line-height: 1.5; white-space: pre-wrap; }
+.text-content { color: var(--portal-text); padding-top: 4px; line-height: 1.7; white-space: pre-wrap; }
 .action-bar { margin: 24px 16px; }
 </style>

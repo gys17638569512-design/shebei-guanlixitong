@@ -3,10 +3,17 @@
     <!-- 顶部欢迎区 -->
     <header class="welcome-header">
       <div class="welcome-text">
-        <h1 class="welcome-title">您好, {{ userName }} 👋</h1>
-        <p class="welcome-subtitle">实时掌握全国起重机维保动态与全生命周期数据。</p>
+        <span class="welcome-kicker">运营指挥舱</span>
+        <h1 class="welcome-title">您好，{{ userName }}</h1>
+        <p class="welcome-subtitle">从排期、执行、签字到归档，实时掌握起重机维保业务的每一个关键节点。</p>
+        <div class="signal-row">
+          <span class="signal-pill">全国工单态势</span>
+          <span class="signal-pill ghost">维保执行闭环</span>
+          <span class="signal-pill ghost">多端实时协同</span>
+        </div>
       </div>
       <div class="time-capsule">
+        <span class="capsule-label">当前日期</span>
         <span class="curr-date">{{ fullDate }}</span>
       </div>
     </header>
@@ -121,11 +128,12 @@ const initCharts = () => {
         boundaryGap: false,
         data: stats.value.order_trend.map(i => i.date),
         axisLine: { lineStyle: { color: '#eee' } },
-        axisLabel: { color: '#999', fontFamily: 'Inter' }
+        axisLabel: { color: '#6a7f92', fontFamily: 'Bahnschrift, Segoe UI, PingFang SC, Microsoft YaHei, sans-serif' }
       },
       yAxis: {
         type: 'value',
-        splitLine: { lineStyle: { type: 'dashed', color: '#f0f0f0' } }
+        splitLine: { lineStyle: { type: 'dashed', color: 'rgba(16, 33, 48, 0.08)' } },
+        axisLabel: { color: '#6a7f92' }
       },
       series: [
         {
@@ -133,12 +141,12 @@ const initCharts = () => {
           type: 'line',
           smooth: true,
           data: stats.value.order_trend.map(i => i.count),
-          itemStyle: { color: '#3b82f6', borderWidth: 2 },
-          lineStyle: { width: 3, shadowColor: 'rgba(59, 130, 246, 0.4)', shadowBlur: 10, shadowOffsetY: 5 },
+          itemStyle: { color: '#0c75d8', borderWidth: 2 },
+          lineStyle: { width: 3, shadowColor: 'rgba(12, 117, 216, 0.34)', shadowBlur: 10, shadowOffsetY: 5 },
           areaStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: 'rgba(59, 130, 246,0.2)' },
-              { offset: 1, color: 'rgba(59, 130, 246,0)' }
+              { offset: 0, color: 'rgba(12, 117, 216, 0.2)' },
+              { offset: 1, color: 'rgba(12, 117, 216, 0)' }
             ])
           }
         }
@@ -153,7 +161,7 @@ const initCharts = () => {
     pieChart = echarts.init(pieDom)
     const option = {
       tooltip: { trigger: 'item' },
-      legend: { bottom: '0%', left: 'center', icon: 'circle', itemGap: 15 },
+      legend: { bottom: '0%', left: 'center', icon: 'circle', itemGap: 15, textStyle: { color: '#5e7387' } },
       series: [
         {
           name: '占比分布',
@@ -170,7 +178,7 @@ const initCharts = () => {
           data: stats.value.equipment_distribution
         }
       ],
-      color: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444']
+      color: ['#0c75d8', '#1fa56d', '#ffb347', '#4bb1ff', '#f05f61']
     }
     pieChart.setOption(option)
   }
@@ -212,43 +220,134 @@ onUnmounted(() => {
   margin: 0 auto;
 }
 
-/* ==================== 头部欢迎区 ==================== */
 .welcome-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 32px;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 30px;
+  padding: 28px 30px;
+  border-radius: 28px;
+  background:
+    linear-gradient(140deg, rgba(8, 21, 33, 0.96) 0%, rgba(15, 42, 67, 0.92) 52%, rgba(20, 75, 116, 0.88) 100%);
+  box-shadow: 0 28px 54px rgba(8, 24, 40, 0.14);
+  overflow: hidden;
+  position: relative;
+}
+
+.welcome-header::before,
+.welcome-header::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.welcome-header::before {
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 100px 100px;
+  opacity: 0.36;
+}
+
+.welcome-header::after {
+  top: -70px;
+  right: -40px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 179, 71, 0.24), transparent 68%);
+}
+
+.welcome-text,
+.time-capsule {
+  position: relative;
+  z-index: 1;
+}
+
+.welcome-kicker {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 196, 124, 0.96);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
 }
 .welcome-title {
-  font-size: 28px;
+  font-family: var(--font-display);
+  font-size: 34px;
   font-weight: 800;
-  color: #1e293b;
+  color: #f8fbff;
   margin: 0 0 8px 0;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.04em;
 }
 .welcome-subtitle {
   font-size: 15px;
-  color: #64748b;
+  color: rgba(236, 242, 247, 0.72);
   margin: 0;
   font-weight: 500;
+  max-width: 700px;
+  line-height: 1.7;
+}
+
+.signal-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.signal-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #f8fbff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.signal-pill.ghost {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(236, 242, 247, 0.78);
 }
 .time-capsule {
-  background: rgba(255, 255, 255, 0.7);
+  min-width: 220px;
+  background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  padding: 8px 20px;
-  border-radius: 9999px;
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  padding: 14px 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.capsule-label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(255, 196, 124, 0.88);
+  margin-bottom: 10px;
 }
 .curr-date {
   font-size: 14px;
-  font-weight: 600;
-  color: #0ea5e9;
+  font-weight: 700;
+  color: #f8fbff;
   letter-spacing: 0.5px;
+  line-height: 1.5;
 }
 
-/* ==================== Bento Grid 数据卡片 ==================== */
 .bento-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -258,18 +357,18 @@ onUnmounted(() => {
 
 .bento-card {
   position: relative;
-  background: #ffffff;
-  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.86));
+  border-radius: 24px;
   padding: 24px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(226, 232, 240, 0.4);
+  box-shadow: 0 18px 40px rgba(8, 24, 40, 0.08);
+  border: 1px solid rgba(16, 33, 48, 0.08);
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 .bento-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 24px 48px rgba(8, 24, 40, 0.12);
 }
 
 .glow-orb {
@@ -286,10 +385,10 @@ onUnmounted(() => {
 .bento-card:hover .glow-orb {
   opacity: 0.4;
 }
-.glow-orb.bg-blue { background: #3b82f6; }
-.glow-orb.bg-orange { background: #f59e0b; }
-.glow-orb.bg-green { background: #10b981; }
-.glow-orb.bg-purple { background: #8b5cf6; }
+.glow-orb.bg-blue { background: #0c75d8; }
+.glow-orb.bg-orange { background: #ffb347; }
+.glow-orb.bg-green { background: #1fa56d; }
+.glow-orb.bg-purple { background: #4bb1ff; }
 
 .card-content {
   position: relative;
@@ -300,18 +399,20 @@ onUnmounted(() => {
 }
 .card-label {
   font-size: 14px;
-  font-weight: 600;
-  color: #64748b;
+  font-weight: 700;
+  color: #6a7f92;
   margin: 0 0 8px 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 .card-value {
-  font-size: 36px;
+  font-family: var(--font-display);
+  font-size: 38px;
   font-weight: 900;
-  color: #0f172a;
+  color: #102130;
   margin: 0;
   line-height: 1.1;
-  font-family: 'Inter', system-ui, sans-serif;
-  letter-spacing: -1px;
+  letter-spacing: 0.02em;
 }
 
 .icon-box {
@@ -324,12 +425,11 @@ onUnmounted(() => {
   flex-shrink: 0;
 }
 .icon-box svg { width: 24px; height: 24px; }
-.icon-box.blue { background: #eff6ff; color: #3b82f6; }
-.icon-box.orange { background: #fffbeb; color: #f59e0b; }
-.icon-box.green { background: #ecfdf5; color: #10b981; }
-.icon-box.purple { background: #f5f3ff; color: #8b5cf6; }
+.icon-box.blue { background: rgba(12, 117, 216, 0.1); color: #0c75d8; }
+.icon-box.orange { background: rgba(255, 179, 71, 0.14); color: #d37a15; }
+.icon-box.green { background: rgba(31, 165, 109, 0.12); color: #1b8f5f; }
+.icon-box.purple { background: rgba(71, 179, 255, 0.12); color: #0f79c4; }
 
-/* ==================== 现代图表画板 ==================== */
 .charts-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -340,20 +440,38 @@ onUnmounted(() => {
 }
 
 .chart-panel {
-  background: #ffffff;
-  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.86));
+  border-radius: 24px;
   padding: 24px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(226, 232, 240, 0.4);
+  box-shadow: 0 18px 40px rgba(8, 24, 40, 0.08);
+  border: 1px solid rgba(16, 33, 48, 0.08);
 }
 .panel-header {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
-  color: #1e293b;
+  color: #102130;
   margin-bottom: 24px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 .chart-container {
   width: 100%;
   height: 320px;
+}
+
+@media (max-width: 900px) {
+  .welcome-header {
+    flex-direction: column;
+    padding: 24px 22px;
+  }
+
+  .welcome-title {
+    font-size: 28px;
+  }
+
+  .time-capsule {
+    min-width: auto;
+    width: 100%;
+  }
 }
 </style>
