@@ -2,6 +2,7 @@ import axios from 'axios'
 import { showFailToast } from 'vant'
 import 'vant/es/toast/style'
 import router from '../router'
+import { clearPortalSession } from './portalAuth'
 
 const request = axios.create({
   baseURL: '/api/v1/portal', // 注意：客户门户所有接口都在 /portal 前缀下
@@ -29,7 +30,7 @@ request.interceptors.response.use(
     } else {
       showFailToast(res.msg || '业务异常')
       if (res.code === 401) {
-        localStorage.removeItem('portal_token')
+        clearPortalSession()
         router.push('/login')
       }
       return Promise.reject(new Error(res.msg || 'Error'))
@@ -40,7 +41,7 @@ request.interceptors.response.use(
     const res = error.response ? error.response.data : null
 
     if (status === 401 || (res && res.code === 401)) {
-      localStorage.removeItem('portal_token')
+      clearPortalSession()
       router.push('/login')
     } else {
       showFailToast(res?.msg || '网络连接异常')

@@ -32,6 +32,24 @@ class PortalSubAccountCreate(BaseModel):
     password: str = Field(..., description="初始密码")
 
 
+class PortalSubAccountUpdate(BaseModel):
+    role: Optional[str] = Field(None, description="账号角色")
+    username: Optional[str] = Field(None, description="登录账号")
+    name: Optional[str] = Field(None, description="姓名")
+    display_name: Optional[str] = Field(None, description="显示名称")
+    phone: Optional[str] = Field(None, description="手机号")
+    email: Optional[str] = Field(None, description="邮箱")
+    avatar_url: Optional[str] = Field(None, description="头像地址")
+
+
+class CustomerAccountStatusUpdate(BaseModel):
+    is_active: bool = Field(..., description="是否启用")
+
+
+class CustomerAccountPasswordReset(BaseModel):
+    password: str = Field(..., description="重置后的密码")
+
+
 class CustomerAccountUpdate(BaseModel):
     parent_account_id: Optional[int] = None
     role: Optional[str] = None
@@ -52,6 +70,17 @@ class CustomerMainAccountUpdate(BaseModel):
     display_name: Optional[str] = None
     phone: Optional[str] = None
     email: Optional[str] = None
+
+
+class PortalCurrentAccountUpdate(BaseModel):
+    name: Optional[str] = None
+    display_name: Optional[str] = None
+    phone: Optional[str] = None
+    email: Optional[str] = None
+
+
+class PortalCurrentPasswordUpdate(BaseModel):
+    password: str = Field(..., description="当前登录子账号的新密码")
 
 
 class CustomerAccountResponse(CustomerAccountBase):

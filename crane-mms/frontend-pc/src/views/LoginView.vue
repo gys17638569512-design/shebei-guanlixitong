@@ -89,7 +89,7 @@
           </el-button>
         </el-form>
 
-        <p class="login-tip">管理员账号：admin / 密码：Admin@2024</p>
+        <p class="login-tip">测试账号：admin / Admin@2024，manager01 / Manager@2024，tech01 / Tech@2024</p>
       </div>
     </div>
   </div>
@@ -132,15 +132,23 @@ const rules = {
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
 }
 
+const getLandingPathByRole = (role) => {
+  if (role === 'TECH') {
+    return '/repairs'
+  }
+  return '/dashboard'
+}
+
 const handleLogin = async () => {
   if (!loginFormRef.value) return
   await loginFormRef.value.validate(async (valid) => {
     if (valid) {
       loading.value = true
       try {
-        await authStore.login(loginForm.username, loginForm.password)
+        const response = await authStore.login(loginForm.username, loginForm.password)
         ElMessage.success('登录成功，欢迎回来！')
-        router.push('/')
+        const role = authStore.user?.role || response?.user?.role
+        router.push(getLandingPathByRole(role))
       } catch {
         ElMessage.error('账号或密码错误，请重试')
       } finally {

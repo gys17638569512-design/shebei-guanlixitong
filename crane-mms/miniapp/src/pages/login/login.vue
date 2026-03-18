@@ -26,6 +26,8 @@
         </view>
         
         <button class="login-btn" :loading="loading" @click="handleLogin">登 录 系 统</button>
+
+        <text class="login-tip">工程师测试账号：tech01 / Tech@2024</text>
       </view>
   
       <view class="login-footer">
@@ -217,6 +219,14 @@ const handleLogin = async () => {
   font-size: 34rpx;
   font-weight: bold;
   box-shadow: 0 10rpx 30rpx rgba(41, 121, 255, 0.3);
+}
+
+.login-tip {
+  display: block;
+  margin-top: 24rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: #7f8ea3;
 }
 
 .login-footer {

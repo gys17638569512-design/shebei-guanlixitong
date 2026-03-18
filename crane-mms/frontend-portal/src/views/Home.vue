@@ -5,6 +5,7 @@
       <div class="welcome-text">
         <span class="greeting">您好,</span>
         <h2 class="company-name">{{ stats.customer_name || '加载中...' }}</h2>
+        <span class="account-name">{{ currentOperator }}</span>
       </div>
       <van-icon name="bell" class="notification-icon" />
     </div>
@@ -64,13 +65,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import request from '../utils/request'
+import { getPortalSession } from '../utils/portalAuth'
 
 const router = useRouter()
 const stats = ref({})
 const profile = ref({})
+const portalCustomer = ref(getPortalSession())
+
+const currentOperator = computed(() => {
+  if (!portalCustomer.value?.contact_name) return '欢迎回来'
+  if (portalCustomer.value?.account_type === 'CUSTOMER_ACCOUNT') {
+    return `当前账号：${portalCustomer.value.contact_name}`
+  }
+  return `主账号：${portalCustomer.value.contact_name}`
+})
 
 const fetchData = async () => {
   try {
@@ -112,6 +123,12 @@ onMounted(() => {
   font-weight: 800; 
   color: #1e293b; 
   letter-spacing: -0.5px;
+}
+.account-name {
+  display: block;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #64748b;
 }
 .notification-icon { font-size: 24px; color: #64748b; margin-top: 8px; }
 

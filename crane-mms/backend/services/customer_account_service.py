@@ -8,11 +8,16 @@ from models.customer_account import CustomerAccount
 from models.customer_profile import CustomerProfile
 from models.wechat_binding import WechatBinding
 from schemas.customer_account import (
+    CustomerAccountPasswordReset,
     CustomerAccountCreate,
+    CustomerAccountStatusUpdate,
     CustomerAccountUpdate,
     CustomerCompanyProfileUpdate,
     CustomerMainAccountUpdate,
+    PortalCurrentAccountUpdate,
+    PortalCurrentPasswordUpdate,
     PortalSubAccountCreate,
+    PortalSubAccountUpdate,
 )
 
 
@@ -26,6 +31,16 @@ ROLE_LABELS = {
 }
 
 
+def _build_portal_permissions(account_type: str, account: CustomerAccount | None = None) -> dict:
+    role = "OWNER" if account_type == "CUSTOMER" else (account.role if account else "VIEWER")
+    return {
+        "account_role": role,
+        "role_label": ROLE_LABELS.get(role, role),
+        "can_manage_accounts": account_type == "CUSTOMER" or role in {"ADMIN", "OWNER"},
+        "can_sign_orders": account_type == "CUSTOMER" or role in {"ADMIN", "OWNER", "SIGNER"},
+    }
+
+
 def _mask_phone(phone: str | None) -> str | None:
     if not phone or len(phone) < 7:
         return phone
@@ -37,6 +52,16 @@ def _get_customer_or_raise(db: Session, customer_id: int) -> Customer:
     if not customer:
         raise NotFoundError("客户公司不存在")
     return customer
+
+
+def _get_customer_account_or_raise(db: Session, customer_id: int, account_id: int) -> CustomerAccount:
+    account = db.query(CustomerAccount).filter(
+        CustomerAccount.id == account_id,
+        CustomerAccount.customer_id == customer_id,
+    ).first()
+    if not account:
+        raise NotFoundError("客户子账号不存在")
+    return account
 
 
 def _get_or_create_profile(db: Session, customer: Customer) -> CustomerProfile:
@@ -104,6 +129,7 @@ def _serialize_customer_account(account: CustomerAccount, binding: WechatBinding
         "name": account.name,
         "display_name": account.display_name or account.name,
         "phone": phone,
+        "phone_raw": account.phone,
         "email": account.email,
         "avatar_url": account.avatar_url,
         "is_owner": account.is_owner,
@@ -321,6 +347,50 @@ def create_portal_sub_account(db: Session, customer: Customer, payload: PortalSu
     return create_customer_account(db, account_payload, operator_id=None, created_by_type="CUSTOMER_ACCOUNT")
 
 
+def update_portal_sub_account(db: Session, customer: Customer, account_id: int, payload: PortalSubAccountUpdate) -> dict:
+    account = _get_customer_account_or_raise(db, customer.id, account_id)
+    if account.is_owner:
+        raise BusinessError("客户主账号请在主账号资料中维护")
+
+    update_data = payload.model_dump(exclude_unset=True)
+    if "username" in update_data and update_data["username"] != account.username:
+        if db.query(CustomerAccount).filter(CustomerAccount.username == update_data["username"]).first():
+            raise BusinessError("客户账号登录名已存在")
+
+    for key, value in update_data.items():
+        setattr(account, key, value)
+
+    db.commit()
+    db.refresh(account)
+    binding_map = _build_binding_map(db, "CUSTOMER_ACCOUNT", [account.id])
+    return _serialize_customer_account(account, binding_map.get(account.id), mask_phone=True)
+
+
+def update_portal_sub_account_status(db: Session, customer: Customer, account_id: int, payload: CustomerAccountStatusUpdate) -> dict:
+    account = _get_customer_account_or_raise(db, customer.id, account_id)
+    if account.is_owner:
+        raise BusinessError("客户主账号不支持在子账号列表中启停")
+
+    account.is_active = payload.is_active
+    db.commit()
+    db.refresh(account)
+    binding_map = _build_binding_map(db, "CUSTOMER_ACCOUNT", [account.id])
+    return _serialize_customer_account(account, binding_map.get(account.id), mask_phone=True)
+
+
+def reset_portal_sub_account_password(db: Session, customer: Customer, account_id: int, payload: CustomerAccountPasswordReset) -> dict:
+    account = _get_customer_account_or_raise(db, customer.id, account_id)
+    if account.is_owner:
+        raise BusinessError("客户主账号请在主账号资料中修改密码")
+
+    account.password_hash = get_password_hash(payload.password)
+    account.must_change_password = True
+    db.commit()
+    db.refresh(account)
+    binding_map = _build_binding_map(db, "CUSTOMER_ACCOUNT", [account.id])
+    return _serialize_customer_account(account, binding_map.get(account.id), mask_phone=True)
+
+
 def update_portal_company_profile(db: Session, customer: Customer, payload: CustomerCompanyProfileUpdate) -> dict:
     return update_customer_company_profile(db, customer.id, payload, operator_id=None)
 
@@ -374,3 +444,88 @@ def bind_customer_wechat(
         "is_active": binding.is_active,
         "bound_at": binding.bound_at.strftime("%Y-%m-%d %H:%M:%S") if binding.bound_at else None,
     }
+
+
+def get_portal_current_account(db: Session, customer: Customer, account: CustomerAccount | None = None, account_type: str = "CUSTOMER") -> dict:
+    permissions = _build_portal_permissions(account_type, account)
+    profile = _get_or_create_profile(db, customer)
+
+    if account_type == "CUSTOMER_ACCOUNT" and account:
+        return {
+            "account_type": account_type,
+            "account_id": account.id,
+            "username": account.username,
+            "name": account.name,
+            "display_name": account.display_name or account.name,
+            "phone": account.phone,
+            "email": account.email,
+            "company_name": customer.company_name,
+            "company_logo_url": profile.logo_url if profile else None,
+            "must_change_password": account.must_change_password,
+            "is_active": account.is_active,
+            "last_login_at": account.last_login_at.strftime("%Y-%m-%d %H:%M") if account.last_login_at else None,
+            **permissions,
+        }
+
+    return {
+        "account_type": "CUSTOMER",
+        "account_id": None,
+        "username": customer.login_phone or f"customer-{customer.id}",
+        "name": customer.contact_name,
+        "display_name": customer.contact_name,
+        "phone": customer.contact_phone,
+        "email": None,
+        "company_name": customer.company_name,
+        "company_logo_url": profile.logo_url if profile else None,
+        "must_change_password": False,
+        "is_active": True,
+        "last_login_at": None,
+        **permissions,
+    }
+
+
+def update_portal_current_account(
+    db: Session,
+    customer: Customer,
+    account: CustomerAccount | None,
+    account_type: str,
+    payload: PortalCurrentAccountUpdate,
+) -> dict:
+    update_data = payload.model_dump(exclude_unset=True)
+
+    if account_type == "CUSTOMER_ACCOUNT" and account:
+        for field in ("name", "display_name", "phone", "email"):
+            if field in update_data:
+                setattr(account, field, update_data[field])
+        db.commit()
+        db.refresh(account)
+        return get_portal_current_account(db, customer, account, account_type)
+
+    if "name" in update_data:
+        customer.contact_name = update_data["name"]
+    elif "display_name" in update_data:
+        customer.contact_name = update_data["display_name"]
+    if "phone" in update_data:
+        customer.contact_phone = update_data["phone"]
+        customer.login_phone = update_data["phone"]
+
+    db.commit()
+    db.refresh(customer)
+    return get_portal_current_account(db, customer, None, "CUSTOMER")
+
+
+def update_portal_current_password(
+    db: Session,
+    customer: Customer,
+    account: CustomerAccount | None,
+    account_type: str,
+    payload: PortalCurrentPasswordUpdate,
+) -> dict:
+    if account_type != "CUSTOMER_ACCOUNT" or not account:
+        raise BusinessError("客户主账号改密能力待独立登录密码方案上线后开放")
+
+    account.password_hash = get_password_hash(payload.password)
+    account.must_change_password = False
+    db.commit()
+    db.refresh(account)
+    return get_portal_current_account(db, customer, account, account_type)

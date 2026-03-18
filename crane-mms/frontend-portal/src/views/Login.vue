@@ -38,7 +38,7 @@
                 v-model="username"
                 name="username"
                 label="账号"
-                placeholder="请输入手机号或客户账号"
+                placeholder="请输入客户登录手机号"
                 left-icon="user-o"
                 :rules="[{ required: true, message: '请填写账号' }]"
                 class="custom-field"
@@ -104,6 +104,8 @@
               <van-icon name="wechat" color="#07c160" size="24" />
             </span>
           </div>
+
+          <p class="login-tip">测试账号：13800138000 / 123456</p>
         </van-form>
       </div>
 
@@ -166,7 +168,11 @@ const handleLogin = async () => {
     localStorage.setItem('portal_customer', JSON.stringify({
       id: res.customer_id,
       company_name: res.company_name,
-      contact_name: res.contact_name
+      contact_name: res.contact_name,
+      account_id: res.account_id || null,
+      account_role: res.account_role || '',
+      role_label: res.role_label || '',
+      account_type: res.account_type || 'CUSTOMER'
     }))
     
     showToast({ message: '登录成功', type: 'success' })
@@ -333,6 +339,14 @@ onUnmounted(() => {
   justify-content: center;
   margin-top: 20px;
 }
+
+.login-tip {
+  margin: 18px 0 0;
+  text-align: center;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
 .wechat-btn {
   width: 48px;
   height: 48px;

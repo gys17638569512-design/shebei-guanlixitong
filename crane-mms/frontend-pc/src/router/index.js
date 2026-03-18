@@ -135,6 +135,13 @@ const router = createRouter({
   ]
 })
 
+const getDefaultRouteByRole = (role) => {
+  if (role === 'TECH') {
+    return '/repairs'
+  }
+  return '/dashboard'
+}
+
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
@@ -145,7 +152,7 @@ router.beforeEach((to, from, next) => {
     if (to.meta.requiresRole.includes(authStore.user?.role)) {
       next()
     } else {
-      next('/dashboard')
+      next(getDefaultRouteByRole(authStore.user?.role))
     }
   } else {
     next()

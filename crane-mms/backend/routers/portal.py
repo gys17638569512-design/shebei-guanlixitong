@@ -18,14 +18,21 @@ from jose import jwt
 
 from core.database import get_db
 from core.response import ok
+from core.security import verify_password
 from core.settings import settings
 from core.sms import send_verify_code_sms
+from models.customer_account import CustomerAccount
 from models.customer import Customer
 from models.work_order import WorkOrder, OrderStatus
 from schemas.customer_account import (
+    CustomerAccountPasswordReset,
+    CustomerAccountStatusUpdate,
     CustomerCompanyProfileUpdate,
     CustomerMainAccountUpdate,
+    PortalCurrentAccountUpdate,
+    PortalCurrentPasswordUpdate,
     PortalSubAccountCreate,
+    PortalSubAccountUpdate,
 )
 from schemas.wechat_binding import WechatBindingPayload
 from services import customer_account_service
@@ -33,10 +40,12 @@ from services import customer_account_service
 router = APIRouter(prefix="/portal", tags=["客户门户"])
 
 
-def _generate_customer_token(customer_id: int) -> str:
+def _generate_customer_token(customer_id: int, account_id: int | None = None, account_type: str = "CUSTOMER") -> str:
     payload = {
         "sub": str(customer_id),
         "type": "customer",
+        "account_id": account_id,
+        "account_type": account_type,
         "exp": datetime.utcnow() + timedelta(hours=24)
     }
     return jwt.encode(payload, settings.CUSTOMER_JWT_SECRET, algorithm="HS256")
@@ -48,6 +57,16 @@ def _verify_customer_token(token: str) -> int | None:
         if payload.get("type") != "customer":
             return None
         return int(payload.get("sub"))
+    except Exception:
+        return None
+
+
+def _decode_customer_token(token: str) -> dict | None:
+    try:
+        payload = jwt.decode(token, settings.CUSTOMER_JWT_SECRET, algorithms=["HS256"])
+        if payload.get("type") != "customer":
+            return None
+        return payload
     except Exception:
         return None
 
@@ -72,6 +91,66 @@ def customer_auth(authorization: str = None, db: Session = None) -> Customer:
     if not customer:
         raise HTTPException(status_code=404, detail="客户账号不存在")
     return customer
+
+
+def customer_auth_context(authorization: str = None, db: Session = None) -> dict:
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="未提供有效 Token")
+
+    token = authorization.replace("Bearer ", "")
+    payload = _decode_customer_token(token)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Token 无效或已过期，请重新登录")
+
+    customer_id = payload.get("sub")
+    customer = db.query(Customer).filter(Customer.id == int(customer_id)).first() if customer_id else None
+    if not customer:
+        raise HTTPException(status_code=404, detail="客户账号不存在")
+
+    account_id = payload.get("account_id")
+    account = None
+    if account_id:
+        account = db.query(CustomerAccount).filter(
+            CustomerAccount.id == int(account_id),
+            CustomerAccount.customer_id == customer.id,
+        ).first()
+        if not account:
+            raise HTTPException(status_code=401, detail="当前子账号不存在，请重新登录")
+        if not account.is_active:
+            raise HTTPException(status_code=403, detail="当前子账号已停用，请联系主账号管理员")
+
+    return {
+        "customer": customer,
+        "account": account,
+        "account_type": payload.get("account_type") or "CUSTOMER",
+    }
+
+
+def get_current_customer_context(
+    authorization: str = Header(None, alias="Authorization"),
+    db: Session = Depends(get_db)
+) -> dict:
+    return customer_auth_context(authorization, db)
+
+
+def require_portal_account_manager(context: dict = Depends(get_current_customer_context)) -> dict:
+    if context["account_type"] == "CUSTOMER":
+        return context
+
+    account = context.get("account")
+    if not account or account.role not in {"ADMIN", "OWNER"}:
+        raise HTTPException(status_code=403, detail="当前账号无权管理子账号，请联系主账号管理员")
+    return context
+
+
+def require_portal_order_signer(context: dict = Depends(get_current_customer_context)) -> dict:
+    if context["account_type"] == "CUSTOMER":
+        return context
+
+    account = context.get("account")
+    if not account or account.role not in {"ADMIN", "OWNER", "SIGNER"}:
+        raise HTTPException(status_code=403, detail="当前账号无权执行签字确认")
+    return context
 
 
 # ============ 路由实现 ============
@@ -110,20 +189,42 @@ def submit_sign(
     customer = None
 
     if login_type == "pwd":
-        # 密码登录：因为目前没有密码字段，暂时直接用手机号查询，并假设通用测试密码为 "123456"
         username = payload.get("username")
         password = payload.get("password")
         
         if not username or not password:
             raise HTTPException(status_code=400, detail="请输入账号和密码")
 
-        customer = db.query(Customer).filter(
-            Customer.login_phone == username
-        ).first()
+        account = db.query(CustomerAccount).filter(CustomerAccount.username == username).first()
+        if account:
+            if not account.is_active:
+                raise HTTPException(status_code=400, detail="该子账号已停用，请联系主账号管理员")
+            if not verify_password(password, account.password_hash):
+                raise HTTPException(status_code=400, detail="账号或密码错误")
 
-        # [TODO: 生产环境应增加 login_password 字段存储哈希密码]
-        if not customer or password != "123456": 
-            raise HTTPException(status_code=400, detail="账号或密码错误 (测试密码: 123456)")
+            customer = db.query(Customer).filter(Customer.id == account.customer_id).first()
+            if not customer:
+                raise HTTPException(status_code=404, detail="所属客户公司不存在")
+
+            account.last_login_at = datetime.utcnow()
+            db.commit()
+
+            token = _generate_customer_token(customer.id, account_id=account.id, account_type="CUSTOMER_ACCOUNT")
+            return ok(data={
+                "access_token": token,
+                "customer_id": customer.id,
+                "company_name": customer.company_name,
+                "contact_name": account.display_name or account.name,
+                "account_id": account.id,
+                "account_role": account.role,
+                "role_label": customer_account_service.ROLE_LABELS.get(account.role, account.role),
+                "account_type": "CUSTOMER_ACCOUNT",
+            }, msg="登录成功")
+
+        customer = db.query(Customer).filter(Customer.login_phone == username).first()
+
+        if not customer or password != "123456":
+            raise HTTPException(status_code=400, detail="账号或密码错误 (客户主账号测试密码: 123456)")
 
     else:
         # 短信验证码登录
@@ -142,12 +243,15 @@ def submit_sign(
         customer.sms_code_expires_at = None
         db.commit()
 
-    token = _generate_customer_token(customer.id)
+    token = _generate_customer_token(customer.id, account_type="CUSTOMER")
     return ok(data={
         "access_token": token,
         "customer_id": customer.id,
         "company_name": customer.company_name,
-        "contact_name": customer.contact_name
+        "contact_name": customer.contact_name,
+        "account_role": "OWNER",
+        "role_label": customer_account_service.ROLE_LABELS.get("OWNER", "OWNER"),
+        "account_type": "CUSTOMER",
     }, msg="登录成功")
 
 
@@ -176,12 +280,59 @@ def get_account_center(
     return ok(data)
 
 
+@router.get("/account/me", summary="获取当前登录客户账号资料")
+def get_portal_current_account(
+    context: dict = Depends(get_current_customer_context),
+    db: Session = Depends(get_db)
+):
+    data = customer_account_service.get_portal_current_account(
+        db,
+        context["customer"],
+        context.get("account"),
+        context["account_type"],
+    )
+    return ok(data)
+
+
+@router.put("/account/me", summary="更新当前登录客户账号资料")
+def update_portal_current_account(
+    payload: PortalCurrentAccountUpdate,
+    context: dict = Depends(get_current_customer_context),
+    db: Session = Depends(get_db)
+):
+    data = customer_account_service.update_portal_current_account(
+        db,
+        context["customer"],
+        context.get("account"),
+        context["account_type"],
+        payload,
+    )
+    return ok(data, msg="当前账号资料已更新")
+
+
+@router.put("/account/me/password", summary="修改当前登录客户子账号密码")
+def update_portal_current_password(
+    payload: PortalCurrentPasswordUpdate,
+    context: dict = Depends(get_current_customer_context),
+    db: Session = Depends(get_db)
+):
+    data = customer_account_service.update_portal_current_password(
+        db,
+        context["customer"],
+        context.get("account"),
+        context["account_type"],
+        payload,
+    )
+    return ok(data, msg="当前账号密码已更新")
+
+
 @router.put("/customer/account-center/main-account", summary="更新客户主账号信息")
 def update_main_account(
     payload: CustomerMainAccountUpdate,
-    current_customer: Customer = Depends(get_current_customer),
+    context: dict = Depends(require_portal_account_manager),
     db: Session = Depends(get_db)
 ):
+    current_customer = context["customer"]
     data = customer_account_service.update_portal_main_account(db, current_customer, payload)
     return ok(data, msg="主账号信息已更新")
 
@@ -189,19 +340,54 @@ def update_main_account(
 @router.post("/customer/account-center/sub-accounts", summary="创建客户子账号")
 def create_sub_account(
     payload: PortalSubAccountCreate,
-    current_customer: Customer = Depends(get_current_customer),
+    context: dict = Depends(require_portal_account_manager),
     db: Session = Depends(get_db)
 ):
+    current_customer = context["customer"]
     data = customer_account_service.create_portal_sub_account(db, current_customer, payload)
     return ok(data, msg="子账号创建成功")
+
+
+@router.put("/customer/account-center/sub-accounts/{account_id}", summary="更新客户子账号")
+def update_sub_account(
+    account_id: int,
+    payload: PortalSubAccountUpdate,
+    context: dict = Depends(require_portal_account_manager),
+    db: Session = Depends(get_db)
+):
+    data = customer_account_service.update_portal_sub_account(db, context["customer"], account_id, payload)
+    return ok(data, msg="子账号信息已更新")
+
+
+@router.put("/customer/account-center/sub-accounts/{account_id}/status", summary="启停客户子账号")
+def update_sub_account_status(
+    account_id: int,
+    payload: CustomerAccountStatusUpdate,
+    context: dict = Depends(require_portal_account_manager),
+    db: Session = Depends(get_db)
+):
+    data = customer_account_service.update_portal_sub_account_status(db, context["customer"], account_id, payload)
+    return ok(data, msg="子账号状态已更新")
+
+
+@router.put("/customer/account-center/sub-accounts/{account_id}/reset-password", summary="重置客户子账号密码")
+def reset_sub_account_password(
+    account_id: int,
+    payload: CustomerAccountPasswordReset,
+    context: dict = Depends(require_portal_account_manager),
+    db: Session = Depends(get_db)
+):
+    data = customer_account_service.reset_portal_sub_account_password(db, context["customer"], account_id, payload)
+    return ok(data, msg="子账号密码已重置")
 
 
 @router.put("/customer/account-center/company-profile", summary="更新客户公司资料")
 def update_company_profile(
     payload: CustomerCompanyProfileUpdate,
-    current_customer: Customer = Depends(get_current_customer),
+    context: dict = Depends(require_portal_account_manager),
     db: Session = Depends(get_db)
 ):
+    current_customer = context["customer"]
     data = customer_account_service.update_portal_company_profile(db, current_customer, payload)
     return ok(data, msg="公司资料已更新")
 
@@ -357,11 +543,11 @@ def get_customer_order_detail(
 def customer_sign(
     order_id: int,
     sign_url: str = Body(..., embed=True, description="签字图片 URL 或 base64"),
-    authorization: str = None,
+    context: dict = Depends(require_portal_order_signer),
     background_tasks: BackgroundTasks = None,
     db: Session = Depends(get_db)
 ):
-    customer = customer_auth(authorization, db)
+    customer = context["customer"]
     order = db.query(WorkOrder).filter(
         WorkOrder.id == order_id,
         WorkOrder.customer_id == customer.id

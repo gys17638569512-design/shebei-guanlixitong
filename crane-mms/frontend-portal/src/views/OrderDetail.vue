@@ -43,7 +43,7 @@
           </van-button>
         </div>
 
-        <div class="action-bar" v-if="order.status === 'PENDING_SIGN' || order.status === 'IN_PROGRESS'">
+        <div class="action-bar" v-if="permissions.canSignOrders && (order.status === 'PENDING_SIGN' || order.status === 'IN_PROGRESS')">
           <van-button 
             block 
             type="danger" 
@@ -59,14 +59,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { showToast } from 'vant'
 import request from '../utils/request'
+import { getPortalPermissions } from '../utils/portalAuth'
 
 const route = useRoute()
 const router = useRouter()
 const order = ref({ status: '' })
+const permissions = computed(() => getPortalPermissions())
 
 const loadData = async () => {
   try {

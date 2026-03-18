@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { getPortalPermissions } from '../utils/portalAuth'
 
 const routes = [
   {
@@ -35,7 +36,7 @@ const routes = [
     path: '/sign/:id',
     name: 'OrderSign',
     component: () => import('../views/OrderSign.vue'),
-    meta: { title: '确认签字', requiresAuth: true }
+    meta: { title: '确认签字', requiresAuth: true, permission: 'canSignOrders' }
   },
   {
     path: '/account-center',
@@ -62,6 +63,19 @@ router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('portal_token')
   if (to.meta.requiresAuth && !token) {
     next('/login')
+    return
+  }
+
+  if (to.meta.permission) {
+    const permissions = getPortalPermissions()
+    if (!permissions[to.meta.permission]) {
+      next('/records')
+      return
+    }
+  }
+
+  if (to.meta.requiresAuth && token) {
+    next()
   } else {
     next()
   }
