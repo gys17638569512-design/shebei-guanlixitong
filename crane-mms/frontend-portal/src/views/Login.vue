@@ -2,7 +2,14 @@
   <div class="login-wrapper">
     <div class="login-container">
       <div class="login-header">
-        <div class="logo-box">🏗️</div>
+        <div class="logo-box" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="64" height="64" rx="18" fill="#1677FF"/>
+            <path d="M14 46V24L32 12L50 24V46" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M32 12V46M14 29H50" stroke="white" stroke-width="2.8" stroke-linecap="round" opacity="0.55"/>
+            <circle cx="32" cy="32" r="5.5" fill="white"/>
+          </svg>
+        </div>
         <h1>数字化起重机维修维保系统</h1>
         <p>客户服务门户 · 专业 · 透明 · 高效</p>
       </div>
@@ -231,9 +238,16 @@ onUnmounted(() => {
 }
 
 .logo-box {
-  font-size: 64px;
-  margin-bottom: 16px;
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 16px;
   filter: drop-shadow(0 8px 16px rgba(0,0,0,0.1));
+}
+
+.logo-box svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .login-header h1 {

@@ -4,7 +4,13 @@
     
     <view class="content-box">
       <view class="login-header">
-        <view class="logo-circle">🏗️</view>
+        <view class="logo-circle">
+          <view class="logo-mark">
+            <view class="logo-roof"></view>
+            <view class="logo-cross"></view>
+            <view class="logo-dot"></view>
+          </view>
+        </view>
         <text class="title">数字化起重机维修维保系统</text>
         <text class="subtitle">工人操作端 · 现场作业中心</text>
       </view>
@@ -110,6 +116,53 @@ const handleLogin = async () => {
   margin: 0 auto 30rpx;
   font-size: 80rpx;
   box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.15);
+}
+
+.logo-mark {
+  width: 72rpx;
+  height: 72rpx;
+  position: relative;
+}
+
+.logo-roof {
+  position: absolute;
+  inset: 10rpx;
+  border: 6rpx solid #2979ff;
+  border-bottom-width: 10rpx;
+  border-radius: 12rpx;
+}
+
+.logo-cross {
+  position: absolute;
+  top: 14rpx;
+  bottom: 14rpx;
+  left: 50%;
+  width: 6rpx;
+  transform: translateX(-50%);
+  background: rgba(41, 121, 255, 0.55);
+  border-radius: 999rpx;
+}
+
+.logo-cross::before {
+  content: '';
+  position: absolute;
+  top: 22rpx;
+  left: -22rpx;
+  width: 50rpx;
+  height: 6rpx;
+  background: rgba(41, 121, 255, 0.55);
+  border-radius: 999rpx;
+}
+
+.logo-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16rpx;
+  height: 16rpx;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #2979ff;
 }
 
 .title {

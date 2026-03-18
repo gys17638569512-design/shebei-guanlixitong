@@ -27,7 +27,7 @@ import uvicorn
 
 description = """
 <div align="center">
-  <img src="/static/logo.png" width="120" style="margin-bottom: 20px; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
+  <img src="/static/brand-mark.svg" width="120" style="margin-bottom: 20px; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
         <h1>数字化起重机维修维保系统 V1.0</h1>
   <p><i>基于工业互联网技术的特种设备全生命周期管理后端核心集群</i></p>
 </div>
@@ -88,7 +88,7 @@ async def custom_swagger_ui_html():
         oauth2_redirect_url=app.swagger_ui_oauth2_redirect_url,
         swagger_js_url="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui-bundle.js",
         swagger_css_url="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui.css",
-        swagger_favicon_url="/static/logo.png",
+        swagger_favicon_url="/static/brand-mark.svg",
         swagger_ui_parameters={"defaultModelsExpandDepth": -1},
     )
 
