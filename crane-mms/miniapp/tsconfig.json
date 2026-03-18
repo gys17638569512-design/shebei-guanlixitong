@@ -2,6 +2,8 @@
   "extends": "@vue/tsconfig/tsconfig.json",
   "compilerOptions": {
     "target": "ESNext",
+    "allowJs": true,
+    "checkJs": false,
     "useDefineForClassFields": true,
     "module": "ESNext",
     "moduleResolution": "Node",

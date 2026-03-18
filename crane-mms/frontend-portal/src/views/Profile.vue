@@ -108,5 +108,5 @@ onMounted(() => {
   font-size: 15px;
 }
 
-.interactive-card:active { transform: scale(0.98); transiton: transform 0.1s; }
+.interactive-card:active { transform: scale(0.98); transition: transform 0.1s; }
 </style>
