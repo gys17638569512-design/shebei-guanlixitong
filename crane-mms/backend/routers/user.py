@@ -2,9 +2,10 @@ from fastapi import APIRouter, Depends, Path, Query
 from sqlalchemy.orm import Session
 
 from core.database import get_db
-from core.permissions import get_current_user, require_role
+from core.permissions import get_current_user, require_permission, require_role
 from core.response import ok
 from models.user import User
+from schemas.permission import RolePermissionUpdate, UserPermissionOverrideUpdate
 from schemas.user import (
     UserCreate,
     UserPasswordReset,
@@ -13,6 +14,7 @@ from schemas.user import (
     UserUpdate,
 )
 from schemas.wechat_binding import WechatBindingPayload
+from services.permission_service import PermissionService
 from services import user_service
 
 
@@ -24,10 +26,19 @@ def get_users(
     skip: int = Query(0, description="跳过的记录数"),
     limit: int = Query(100, description="每页返回的最大记录数量"),
     role: str = Query(None, description="按角色过滤，如 TECH/MANAGER/ADMIN"),
-    current_user: User = Depends(require_role(["ADMIN", "MANAGER"])),
+    current_user: User = Depends(require_permission("settings.permission_management.access")),
     db: Session = Depends(get_db)
 ):
     data = user_service.get_users(db, skip=skip, limit=limit, role=role)
+    return ok(data)
+
+
+@router.get("/permission-catalog", summary="获取权限目录与角色默认权限")
+def get_permission_catalog(
+    current_user: User = Depends(require_permission("settings.permission_management.access")),
+    db: Session = Depends(get_db)
+):
+    data = PermissionService(db).get_catalog_payload()
     return ok(data)
 
 
@@ -81,17 +92,27 @@ def unbind_my_wechat(
 @router.get("/{id}", summary="获取员工详情", description="根据员工ID获取特定的员工资料。")
 def get_user(
     id: int = Path(..., description="要查询的员工ID"),
-    current_user: User = Depends(require_role(["ADMIN"])),
+    current_user: User = Depends(require_permission("settings.permission_management.detail.view")),
     db: Session = Depends(get_db)
 ):
     data = user_service.get_user(db, id)
     return ok(data)
 
 
+@router.get("/{id}/permissions", summary="获取员工权限详情")
+def get_user_permissions(
+    id: int = Path(..., description="要查询权限的员工ID"),
+    current_user: User = Depends(require_permission("settings.permission_management.detail.view")),
+    db: Session = Depends(get_db)
+):
+    data = PermissionService(db).get_user_permission_detail(id)
+    return ok(data)
+
+
 @router.post("", summary="创建新员工账号", description="录入新的系统使用者，自动使用 bcrypt 加盐哈希密码存储。")
 def create_user(
     user_in: UserCreate,
-    current_user: User = Depends(require_role(["ADMIN"])),
+    current_user: User = Depends(require_permission("settings.permission_management.account.create")),
     db: Session = Depends(get_db)
 ):
     data = user_service.create_user(db, user_in, current_user.id)
@@ -102,18 +123,40 @@ def create_user(
 def update_user(
     user_in: UserUpdate,
     id: int = Path(..., description="要修改的员工ID"),
-    current_user: User = Depends(require_role(["ADMIN"])),
+    current_user: User = Depends(require_permission("settings.permission_management.account.edit")),
     db: Session = Depends(get_db)
 ):
     data = user_service.update_user(db, id, user_in, current_user.id)
     return ok(data, msg="资料修改成功")
 
 
+@router.put("/roles/{role}/permissions", summary="更新角色默认权限")
+def update_role_permissions(
+    role: str = Path(..., description="角色编码，如 ADMIN/MANAGER/TECH"),
+    payload: RolePermissionUpdate = ...,
+    current_user: User = Depends(require_permission("settings.permission_management.role_template.edit")),
+    db: Session = Depends(get_db)
+):
+    data = PermissionService(db).update_role_permissions(role, payload.permissions, current_user.id)
+    return ok(data, msg="角色默认权限已更新")
+
+
+@router.put("/{id}/permissions", summary="更新员工个人覆盖权限")
+def update_user_permissions(
+    payload: UserPermissionOverrideUpdate,
+    id: int = Path(..., description="员工ID"),
+    current_user: User = Depends(require_permission("settings.permission_management.user_override.edit")),
+    db: Session = Depends(get_db)
+):
+    data = PermissionService(db).update_user_override(id, payload.allow_permissions, payload.deny_permissions, current_user.id)
+    return ok(data, msg="员工权限覆盖已更新")
+
+
 @router.put("/{id}/reset-password", summary="重置员工密码")
 def reset_user_password(
     payload: UserPasswordReset,
     id: int = Path(..., description="员工ID"),
-    current_user: User = Depends(require_role(["ADMIN"])),
+    current_user: User = Depends(require_permission("settings.permission_management.account.reset_password")),
     db: Session = Depends(get_db)
 ):
     data = user_service.reset_user_password(db, id, payload.password, current_user.id)
@@ -124,7 +167,7 @@ def reset_user_password(
 def update_user_status(
     payload: UserStatusUpdate,
     id: int = Path(..., description="员工ID"),
-    current_user: User = Depends(require_role(["ADMIN"])),
+    current_user: User = Depends(require_permission("settings.permission_management.account.status")),
     db: Session = Depends(get_db)
 ):
     data = user_service.update_user_status(db, id, payload.status, current_user.id)

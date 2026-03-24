@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Date
+from sqlalchemy import Boolean, Column, Integer, String, Text, ForeignKey, Date
 from sqlalchemy.orm import relationship
 from core.database import Base
 
@@ -11,6 +11,7 @@ class Equipment(Base):
     name = Column(String(100), nullable=False)
     model_type = Column(String(50), nullable=False)
     category = Column(String(50), nullable=False)
+    manufacturer = Column(String(100), nullable=True)
     tonnage = Column(String(20), nullable=False)
     span = Column(String(20), nullable=False)
     lifting_height = Column(String(20), nullable=False)
@@ -19,6 +20,10 @@ class Equipment(Base):
     last_inspection_date = Column(Date)
     next_inspection_date = Column(Date)
     warranty_end_date = Column(Date)
+    applied_template_id = Column(Integer, nullable=True)
+    applied_template_version = Column(Integer, nullable=True)
+    submit_as_template_candidate = Column(Boolean, nullable=False, default=False)
+    inspection_items_json = Column(Text, nullable=True)
     
     # 关系
     customer = relationship("Customer", back_populates="equipments")

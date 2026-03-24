@@ -6,13 +6,13 @@
         <p class="page-subtitle">统一维护系统名称、公司信息、Logo、主题色与报告抬头，后续可直接联动各端展示</p>
       </div>
       <div class="header-actions">
-        <el-button @click="resetDefaults">恢复默认</el-button>
-        <el-button type="primary" @click="saveSettings" :loading="saving">保存配置</el-button>
+        <el-button v-if="canEditBrandConfig" @click="resetDefaults">恢复默认</el-button>
+        <el-button v-if="canEditBrandConfig" type="primary" @click="saveSettings" :loading="saving">保存配置</el-button>
       </div>
     </div>
 
     <div class="config-grid">
-      <el-card class="editor-card" shadow="never">
+      <el-card v-if="canViewEditor" class="editor-card" shadow="never">
         <template #header>
           <div class="card-header">
             <span>品牌信息编辑</span>
@@ -20,7 +20,7 @@
           </div>
         </template>
 
-        <el-form ref="formRef" :model="form" :rules="rules" label-position="top">
+        <el-form ref="formRef" :model="form" :rules="rules" label-position="top" :disabled="!canEditBrandConfig">
           <el-row :gutter="16">
             <el-col :span="12">
               <el-form-item label="公司全称" prop="company_name">
@@ -105,7 +105,7 @@
         </el-form>
       </el-card>
 
-      <div class="preview-column">
+      <div v-if="canViewPreview" class="preview-column">
         <el-card class="preview-card" shadow="never">
           <template #header>
             <div class="card-header">
@@ -156,12 +156,19 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { fetchPlatformSettings, persistPlatformSettings } from '@/api/system'
+import { useAuthStore } from '@/stores/auth'
+import { SETTINGS_PERMISSIONS } from '@/constants/permissions'
 
+const authStore = useAuthStore()
 const formRef = ref(null)
 const saving = ref(false)
+
+const canEditBrandConfig = computed(() => authStore.hasPermission(SETTINGS_PERMISSIONS.BRAND_CONFIG_EDITOR_EDIT))
+const canViewEditor = computed(() => authStore.hasPermission(SETTINGS_PERMISSIONS.BRAND_CONFIG_MODULE_EDITOR))
+const canViewPreview = computed(() => authStore.hasPermission(SETTINGS_PERMISSIONS.BRAND_CONFIG_MODULE_PREVIEW))
 
 const form = reactive({
   company_name: '',

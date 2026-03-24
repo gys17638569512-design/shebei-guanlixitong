@@ -11,3 +11,10 @@ from .employee_profile import EmployeeProfile
 from .customer_profile import CustomerProfile
 from .customer_account import CustomerAccount
 from .wechat_binding import WechatBinding
+from .equipment_template import (
+    EquipmentTemplateCandidate,
+    EquipmentTemplateGroup,
+    EquipmentTemplateVersion,
+    InspectionBaseTemplate,
+)
+from .access_control import RolePermissionProfile, UserPermissionOverride

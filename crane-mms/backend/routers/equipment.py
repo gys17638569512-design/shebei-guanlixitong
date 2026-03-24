@@ -39,12 +39,15 @@ def get_equipments(
 def get_equipment_templates(
     category: str = Query(..., description="设备大类"),
     model_type: str = Query(..., description="型式"),
+    tonnage: str = Query(None, description="吨位"),
+    span: str = Query(None, description="跨度"),
+    manufacturer: str = Query(None, description="厂家"),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     # 读操作，无需审计日志
     service = EquipmentService(db)
-    templates = service.get_equipment_templates(category, model_type)
+    templates = service.template_service.get_compatible_parts(category, model_type, tonnage, span, manufacturer)
     return ok(data=templates)
 
 @router.get("/{equipment_id}", summary="获取设备档案详情（含部件清单）")
@@ -69,4 +72,3 @@ def update_equipment(
     service = EquipmentService(db)
     equipment = service.update_equipment(equipment_id, equipment_in, current_user.id)
     return ok(data=equipment)
-

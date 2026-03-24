@@ -8,7 +8,7 @@
     </div>
 
     <!-- 筛选区域 -->
-    <el-card class="filter-card mb-24">
+    <el-card v-if="canUseFilters" class="filter-card mb-24">
       <el-form :inline="true" :model="filters" size="default">
         <el-form-item label="操作动作">
           <el-select v-model="filters.action" placeholder="全部" clearable style="width: 120px">
@@ -33,7 +33,7 @@
     </el-card>
 
     <!-- 数据表格 -->
-    <el-card class="table-card">
+    <el-card v-if="canViewLogs" class="table-card">
       <el-table :data="logs" v-loading="loading" style="width: 100%" border stripe>
         <el-table-column prop="log_id" label="ID" width="70" align="center" />
         <el-table-column prop="created_at" label="操作时间" width="180" align="center" />
@@ -53,7 +53,7 @@
         <el-table-column prop="record_id" label="记录ID" width="90" align="center" />
         <el-table-column prop="new_value" label="变更详细内容">
           <template #default="{ row }">
-            <div class="json-preview" @click="showDetail(row.new_value)">
+            <div class="json-preview" :class="{ disabled: !canViewDetail }" @click="showDetail(row.new_value)">
               {{ row.new_value || '无详细内容' }}
             </div>
           </template>
@@ -69,9 +69,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { getAuditLogs } from '@/api/audit'
 import { ElMessage } from 'element-plus'
+import { useAuthStore } from '@/stores/auth'
+import { SETTINGS_PERMISSIONS } from '@/constants/permissions'
+
+const authStore = useAuthStore()
+const canUseFilters = computed(() => authStore.hasPermission(SETTINGS_PERMISSIONS.AUDIT_FILTERS_USE))
+const canViewLogs = computed(() => authStore.hasPermission(SETTINGS_PERMISSIONS.AUDIT_MODULE_LOGS))
+const canViewDetail = computed(() => authStore.hasPermission(SETTINGS_PERMISSIONS.AUDIT_MODULE_DETAIL))
 
 const loading = ref(false)
 const logs = ref([])
@@ -110,6 +117,7 @@ const getActionType = (action) => {
 }
 
 const showDetail = (val) => {
+  if (!canViewDetail.value) return
   if (!val) return
   try {
     // 尝试解析并格式化 JSON 字符串
@@ -169,6 +177,12 @@ onMounted(fetchLogs)
 .json-preview:hover {
   color: var(--color-primary);
   text-decoration: underline;
+}
+
+.json-preview.disabled {
+  cursor: default;
+  color: var(--color-text-placeholder);
+  text-decoration: none;
 }
 
 .json-content {

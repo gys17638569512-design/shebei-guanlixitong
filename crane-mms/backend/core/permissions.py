@@ -3,8 +3,10 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 from .database import get_db
+from .exceptions import ForbiddenError
 from .settings import settings
 from models.user import User
+from services.permission_service import PermissionService
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
@@ -37,3 +39,26 @@ def require_role(roles: list):
             )
         return current_user
     return role_checker
+
+
+def require_permission(permission_keys: str | list[str], match: str = "all"):
+    if isinstance(permission_keys, str):
+        required = [permission_keys]
+    else:
+        required = list(permission_keys)
+
+    async def permission_checker(
+        current_user: User = Depends(get_current_user),
+        db: Session = Depends(get_db),
+    ):
+        effective_permissions = PermissionService(db).get_effective_permissions(current_user)
+        if match == "any":
+            permitted = any(item in effective_permissions for item in required)
+        else:
+            permitted = all(item in effective_permissions for item in required)
+
+        if not permitted:
+            raise ForbiddenError("权限不足")
+        return current_user
+
+    return permission_checker

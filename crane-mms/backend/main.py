@@ -17,9 +17,18 @@ from models.employee_profile import EmployeeProfile
 from models.customer_profile import CustomerProfile
 from models.customer_account import CustomerAccount
 from models.wechat_binding import WechatBinding
+from models.equipment_template import (
+    EquipmentTemplateCandidate,
+    EquipmentTemplateGroup,
+    EquipmentTemplateVersion,
+    InspectionBaseTemplate,
+)
+from models.access_control import RolePermissionProfile, UserPermissionOverride
+from core.schema_upgrade import ensure_runtime_schema
 
 # 创建数据库表
 Base.metadata.create_all(bind=engine)
+ensure_runtime_schema(engine)
 
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
@@ -27,7 +36,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from core.exceptions import BusinessError, UnauthorizedError, ForbiddenError, NotFoundError, ConflictError
 from core.response import err
 from routers import auth, order, upload, report, user, customer, equipment, part, audit_log, stats
-from routers import portal, repair, template, platform_setting, customer_account
+from routers import portal, repair, template, platform_setting, customer_account, equipment_template
 import uvicorn
 
 description = """
@@ -150,6 +159,7 @@ app.include_router(stats.router, prefix="/api/v1")
 app.include_router(portal.router, prefix="/api/v1")
 app.include_router(repair.router, prefix="/api/v1")
 app.include_router(template.router, prefix="/api/v1")
+app.include_router(equipment_template.router, prefix="/api/v1")
 app.include_router(platform_setting.router, prefix="/api/v1")
 app.include_router(customer_account.router, prefix="/api/v1")
 

@@ -1,3 +1,5 @@
+import json
+
 from sqlalchemy.orm import Session
 from models.equipment import Equipment, EquipmentPart
 from schemas.equipment import EquipmentCreate
@@ -14,6 +16,7 @@ class EquipmentRepository:
             category=equip_data.category,
             model_type=equip_data.model_type,
             name=equip_data.name,
+            manufacturer=equip_data.manufacturer,
             tonnage=equip_data.tonnage,
             span=equip_data.span,
             lifting_height=equip_data.lifting_height,
@@ -21,7 +24,11 @@ class EquipmentRepository:
             installation_location=equip_data.installation_location,
             last_inspection_date=equip_data.last_inspection_date,
             next_inspection_date=equip_data.next_inspection_date,
-            warranty_end_date=equip_data.warranty_end_date
+            warranty_end_date=equip_data.warranty_end_date,
+            applied_template_id=equip_data.applied_template_id,
+            applied_template_version=equip_data.applied_template_version,
+            submit_as_template_candidate=equip_data.submit_as_template_candidate,
+            inspection_items_json=json.dumps(equip_data.inspection_items or [], ensure_ascii=False),
         )
         self.db.add(db_equip)
         self.db.flush()
@@ -44,7 +51,7 @@ class EquipmentRepository:
             action="CREATE",
             table_name="equipments",
             record_id=db_equip.id,
-            new_value={"name": db_equip.name, "customer_id": db_equip.customer_id, "category": db_equip.category}
+            new_value={"name": db_equip.name, "customer_id": db_equip.customer_id, "category": db_equip.category, "manufacturer": db_equip.manufacturer}
         )
 
         self.db.commit()
@@ -52,35 +59,12 @@ class EquipmentRepository:
         return db_equip
 
     def get_equipment_templates(self, category: str, model_type: str):
-        # 这是一个模拟的方法，因为 PRD 中提到未来可能由字典表维护
-        # 这里为了满足前端的联动查询，返回硬编码的常见模版
-        templates = {
-            "桥式起重机": [
-                {"part_name": "主梁", "specification": "Q235B"},
-                {"part_name": "端梁", "specification": ""},
-                {"part_name": "起升机构", "specification": "含电动机、减速器、卷筒"},
-                {"part_name": "小车运行机构", "specification": ""},
-                {"part_name": "大车运行机构", "specification": ""},
-                {"part_name": "电气控制箱", "specification": "变频控制"},
-                {"part_name": "驾驶室", "specification": "联动台操作"},
-                {"part_name": "吊钩组", "specification": "单钩"},
-                {"part_name": "钢丝绳", "specification": "线接触型"},
-            ],
-            "门式起重机": [
-                {"part_name": "主梁", "specification": "箱型"},
-                {"part_name": "支腿", "specification": "L型或C型"},
-                {"part_name": "地梁", "specification": ""},
-                {"part_name": "起升机构", "specification": ""},
-                {"part_name": "运行机构", "specification": ""}
-            ],
-            "悬臂起重机": [
-                {"part_name": "立柱", "specification": "无缝钢管"},
-                {"part_name": "回转臂", "specification": "工字钢"},
-                {"part_name": "电动环链葫芦", "specification": ""},
-                {"part_name": "滑触线", "specification": "C型轨"}
-            ]
-        }
-        return templates.get(category, [{"part_name": "通用部件", "specification": ""}])
+        from services.equipment_template_service import EquipmentTemplateService
+
+        templates = EquipmentTemplateService(self.db).get_compatible_parts(category, model_type)
+        if templates:
+            return templates
+        return [{"part_name": "通用部件", "specification": ""}]
 
     def get_equipment_by_id(self, equipment_id: int):
         return self.db.query(Equipment).filter(Equipment.id == equipment_id).first()
@@ -91,13 +75,16 @@ class EquipmentRepository:
             return None
 
         # 更新主字段
-        fields = ['category', 'model_type', 'name', 'tonnage', 'span', 'lifting_height',
+        fields = ['category', 'model_type', 'name', 'manufacturer', 'tonnage', 'span', 'lifting_height',
                   'work_class', 'installation_location', 'last_inspection_date',
-                  'next_inspection_date', 'warranty_end_date']
+                  'next_inspection_date', 'warranty_end_date', 'applied_template_id',
+                  'applied_template_version', 'submit_as_template_candidate']
         for field in fields:
             val = getattr(update_data, field, None)
             if val is not None:
                 setattr(db_equip, field, val)
+        if update_data.inspection_items is not None:
+            db_equip.inspection_items_json = json.dumps(update_data.inspection_items, ensure_ascii=False)
 
         # 更新部件清单（如果提供了 parts 则先删除再重建）
         if update_data.parts is not None:
@@ -118,7 +105,7 @@ class EquipmentRepository:
             action="UPDATE",
             table_name="equipments",
             record_id=equipment_id,
-            new_value={"name": db_equip.name, "category": db_equip.category}
+            new_value={"name": db_equip.name, "category": db_equip.category, "manufacturer": db_equip.manufacturer}
         )
 
         self.db.commit()

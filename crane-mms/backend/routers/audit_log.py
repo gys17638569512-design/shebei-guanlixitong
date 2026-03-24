@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import desc
 from typing import List, Optional
 from core.database import get_db
-from core.permissions import require_role
+from core.permissions import require_permission
 from core.response import ok
 from models.audit_log import AuditLog
 from models.user import User
@@ -16,7 +16,7 @@ async def get_audit_logs(
     table_name: Optional[str] = Query(None, description="目标表名"),
     user_id: Optional[int] = Query(None, description="操作人ID"),
     limit: int = Query(100, description="返回记录条数限制"),
-    current_user: User = Depends(require_role(["ADMIN", "MANAGER"])),
+    current_user: User = Depends(require_permission("settings.audit.access")),
     db: Session = Depends(get_db)
 ):
     query = db.query(AuditLog)

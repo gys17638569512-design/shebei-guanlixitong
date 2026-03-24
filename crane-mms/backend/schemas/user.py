@@ -67,6 +67,9 @@ class UserResponse(UserBase):
     wechat_bound: Optional[bool] = False
     last_login_at: Optional[str] = None
     password_updated_at: Optional[str] = None
+    role_permissions: list[str] = Field(default_factory=list, description="角色默认权限")
+    effective_permissions: list[str] = Field(default_factory=list, description="当前生效权限")
+    user_overrides: dict = Field(default_factory=dict, description="用户个人权限覆盖")
 
     class Config:
         from_attributes = True

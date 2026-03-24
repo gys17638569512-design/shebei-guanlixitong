@@ -11,6 +11,14 @@ export const fetchEmployeeAccounts = async () => {
   return res.items || []
 }
 
+export const fetchPermissionCatalog = () => request.get('/users/permission-catalog')
+
+export const fetchUserPermissionDetail = (id) => request.get(`/users/${id}/permissions`)
+
+export const updateRolePermissions = (role, payload) => request.put(`/users/roles/${role}/permissions`, payload)
+
+export const updateUserPermissionOverrides = (id, payload) => request.put(`/users/${id}/permissions`, payload)
+
 export const addEmployeeAccount = (payload) => request.post('/users', payload)
 
 export const editEmployeeAccount = (id, payload) => request.put(`/users/${id}`, payload)

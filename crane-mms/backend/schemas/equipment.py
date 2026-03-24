@@ -22,6 +22,7 @@ class EquipmentBase(BaseModel):
     category: str = Field(..., description="设备大类(如桥式起重机)")
     model_type: str = Field(..., description="型式(如QD型)")
     name: str = Field(..., description="设备名称")
+    manufacturer: Optional[str] = Field(None, description="设备厂家")
     tonnage: str = Field(..., description="吨位")
     span: str = Field(..., description="跨度")
     lifting_height: str = Field(..., description="起升高度")
@@ -33,6 +34,10 @@ class EquipmentBase(BaseModel):
 
 class EquipmentCreate(EquipmentBase):
     parts: Optional[List[EquipmentPartCreate]] = Field(default=[], description="部件清单")
+    inspection_items: Optional[List[dict]] = Field(default=[], description="建议检修项")
+    applied_template_id: Optional[int] = Field(None, description="已应用模板组ID")
+    applied_template_version: Optional[int] = Field(None, description="已应用模板版本号")
+    submit_as_template_candidate: bool = Field(False, description="是否提交为模板候选")
 
     class Config:
         json_schema_extra = {
@@ -41,6 +46,7 @@ class EquipmentCreate(EquipmentBase):
                 "category": "桥式起重机",
                 "model_type": "QD型",
                 "name": "成品库1号行车",
+                "manufacturer": "沪工",
                 "tonnage": "10t",
                 "span": "22.5m",
                 "lifting_height": "9m",
@@ -49,6 +55,12 @@ class EquipmentCreate(EquipmentBase):
                 "last_inspection_date": "2023-12-01",
                 "next_inspection_date": "2024-12-01",
                 "warranty_end_date": "2025-06-01",
+                "inspection_items": [
+                    {"item_name": "钢丝绳检查", "description": "检查磨损情况", "required": True}
+                ],
+                "applied_template_id": 1,
+                "applied_template_version": 2,
+                "submit_as_template_candidate": True,
                 "parts": [
                     {"part_name": "主起升机构", "specification": "10t专用", "quantity": 1},
                     {"part_name": "大车运行电机", "specification": "3.0kW", "quantity": 4}
@@ -59,6 +71,10 @@ class EquipmentCreate(EquipmentBase):
 class EquipmentResponse(EquipmentBase):
     id: int
     parts: List[EquipmentPartResponse] = []
+    inspection_items: List[dict] = []
+    applied_template_id: Optional[int] = None
+    applied_template_version: Optional[int] = None
+    submit_as_template_candidate: bool = False
 
     class Config:
         from_attributes = True
@@ -67,6 +83,7 @@ class EquipmentUpdate(BaseModel):
     category: Optional[str] = None
     model_type: Optional[str] = None
     name: Optional[str] = None
+    manufacturer: Optional[str] = None
     tonnage: Optional[str] = None
     span: Optional[str] = None
     lifting_height: Optional[str] = None
@@ -76,3 +93,7 @@ class EquipmentUpdate(BaseModel):
     next_inspection_date: Optional[date] = None
     warranty_end_date: Optional[date] = None
     parts: Optional[List[EquipmentPartCreate]] = None
+    inspection_items: Optional[List[dict]] = None
+    applied_template_id: Optional[int] = None
+    applied_template_version: Optional[int] = None
+    submit_as_template_candidate: Optional[bool] = None

@@ -9,6 +9,7 @@ from models.employee_profile import EmployeeProfile
 from models.wechat_binding import WechatBinding
 from repositories import user as user_repo
 from schemas.user import UserCreate, UserSelfUpdate, UserUpdate
+from services.permission_service import PermissionService
 
 
 PROFILE_FIELDS = {"display_name", "department", "job_title", "email", "avatar_url", "status", "must_change_password"}
@@ -38,8 +39,13 @@ def _build_wechat_bound_map(db: Session, user_ids: list[int]) -> set[int]:
     return {binding.owner_id for binding in bindings}
 
 
-def _serialize_user(user, profile: EmployeeProfile | None = None, wechat_bound: bool = False) -> dict:
-    return {
+def _serialize_user(
+    user,
+    profile: EmployeeProfile | None = None,
+    wechat_bound: bool = False,
+    permission_bundle: dict | None = None,
+) -> dict:
+    serialized = {
         "id": user.id,
         "username": user.username,
         "role": user.role,
@@ -58,6 +64,11 @@ def _serialize_user(user, profile: EmployeeProfile | None = None, wechat_bound: 
         "last_login_at": profile.last_login_at.strftime("%Y-%m-%d %H:%M:%S") if profile and profile.last_login_at else None,
         "password_updated_at": profile.password_updated_at.strftime("%Y-%m-%d %H:%M:%S") if profile and profile.password_updated_at else None,
     }
+    if permission_bundle:
+        serialized["role_permissions"] = permission_bundle["role_permissions"]
+        serialized["user_overrides"] = permission_bundle["user_overrides"]
+        serialized["effective_permissions"] = permission_bundle["effective_permissions"]
+    return serialized
 
 
 def get_users(db: Session, skip: int = 0, limit: int = 100, role: str | None = None):
@@ -88,7 +99,8 @@ def get_user(db: Session, user_id: int):
 
     profile = _get_profile(db, user_id, create=False)
     bound_set = _build_wechat_bound_map(db, [user_id])
-    return _serialize_user(user, profile, user_id in bound_set)
+    permission_bundle = PermissionService(db).get_user_permission_bundle(user)
+    return _serialize_user(user, profile, user_id in bound_set, permission_bundle)
 
 
 def create_user(db: Session, user_in: UserCreate, operator_id: int):
@@ -212,7 +224,8 @@ def update_user_status(db: Session, user_id: int, status: str, operator_id: int)
 def get_current_user_profile(db: Session, current_user):
     profile = _get_profile(db, current_user.id, create=True)
     bound_set = _build_wechat_bound_map(db, [current_user.id])
-    return _serialize_user(current_user, profile, current_user.id in bound_set)
+    permission_bundle = PermissionService(db).get_user_permission_bundle(current_user)
+    return _serialize_user(current_user, profile, current_user.id in bound_set, permission_bundle)
 
 
 def update_current_user_profile(db: Session, current_user, payload: UserSelfUpdate):

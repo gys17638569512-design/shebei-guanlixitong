@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Path
 from sqlalchemy.orm import Session
 from core.database import get_db
-from core.permissions import get_current_user
+from core.permissions import get_current_user, require_permission
 from models.user import User
 from models.work_order import WorkOrder
 
@@ -32,14 +32,10 @@ async def get_order_report(
         
 @router.get("/reports/archive", summary="获取所有已归档报告", description="拉取所有具备 PDF 连接的已完成工单列表")
 async def get_report_archive(
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_permission("settings.reports.access")),
     db: Session = Depends(get_db)
 ):
-    from core.exceptions import ForbiddenError
     from core.response import ok
-    if current_user.role not in ["ADMIN", "MANAGER"]:
-        raise ForbiddenError("权限不足")
-        
     orders = db.query(WorkOrder).filter(WorkOrder.pdf_report_url != None).order_by(WorkOrder.completed_at.desc()).all()
     result = []
     for order in orders:
