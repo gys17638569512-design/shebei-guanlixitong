@@ -1,0 +1,17 @@
+.git
+.pytest-temp
+runtime
+run-logs
+uploads
+
+**/__pycache__
+**/.pytest_cache
+**/node_modules
+**/dist
+**/output
+**/.vscode
+
+backend/.env
+backend/crane_mms.db
+backend/uploads
+backend/tmp

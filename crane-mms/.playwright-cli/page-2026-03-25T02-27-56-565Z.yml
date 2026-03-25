@@ -1,0 +1,180 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img "品牌标识" [ref=e7]
+      - generic [ref=e8]:
+        - generic [ref=e9]: 数字化起重机维保系统
+        - generic [ref=e10]: Operations Command Center
+        - generic [ref=e11]: 设备、排程、权限与模板一体调度
+    - generic [ref=e12]:
+      - generic [ref=e13]: 业务中枢
+      - link "控制看板 运行概览与风险脉冲" [ref=e14] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e17]
+        - generic [ref=e19]:
+          - strong [ref=e20]: 控制看板
+          - generic [ref=e21]: 运行概览与风险脉冲
+      - link "客户管理 客户档案与联系人" [ref=e22] [cursor=pointer]:
+        - /url: /customers
+        - img [ref=e25]
+        - generic [ref=e29]:
+          - strong [ref=e30]: 客户管理
+          - generic [ref=e31]: 客户档案与联系人
+      - link "设备档案 设备台账与参数快照" [ref=e32] [cursor=pointer]:
+        - /url: /equipments
+        - img [ref=e35]
+        - generic [ref=e37]:
+          - strong [ref=e38]: 设备档案
+          - generic [ref=e39]: 设备台账与参数快照
+      - link "工单中心 派工、进度、签字闭环" [ref=e40] [cursor=pointer]:
+        - /url: /orders
+        - img [ref=e43]
+        - generic [ref=e45]:
+          - strong [ref=e46]: 工单中心
+          - generic [ref=e47]: 派工、进度、签字闭环
+      - link "维修工单 故障维修与处理记录" [ref=e48] [cursor=pointer]:
+        - /url: /repairs
+        - img [ref=e51]
+        - generic [ref=e53]:
+          - strong [ref=e54]: 维修工单
+          - generic [ref=e55]: 故障维修与处理记录
+      - link "批量排期 成组调度与计划编排" [ref=e56] [cursor=pointer]:
+        - /url: /orders/batch
+        - img [ref=e59]
+        - generic [ref=e61]:
+          - strong [ref=e62]: 批量排期
+          - generic [ref=e63]: 成组调度与计划编排
+      - link "备件库 库存、部件、规格基线" [ref=e64] [cursor=pointer]:
+        - /url: /system/parts
+        - img [ref=e67]
+        - generic [ref=e69]:
+          - strong [ref=e70]: 备件库
+          - generic [ref=e71]: 库存、部件、规格基线
+    - generic [ref=e72]:
+      - generic [ref=e73]:
+        - img [ref=e76]
+        - generic [ref=e78]:
+          - generic [ref=e79]: 设置工作台
+          - generic [ref=e80]: 模板、权限、品牌、审计、报告
+      - link "设备模板中心 模板组、候选、通用模板 ›" [ref=e81] [cursor=pointer]:
+        - /url: /equipment-templates
+        - img [ref=e84]
+        - generic [ref=e86]:
+          - strong [ref=e87]: 设备模板中心
+          - generic [ref=e88]: 模板组、候选、通用模板
+        - generic [ref=e89]: ›
+      - link "权限管理 账号、角色默认权限、个人覆盖 ›" [ref=e90] [cursor=pointer]:
+        - /url: /system/employees
+        - img [ref=e93]
+        - generic [ref=e95]:
+          - strong [ref=e96]: 权限管理
+          - generic [ref=e97]: 账号、角色默认权限、个人覆盖
+        - generic [ref=e98]: ›
+      - link "平台品牌配置 品牌资产、门户样式、展示规范 ›" [ref=e99] [cursor=pointer]:
+        - /url: /system/brand-config
+        - img [ref=e102]
+        - generic [ref=e105]:
+          - strong [ref=e106]: 平台品牌配置
+          - generic [ref=e107]: 品牌资产、门户样式、展示规范
+        - generic [ref=e108]: ›
+      - link "安全审计 审计事件与账号痕迹 ›" [ref=e109] [cursor=pointer]:
+        - /url: /system/audit
+        - img [ref=e112]
+        - generic [ref=e114]:
+          - strong [ref=e115]: 安全审计
+          - generic [ref=e116]: 审计事件与账号痕迹
+        - generic [ref=e117]: ›
+      - link "报告集中 归档报告与签字材料 ›" [ref=e118] [cursor=pointer]:
+        - /url: /system/reports
+        - img [ref=e121]
+        - generic [ref=e123]:
+          - strong [ref=e124]: 报告集中
+          - generic [ref=e125]: 归档报告与签字材料
+        - generic [ref=e126]: ›
+    - generic [ref=e127]:
+      - generic [ref=e128]: "?"
+      - generic [ref=e129]:
+        - strong [ref=e130]: "?????"
+        - generic [ref=e131]: 系统管理员
+      - button "退出登录" [ref=e132] [cursor=pointer]:
+        - img [ref=e134]
+  - generic [ref=e137]:
+    - banner [ref=e138]:
+      - generic [ref=e139]:
+        - generic [ref=e140]: Operations Mesh
+        - heading "控制看板" [level=1] [ref=e141]
+        - paragraph [ref=e142]: 围绕客户、设备、工单与维保执行的日常运营工作台。
+      - generic [ref=e144]:
+        - generic [ref=e145]: 当前作业层
+        - strong [ref=e146]: 业务执行域
+        - generic [ref=e147]: 2026年3月25日 星期三
+      - generic [ref=e148]:
+        - generic [ref=e149]: 系统管理员
+        - button [ref=e151] [cursor=pointer]:
+          - img [ref=e154]
+        - generic [ref=e158]: 10:27:56
+    - main [ref=e159]:
+      - generic [ref=e160]:
+        - generic [ref=e161]:
+          - generic [ref=e162]:
+            - paragraph [ref=e163]: Operations Situation Room
+            - heading "您好，?????，今日维保指挥面已就绪" [level=2] [ref=e164]
+            - paragraph [ref=e165]: 从排程、执行、签字到归档，以统一作业视图掌握起重机维保业务的节奏、风险与资源状态。
+            - generic [ref=e166]:
+              - generic [ref=e167]: 闭环率 0%
+              - generic [ref=e168]: 进行中 0 项
+              - generic [ref=e169]: 设备分布 0 类
+          - generic [ref=e170]:
+            - generic [ref=e171]:
+              - generic [ref=e172]: 今日态势
+              - generic [ref=e173]: 2026年3月25日 星期三
+              - generic [ref=e174]: 控制看板基于当前归档与工单数据实时刷新
+            - generic [ref=e175]:
+              - generic [ref=e176]: 主导设备类型
+              - generic [ref=e177]: 暂无数据
+              - generic [ref=e178]: 当前设备画像中占比最高的设备门类
+        - generic [ref=e179]:
+          - article [ref=e180]:
+            - generic [ref=e181]: 累计工单
+            - generic [ref=e182]: "0"
+            - generic [ref=e183]: 当前系统内累计沉淀的维保任务
+          - article [ref=e184]:
+            - generic [ref=e185]: 进行中任务
+            - generic [ref=e186]: "0"
+            - generic [ref=e187]: 需要持续追踪执行状态的在途工单
+          - article [ref=e188]:
+            - generic [ref=e189]: 归档闭环
+            - generic [ref=e190]: 0%
+            - generic [ref=e191]: 已签字归档工单在总工单中的占比
+          - article [ref=e192]:
+            - generic [ref=e193]: 在册设备
+            - generic [ref=e194]: "0"
+            - generic [ref=e195]: 当前纳入运营视图的设备资产总数
+        - generic [ref=e196]:
+          - article [ref=e197]:
+            - generic [ref=e199]:
+              - heading "近七日工单节奏" [level=3] [ref=e200]
+              - paragraph [ref=e201]: 观察排程波动、执行压强与交付节奏。
+          - generic [ref=e206]:
+            - article [ref=e207]:
+              - generic [ref=e209]:
+                - heading "设备类型画像" [level=3] [ref=e210]
+                - paragraph [ref=e211]: 当前在册设备结构，用于判断资源侧重点。
+            - article [ref=e216]:
+              - generic [ref=e218]:
+                - heading "运行判读" [level=3] [ref=e219]
+                - paragraph [ref=e220]: 把统计数据翻译成可行动的运营提示。
+              - generic [ref=e222]:
+                - generic [ref=e224]:
+                  - generic [ref=e225]: 归档缺口
+                  - strong [ref=e226]: 0 单
+                  - generic [ref=e227]: 当前归档节奏健康，没有明显积压。
+                - generic [ref=e230]:
+                  - generic [ref=e231]: 执行压力
+                  - strong [ref=e232]: 0 单
+                  - generic [ref=e233]: 结合进行中任务数，判断现场资源是否需要调配。
+                - generic [ref=e236]:
+                  - generic [ref=e237]: 设备结构
+                  - strong [ref=e238]: 暂无数据
+                  - generic [ref=e239]: 主导设备类型将影响模板维护与备件优先级。
+        - img [ref=e243]

@@ -1,0 +1,46 @@
+- generic [ref=e3]:
+  - generic [ref=e5]:
+    - img [ref=e7]
+    - heading "数字化起重机 维修维保系统" [level=1] [ref=e12]:
+      - text: 数字化起重机
+      - text: 维修维保系统
+    - paragraph [ref=e13]: 全生命周期数字化维保 · 安全可靠 · 高效运营
+    - generic [ref=e14]:
+      - generic [ref=e15]: 客户档案与设备全生命周期管理
+      - generic [ref=e17]: 工单派发与现场移动端作业
+      - generic [ref=e19]: 电子签名与PDF报告自动生成
+      - generic [ref=e21]: 特检预警与维保计划智能排期
+    - generic [ref=e23]:
+      - generic [ref=e24]:
+        - generic [ref=e25]: 系统定位
+        - strong [ref=e26]: 工业服务指挥舱
+      - generic [ref=e27]:
+        - generic [ref=e28]: 多端协同
+        - strong [ref=e29]: 管理端 / 客户门户 / 微信作业端
+      - generic [ref=e30]:
+        - generic [ref=e31]: 闭环能力
+        - strong [ref=e32]: 排期、执行、签字、归档一体化
+  - generic [ref=e38]:
+    - generic [ref=e39]:
+      - heading "欢迎回来" [level=2] [ref=e40]
+      - paragraph [ref=e41]: 请登录您的账户以继续
+    - generic [ref=e42]:
+      - generic [ref=e43]:
+        - generic [ref=e44]: "*登录账号"
+        - generic [ref=e47]:
+          - img [ref=e50]
+          - textbox "*登录账号" [ref=e53]:
+            - /placeholder: 请输入账号
+      - generic [ref=e54]:
+        - generic [ref=e55]: "*登录密码"
+        - generic [ref=e58]:
+          - img [ref=e61]
+          - textbox "*登录密码" [ref=e64]:
+            - /placeholder: 请输入密码
+      - button "登 录" [ref=e65] [cursor=pointer]:
+        - generic [ref=e66]: 登 录
+    - paragraph [ref=e67]: 测试账号：admin / Admin@2024，manager01 / Manager@2024，tech01 / Tech@2024
+    - generic [ref=e68]:
+      - generic [ref=e69]: 实时看板
+      - generic [ref=e70]: 工单闭环
+      - generic [ref=e71]: 移动协同

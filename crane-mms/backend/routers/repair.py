@@ -8,7 +8,6 @@ from schemas.repair_order import RepairOrderCreate, RepairOrderUpdate, RepairOrd
 from models.repair_order import RepairOrder
 from models.user import User
 from core.permissions import get_current_user
-from services import pdf_service
 
 router = APIRouter(
     prefix="/repairs",
@@ -85,6 +84,8 @@ def get_repair_report(
         raise HTTPException(status_code=403, detail="Insufficient permissions")
 
     if not order.pdf_report_url and _is_completed_status(order.status):
+        from services import pdf_service
+
         pdf_service.generate_repair_report(repair_id)
         db.expire_all()
         order = db.query(RepairOrder).filter(RepairOrder.id == repair_id).first()
@@ -129,6 +130,8 @@ def update_repair_order(
     db.refresh(order)
 
     if _is_completed_status(order.status) and not order.pdf_report_url:
+        from services import pdf_service
+
         background_tasks.add_task(pdf_service.generate_repair_report, order.id)
 
     return ok(data=order)

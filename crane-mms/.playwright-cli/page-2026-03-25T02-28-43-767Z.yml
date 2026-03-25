@@ -1,0 +1,222 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img "品牌标识" [ref=e7]
+      - generic [ref=e8]:
+        - generic [ref=e9]: 数字化起重机维保系统
+        - generic [ref=e10]: Operations Command Center
+        - generic [ref=e11]: 设备、排程、权限与模板一体调度
+    - generic [ref=e12]:
+      - generic [ref=e13]: 业务中枢
+      - link "控制看板 运行概览与风险脉冲" [ref=e14] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e17]
+        - generic [ref=e19]:
+          - strong [ref=e20]: 控制看板
+          - generic [ref=e21]: 运行概览与风险脉冲
+      - link "客户管理 客户档案与联系人" [ref=e22] [cursor=pointer]:
+        - /url: /customers
+        - img [ref=e25]
+        - generic [ref=e29]:
+          - strong [ref=e30]: 客户管理
+          - generic [ref=e31]: 客户档案与联系人
+      - link "设备档案 设备台账与参数快照" [ref=e32] [cursor=pointer]:
+        - /url: /equipments
+        - img [ref=e35]
+        - generic [ref=e37]:
+          - strong [ref=e38]: 设备档案
+          - generic [ref=e39]: 设备台账与参数快照
+      - link "工单中心 派工、进度、签字闭环" [ref=e40] [cursor=pointer]:
+        - /url: /orders
+        - img [ref=e43]
+        - generic [ref=e45]:
+          - strong [ref=e46]: 工单中心
+          - generic [ref=e47]: 派工、进度、签字闭环
+      - link "维修工单 故障维修与处理记录" [ref=e48] [cursor=pointer]:
+        - /url: /repairs
+        - img [ref=e51]
+        - generic [ref=e53]:
+          - strong [ref=e54]: 维修工单
+          - generic [ref=e55]: 故障维修与处理记录
+      - link "批量排期 成组调度与计划编排" [ref=e56] [cursor=pointer]:
+        - /url: /orders/batch
+        - img [ref=e59]
+        - generic [ref=e61]:
+          - strong [ref=e62]: 批量排期
+          - generic [ref=e63]: 成组调度与计划编排
+      - link "备件库 库存、部件、规格基线" [ref=e64] [cursor=pointer]:
+        - /url: /system/parts
+        - img [ref=e67]
+        - generic [ref=e69]:
+          - strong [ref=e70]: 备件库
+          - generic [ref=e71]: 库存、部件、规格基线
+    - generic [ref=e72]:
+      - generic [ref=e73]:
+        - img [ref=e76]
+        - generic [ref=e78]:
+          - generic [ref=e79]: 设置工作台
+          - generic [ref=e80]: 模板、权限、品牌、审计、报告
+      - link "设备模板中心 模板组、候选、通用模板 ›" [ref=e81] [cursor=pointer]:
+        - /url: /equipment-templates
+        - img [ref=e84]
+        - generic [ref=e86]:
+          - strong [ref=e87]: 设备模板中心
+          - generic [ref=e88]: 模板组、候选、通用模板
+        - generic [ref=e89]: ›
+      - link "权限管理 账号、角色默认权限、个人覆盖 ›" [ref=e90] [cursor=pointer]:
+        - /url: /system/employees
+        - img [ref=e93]
+        - generic [ref=e95]:
+          - strong [ref=e96]: 权限管理
+          - generic [ref=e97]: 账号、角色默认权限、个人覆盖
+        - generic [ref=e98]: ›
+      - link "平台品牌配置 品牌资产、门户样式、展示规范 ›" [ref=e99] [cursor=pointer]:
+        - /url: /system/brand-config
+        - img [ref=e102]
+        - generic [ref=e105]:
+          - strong [ref=e106]: 平台品牌配置
+          - generic [ref=e107]: 品牌资产、门户样式、展示规范
+        - generic [ref=e108]: ›
+      - link "安全审计 审计事件与账号痕迹 ›" [ref=e109] [cursor=pointer]:
+        - /url: /system/audit
+        - img [ref=e112]
+        - generic [ref=e114]:
+          - strong [ref=e115]: 安全审计
+          - generic [ref=e116]: 审计事件与账号痕迹
+        - generic [ref=e117]: ›
+      - link "报告集中 归档报告与签字材料 ›" [ref=e118] [cursor=pointer]:
+        - /url: /system/reports
+        - img [ref=e121]
+        - generic [ref=e123]:
+          - strong [ref=e124]: 报告集中
+          - generic [ref=e125]: 归档报告与签字材料
+        - generic [ref=e126]: ›
+    - generic [ref=e127]:
+      - generic [ref=e128]: "?"
+      - generic [ref=e129]:
+        - strong [ref=e130]: "?????"
+        - generic [ref=e131]: 系统管理员
+      - button "退出登录" [ref=e132] [cursor=pointer]:
+        - img [ref=e134]
+  - generic [ref=e137]:
+    - banner [ref=e138]:
+      - generic [ref=e139]:
+        - generic [ref=e140]: Settings Control Layer
+        - heading "权限管理" [level=1] [ref=e141]
+        - paragraph [ref=e142]: 统一维护模板、权限、品牌、审计与报告治理能力。
+      - generic [ref=e144]:
+        - generic [ref=e145]: 当前作业层
+        - strong [ref=e146]: 设置管控域
+        - generic [ref=e147]: 2026年3月25日 星期三
+      - generic [ref=e148]:
+        - generic [ref=e149]: 系统管理员
+        - button [ref=e151] [cursor=pointer]:
+          - img [ref=e154]
+        - generic [ref=e158]: 10:28:43
+    - main [ref=e159]:
+      - generic [ref=e160]:
+        - generic [ref=e161]:
+          - generic [ref=e162]:
+            - paragraph [ref=e163]: Permission Governance
+            - heading "角色默认权限与个人覆盖统一治理" [level=2] [ref=e164]
+            - paragraph [ref=e165]: 在同一工作台查看全部账号、切换角色、维护默认权限模板，并针对个人做覆盖授权，让设置区入口和操作能力都能精确收口。
+            - generic [ref=e166]:
+              - generic [ref=e167]: 账号总数 0
+              - generic [ref=e168]: 启用账号 0
+              - generic [ref=e169]: 权限模块 0
+          - generic [ref=e170]:
+            - generic [ref=e171]:
+              - generic [ref=e172]: 治理模式
+              - generic [ref=e173]: 角色 + 个人覆盖
+              - generic [ref=e174]: 先继承角色默认权限，再做单人覆盖开关
+            - generic [ref=e175]:
+              - button "刷新数据" [ref=e176] [cursor=pointer]:
+                - generic [ref=e177]: 刷新数据
+              - button "新增账号" [ref=e178] [cursor=pointer]:
+                - generic [ref=e179]: 新增账号
+        - generic [ref=e180]:
+          - article [ref=e181]:
+            - generic [ref=e182]: 账号总数
+            - generic [ref=e183]: "0"
+            - generic [ref=e184]: 权限中心可管理的全部员工
+          - article [ref=e185]:
+            - generic [ref=e186]: 启用账号
+            - generic [ref=e187]: "0"
+            - generic [ref=e188]: 当前允许登录的平台账号
+          - article [ref=e189]:
+            - generic [ref=e190]: 微信绑定
+            - generic [ref=e191]: "0"
+            - generic [ref=e192]: 可接收微信提醒的成员
+          - article [ref=e193]:
+            - generic [ref=e194]: 待改密码
+            - generic [ref=e195]: "0"
+            - generic [ref=e196]: 首次登录或重置后需处理
+        - generic [ref=e197]:
+          - article [ref=e198]:
+            - generic [ref=e200]:
+              - heading "账号总表" [level=3] [ref=e201]
+              - paragraph [ref=e202]: 从账号列表进入详情，继续维护角色默认权限和个人覆盖。
+            - generic [ref=e203]:
+              - generic [ref=e204]:
+                - generic [ref=e206]:
+                  - img [ref=e208]
+                  - textbox "搜索姓名、账号、部门" [ref=e211]
+                - generic [ref=e213] [cursor=pointer]:
+                  - generic:
+                    - combobox [ref=e215]
+                    - generic [ref=e216]: 全部角色
+                  - img [ref=e219]
+                - generic [ref=e222] [cursor=pointer]:
+                  - generic:
+                    - combobox [ref=e224]
+                    - generic [ref=e225]: 全部状态
+                  - img [ref=e228]
+              - generic [ref=e230]:
+                - generic [ref=e231]:
+                  - table [ref=e233]:
+                    - rowgroup [ref=e244]:
+                      - row "姓名 账号 部门 岗位 角色 账号状态 最后登录 操作" [ref=e245]:
+                        - columnheader [ref=e246]
+                        - columnheader "姓名" [ref=e247]:
+                          - generic [ref=e248]: 姓名
+                        - columnheader "账号" [ref=e249]:
+                          - generic [ref=e250]: 账号
+                        - columnheader "部门" [ref=e251]:
+                          - generic [ref=e252]: 部门
+                        - columnheader "岗位" [ref=e253]:
+                          - generic [ref=e254]: 岗位
+                        - columnheader "角色" [ref=e255]:
+                          - generic [ref=e256]: 角色
+                        - columnheader "账号状态" [ref=e257]:
+                          - generic [ref=e258]: 账号状态
+                        - columnheader "最后登录" [ref=e259]:
+                          - generic [ref=e260]: 最后登录
+                        - columnheader "操作" [ref=e261]:
+                          - generic [ref=e262]: 操作
+                  - generic [ref=e266]:
+                    - table:
+                      - rowgroup
+                    - generic [ref=e268]: No Data
+                - img [ref=e272]
+          - generic [ref=e274]:
+            - article [ref=e275]:
+              - generic [ref=e277]:
+                - heading "角色分布" [level=3] [ref=e278]
+                - paragraph [ref=e279]: 先看角色结构，再决定默认权限模板是否需要收紧。
+              - generic [ref=e281]:
+                - generic [ref=e283]:
+                  - generic [ref=e284]: 系统管理员
+                  - strong [ref=e285]: 0 人
+                  - generic [ref=e286]: 拥有最高设置域权限，通常负责角色模板和治理基线。
+                - generic [ref=e289]:
+                  - generic [ref=e290]: 业务经理
+                  - strong [ref=e291]: 0 人
+                  - generic [ref=e292]: 负责业务协同与设置页访问，适合按角色模板批量治理。
+                - generic [ref=e295]:
+                  - generic [ref=e296]: 技术工程师
+                  - strong [ref=e297]: 0 人
+                  - generic [ref=e298]: 通常以业务执行为主，设置权限应根据实际工作边界谨慎开放。
+            - article [ref=e300]:
+              - generic [ref=e302]:
+                - heading "权限域覆盖" [level=3] [ref=e303]
+                - paragraph [ref=e304]: 第一版仅覆盖设置区五个模块，但粒度已细到页面、操作和模块区块。

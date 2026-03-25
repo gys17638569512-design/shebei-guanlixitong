@@ -6,6 +6,7 @@ alembic
 python-jose[cryptography]
 python-multipart
 python-dotenv
+python-dateutil
 passlib[bcrypt]
 bcrypt<5
 cos-python-sdk-v5
@@ -13,3 +14,6 @@ Pillow
 weasyprint
 jinja2
 pydantic-settings
+requests
+reportlab
+xhtml2pdf

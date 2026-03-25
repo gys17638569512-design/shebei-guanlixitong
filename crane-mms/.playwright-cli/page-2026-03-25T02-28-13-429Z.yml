@@ -1,0 +1,232 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img "品牌标识" [ref=e7]
+      - generic [ref=e8]:
+        - generic [ref=e9]: 数字化起重机维保系统
+        - generic [ref=e10]: Operations Command Center
+        - generic [ref=e11]: 设备、排程、权限与模板一体调度
+    - generic [ref=e12]:
+      - generic [ref=e13]: 业务中枢
+      - link "控制看板 运行概览与风险脉冲" [ref=e14] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e17]
+        - generic [ref=e19]:
+          - strong [ref=e20]: 控制看板
+          - generic [ref=e21]: 运行概览与风险脉冲
+      - link "客户管理 客户档案与联系人" [ref=e22] [cursor=pointer]:
+        - /url: /customers
+        - img [ref=e25]
+        - generic [ref=e29]:
+          - strong [ref=e30]: 客户管理
+          - generic [ref=e31]: 客户档案与联系人
+      - link "设备档案 设备台账与参数快照" [ref=e32] [cursor=pointer]:
+        - /url: /equipments
+        - img [ref=e35]
+        - generic [ref=e37]:
+          - strong [ref=e38]: 设备档案
+          - generic [ref=e39]: 设备台账与参数快照
+      - link "工单中心 派工、进度、签字闭环" [ref=e40] [cursor=pointer]:
+        - /url: /orders
+        - img [ref=e43]
+        - generic [ref=e45]:
+          - strong [ref=e46]: 工单中心
+          - generic [ref=e47]: 派工、进度、签字闭环
+      - link "维修工单 故障维修与处理记录" [ref=e48] [cursor=pointer]:
+        - /url: /repairs
+        - img [ref=e51]
+        - generic [ref=e53]:
+          - strong [ref=e54]: 维修工单
+          - generic [ref=e55]: 故障维修与处理记录
+      - link "批量排期 成组调度与计划编排" [ref=e56] [cursor=pointer]:
+        - /url: /orders/batch
+        - img [ref=e59]
+        - generic [ref=e61]:
+          - strong [ref=e62]: 批量排期
+          - generic [ref=e63]: 成组调度与计划编排
+      - link "备件库 库存、部件、规格基线" [ref=e64] [cursor=pointer]:
+        - /url: /system/parts
+        - img [ref=e67]
+        - generic [ref=e69]:
+          - strong [ref=e70]: 备件库
+          - generic [ref=e71]: 库存、部件、规格基线
+    - generic [ref=e72]:
+      - generic [ref=e73]:
+        - img [ref=e76]
+        - generic [ref=e78]:
+          - generic [ref=e79]: 设置工作台
+          - generic [ref=e80]: 模板、权限、品牌、审计、报告
+      - link "设备模板中心 模板组、候选、通用模板 ›" [ref=e81] [cursor=pointer]:
+        - /url: /equipment-templates
+        - img [ref=e84]
+        - generic [ref=e86]:
+          - strong [ref=e87]: 设备模板中心
+          - generic [ref=e88]: 模板组、候选、通用模板
+        - generic [ref=e89]: ›
+      - link "权限管理 账号、角色默认权限、个人覆盖 ›" [ref=e90] [cursor=pointer]:
+        - /url: /system/employees
+        - img [ref=e93]
+        - generic [ref=e95]:
+          - strong [ref=e96]: 权限管理
+          - generic [ref=e97]: 账号、角色默认权限、个人覆盖
+        - generic [ref=e98]: ›
+      - link "平台品牌配置 品牌资产、门户样式、展示规范 ›" [ref=e99] [cursor=pointer]:
+        - /url: /system/brand-config
+        - img [ref=e102]
+        - generic [ref=e105]:
+          - strong [ref=e106]: 平台品牌配置
+          - generic [ref=e107]: 品牌资产、门户样式、展示规范
+        - generic [ref=e108]: ›
+      - link "安全审计 审计事件与账号痕迹 ›" [ref=e109] [cursor=pointer]:
+        - /url: /system/audit
+        - img [ref=e112]
+        - generic [ref=e114]:
+          - strong [ref=e115]: 安全审计
+          - generic [ref=e116]: 审计事件与账号痕迹
+        - generic [ref=e117]: ›
+      - link "报告集中 归档报告与签字材料 ›" [ref=e118] [cursor=pointer]:
+        - /url: /system/reports
+        - img [ref=e121]
+        - generic [ref=e123]:
+          - strong [ref=e124]: 报告集中
+          - generic [ref=e125]: 归档报告与签字材料
+        - generic [ref=e126]: ›
+    - generic [ref=e127]:
+      - generic [ref=e128]: "?"
+      - generic [ref=e129]:
+        - strong [ref=e130]: "?????"
+        - generic [ref=e131]: 系统管理员
+      - button "退出登录" [ref=e132] [cursor=pointer]:
+        - img [ref=e134]
+  - generic [ref=e137]:
+    - banner [ref=e138]:
+      - generic [ref=e139]:
+        - generic [ref=e140]: Operations Mesh
+        - heading "工单中心" [level=1] [ref=e141]
+        - paragraph [ref=e142]: 围绕客户、设备、工单与维保执行的日常运营工作台。
+      - generic [ref=e144]:
+        - generic [ref=e145]: 当前作业层
+        - strong [ref=e146]: 业务执行域
+        - generic [ref=e147]: 2026年3月25日 星期三
+      - generic [ref=e148]:
+        - generic [ref=e149]: 系统管理员
+        - button [ref=e151] [cursor=pointer]:
+          - img [ref=e154]
+        - generic [ref=e158]: 10:28:13
+    - main [ref=e159]:
+      - generic [ref=e160]:
+        - generic [ref=e161]:
+          - generic [ref=e162]:
+            - paragraph [ref=e163]: Work Order Operations
+            - heading "派工、执行、签字与归档统一调度" [level=2] [ref=e164]
+            - paragraph [ref=e165]: 用同一工作台管理工单节奏，快速判断待处理、进行中、待签字和已完成任务的分布，并直接发起新派单。
+            - generic [ref=e166]:
+              - generic [ref=e167]: 总工单 0
+              - generic [ref=e168]: 逾期 0
+              - generic [ref=e169]: 完成率 0%
+          - generic [ref=e170]:
+            - generic [ref=e171]:
+              - generic [ref=e172]: 当前视图
+              - generic [ref=e173]: 全局调度
+              - generic [ref=e174]: 依据账号角色展示全局工单或个人工单
+            - button "新建派单" [ref=e176] [cursor=pointer]:
+              - generic [ref=e177]: 新建派单
+        - generic [ref=e178]:
+          - article [ref=e179]:
+            - generic [ref=e180]: 工单总量
+            - generic [ref=e181]: "0"
+            - generic [ref=e182]: 当前视图中的全部维保工单
+          - article [ref=e183]:
+            - generic [ref=e184]: 待处理
+            - generic [ref=e185]: "0"
+            - generic [ref=e186]: 尚未开始执行的待办任务
+          - article [ref=e187]:
+            - generic [ref=e188]: 待签字
+            - generic [ref=e189]: "0"
+            - generic [ref=e190]: 已执行待客户签字归档的任务
+          - article [ref=e191]:
+            - generic [ref=e192]: 完成率
+            - generic [ref=e193]: 0%
+            - generic [ref=e194]: 已完成工单在总工单中的占比
+        - generic [ref=e195]:
+          - article [ref=e196]:
+            - generic [ref=e198]:
+              - heading "工单节奏总表" [level=3] [ref=e199]
+              - paragraph [ref=e200]: 按状态、类型和关键词切换，快速定位需要推进的工单。
+            - generic [ref=e201]:
+              - generic [ref=e202]:
+                - button "0 全部" [ref=e203] [cursor=pointer]:
+                  - generic [ref=e204]: "0"
+                  - generic [ref=e205]: 全部
+                - button "0 待处理" [ref=e206] [cursor=pointer]:
+                  - generic [ref=e207]: "0"
+                  - generic [ref=e208]: 待处理
+                - button "0 进行中" [ref=e209] [cursor=pointer]:
+                  - generic [ref=e210]: "0"
+                  - generic [ref=e211]: 进行中
+                - button "0 待签字" [ref=e212] [cursor=pointer]:
+                  - generic [ref=e213]: "0"
+                  - generic [ref=e214]: 待签字
+                - button "0 已完成" [ref=e215] [cursor=pointer]:
+                  - generic [ref=e216]: "0"
+                  - generic [ref=e217]: 已完成
+              - generic [ref=e218]:
+                - textbox "搜索客户名、设备名或工程师" [ref=e221]
+                - generic [ref=e223] [cursor=pointer]:
+                  - generic:
+                    - combobox [ref=e225]
+                    - generic [ref=e226]: 工单类型
+                  - img [ref=e229]
+                - generic [ref=e231]: 当前 0 条
+              - generic [ref=e232]:
+                - generic [ref=e233]:
+                  - table [ref=e235]:
+                    - rowgroup [ref=e244]:
+                      - row "类型 客户名 设备名 负责工程师 计划日期 状态 操作" [ref=e245]:
+                        - columnheader "类型" [ref=e246]:
+                          - generic [ref=e247]: 类型
+                        - columnheader "客户名" [ref=e248]:
+                          - generic [ref=e249]: 客户名
+                        - columnheader "设备名" [ref=e250]:
+                          - generic [ref=e251]: 设备名
+                        - columnheader "负责工程师" [ref=e252]:
+                          - generic [ref=e253]: 负责工程师
+                        - columnheader "计划日期" [ref=e254]:
+                          - generic [ref=e255]: 计划日期
+                        - columnheader "状态" [ref=e256]:
+                          - generic [ref=e257]: 状态
+                        - columnheader "操作" [ref=e258]:
+                          - generic [ref=e259]: 操作
+                  - generic [ref=e263]:
+                    - table:
+                      - rowgroup
+                    - generic [ref=e265]: No Data
+                - img [ref=e268]
+              - generic [ref=e270]:
+                - generic [ref=e271]: 当前条件下没有工单
+                - generic [ref=e272]: 尝试切换状态、工单类型，或直接创建新的派单任务。
+          - generic [ref=e273]:
+            - article [ref=e274]:
+              - generic [ref=e276]:
+                - heading "工单判读" [level=3] [ref=e277]
+                - paragraph [ref=e278]: 把状态分布转换成调度建议，减少遗漏。
+              - generic [ref=e280]:
+                - generic [ref=e282]:
+                  - generic [ref=e283]: 逾期工单
+                  - strong [ref=e284]: 0 单
+                  - generic [ref=e285]: 建议优先处理已超过计划日期但仍未完成的任务。
+                - generic [ref=e288]:
+                  - generic [ref=e289]: 签字积压
+                  - strong [ref=e290]: 0 单
+                  - generic [ref=e291]: 待签字过多会拉长归档闭环周期，需要尽快跟进。
+                - generic [ref=e294]:
+                  - generic [ref=e295]: 执行在途
+                  - strong [ref=e296]: 0 单
+                  - generic [ref=e297]: 进行中工单反映当前现场工作压力与资源投入状态。
+            - article [ref=e299]:
+              - generic [ref=e301]:
+                - heading "临期待办" [level=3] [ref=e302]
+                - paragraph [ref=e303]: 优先关注逾期或临近计划日期的工单。
+              - generic [ref=e305]:
+                - img [ref=e307]
+                - paragraph [ref=e324]: 暂无临期待办工单

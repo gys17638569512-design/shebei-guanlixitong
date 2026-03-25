@@ -38,6 +38,7 @@ from core.response import err
 from routers import auth, order, upload, report, user, customer, equipment, part, audit_log, stats
 from routers import portal, repair, template, platform_setting, customer_account, equipment_template
 import uvicorn
+from pathlib import Path
 
 description = """
 <div align="center">
@@ -92,9 +93,12 @@ app = FastAPI(
 
 # 挂载静态文件
 import os
-os.makedirs("uploads", exist_ok=True)
-app.mount("/static", StaticFiles(directory="static"), name="static")
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+BASE_DIR = Path(__file__).resolve().parent
+STATIC_DIR = BASE_DIR / "static"
+UPLOADS_DIR = BASE_DIR / "uploads"
+os.makedirs(UPLOADS_DIR, exist_ok=True)
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+app.mount("/uploads", StaticFiles(directory=str(UPLOADS_DIR)), name="uploads")
 # 自定义 Swagger UI HTML (注入深海蓝主题 CSS)
 @app.get("/docs", include_in_schema=False)
 async def custom_swagger_ui_html():

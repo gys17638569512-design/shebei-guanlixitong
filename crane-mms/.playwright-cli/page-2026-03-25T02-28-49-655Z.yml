@@ -1,0 +1,241 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img "品牌标识" [ref=e7]
+      - generic [ref=e8]:
+        - generic [ref=e9]: 数字化起重机维保系统
+        - generic [ref=e10]: Operations Command Center
+        - generic [ref=e11]: 设备、排程、权限与模板一体调度
+    - generic [ref=e12]:
+      - generic [ref=e13]: 业务中枢
+      - link "控制看板 运行概览与风险脉冲" [ref=e14] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e17]
+        - generic [ref=e19]:
+          - strong [ref=e20]: 控制看板
+          - generic [ref=e21]: 运行概览与风险脉冲
+      - link "客户管理 客户档案与联系人" [ref=e22] [cursor=pointer]:
+        - /url: /customers
+        - img [ref=e25]
+        - generic [ref=e29]:
+          - strong [ref=e30]: 客户管理
+          - generic [ref=e31]: 客户档案与联系人
+      - link "设备档案 设备台账与参数快照" [ref=e32] [cursor=pointer]:
+        - /url: /equipments
+        - img [ref=e35]
+        - generic [ref=e37]:
+          - strong [ref=e38]: 设备档案
+          - generic [ref=e39]: 设备台账与参数快照
+      - link "工单中心 派工、进度、签字闭环" [ref=e40] [cursor=pointer]:
+        - /url: /orders
+        - img [ref=e43]
+        - generic [ref=e45]:
+          - strong [ref=e46]: 工单中心
+          - generic [ref=e47]: 派工、进度、签字闭环
+      - link "维修工单 故障维修与处理记录" [ref=e48] [cursor=pointer]:
+        - /url: /repairs
+        - img [ref=e51]
+        - generic [ref=e53]:
+          - strong [ref=e54]: 维修工单
+          - generic [ref=e55]: 故障维修与处理记录
+      - link "批量排期 成组调度与计划编排" [ref=e56] [cursor=pointer]:
+        - /url: /orders/batch
+        - img [ref=e59]
+        - generic [ref=e61]:
+          - strong [ref=e62]: 批量排期
+          - generic [ref=e63]: 成组调度与计划编排
+      - link "备件库 库存、部件、规格基线" [ref=e64] [cursor=pointer]:
+        - /url: /system/parts
+        - img [ref=e67]
+        - generic [ref=e69]:
+          - strong [ref=e70]: 备件库
+          - generic [ref=e71]: 库存、部件、规格基线
+    - generic [ref=e72]:
+      - generic [ref=e73]:
+        - img [ref=e76]
+        - generic [ref=e78]:
+          - generic [ref=e79]: 设置工作台
+          - generic [ref=e80]: 模板、权限、品牌、审计、报告
+      - link "设备模板中心 模板组、候选、通用模板 ›" [ref=e81] [cursor=pointer]:
+        - /url: /equipment-templates
+        - img [ref=e84]
+        - generic [ref=e86]:
+          - strong [ref=e87]: 设备模板中心
+          - generic [ref=e88]: 模板组、候选、通用模板
+        - generic [ref=e89]: ›
+      - link "权限管理 账号、角色默认权限、个人覆盖 ›" [ref=e90] [cursor=pointer]:
+        - /url: /system/employees
+        - img [ref=e93]
+        - generic [ref=e95]:
+          - strong [ref=e96]: 权限管理
+          - generic [ref=e97]: 账号、角色默认权限、个人覆盖
+        - generic [ref=e98]: ›
+      - link "平台品牌配置 品牌资产、门户样式、展示规范 ›" [ref=e99] [cursor=pointer]:
+        - /url: /system/brand-config
+        - img [ref=e102]
+        - generic [ref=e105]:
+          - strong [ref=e106]: 平台品牌配置
+          - generic [ref=e107]: 品牌资产、门户样式、展示规范
+        - generic [ref=e108]: ›
+      - link "安全审计 审计事件与账号痕迹 ›" [ref=e109] [cursor=pointer]:
+        - /url: /system/audit
+        - img [ref=e112]
+        - generic [ref=e114]:
+          - strong [ref=e115]: 安全审计
+          - generic [ref=e116]: 审计事件与账号痕迹
+        - generic [ref=e117]: ›
+      - link "报告集中 归档报告与签字材料 ›" [ref=e118] [cursor=pointer]:
+        - /url: /system/reports
+        - img [ref=e121]
+        - generic [ref=e123]:
+          - strong [ref=e124]: 报告集中
+          - generic [ref=e125]: 归档报告与签字材料
+        - generic [ref=e126]: ›
+    - generic [ref=e127]:
+      - generic [ref=e128]: "?"
+      - generic [ref=e129]:
+        - strong [ref=e130]: "?????"
+        - generic [ref=e131]: 系统管理员
+      - button "退出登录" [ref=e132] [cursor=pointer]:
+        - img [ref=e134]
+  - generic [ref=e137]:
+    - banner [ref=e138]:
+      - generic [ref=e139]:
+        - generic [ref=e140]: Settings Control Layer
+        - heading "平台品牌配置" [level=1] [ref=e141]
+        - paragraph [ref=e142]: 统一维护模板、权限、品牌、审计与报告治理能力。
+      - generic [ref=e144]:
+        - generic [ref=e145]: 当前作业层
+        - strong [ref=e146]: 设置管控域
+        - generic [ref=e147]: 2026年3月25日 星期三
+      - generic [ref=e148]:
+        - generic [ref=e149]: 系统管理员
+        - button [ref=e151] [cursor=pointer]:
+          - img [ref=e154]
+        - generic [ref=e158]: 10:28:49
+    - main [ref=e159]:
+      - generic [ref=e160]:
+        - generic [ref=e161]:
+          - generic [ref=e162]:
+            - heading "平台品牌配置" [level=1] [ref=e163]
+            - paragraph [ref=e164]: 统一维护系统名称、公司信息、Logo、主题色与报告抬头，后续可直接联动各端展示
+          - generic [ref=e165]:
+            - button "恢复默认" [ref=e166] [cursor=pointer]:
+              - generic [ref=e167]: 恢复默认
+            - button "保存配置" [ref=e168] [cursor=pointer]:
+              - generic [ref=e169]: 保存配置
+        - generic [ref=e170]:
+          - generic [ref=e171]:
+            - generic [ref=e173]:
+              - generic [ref=e174]: 品牌信息编辑
+              - generic:
+                - generic: 平台主体配置
+            - generic [ref=e176]:
+              - generic [ref=e177]:
+                - generic [ref=e179]:
+                  - generic [ref=e180]: "*公司全称"
+                  - textbox "*公司全称" [ref=e184]:
+                    - /placeholder: 请输入公司全称
+                - generic [ref=e186]:
+                  - generic [ref=e187]: 公司简称
+                  - textbox "公司简称" [ref=e191]:
+                    - /placeholder: 请输入公司简称
+              - generic [ref=e192]:
+                - generic [ref=e194]:
+                  - generic [ref=e195]: "*系统名称"
+                  - textbox "*系统名称" [ref=e199]:
+                    - /placeholder: 请输入系统名称
+                - generic [ref=e201]:
+                  - generic [ref=e202]: 系统副标题
+                  - textbox "系统副标题" [ref=e206]:
+                    - /placeholder: 请输入系统副标题
+              - generic [ref=e207]:
+                - generic [ref=e209]:
+                  - generic [ref=e210]: 管理端登录标题
+                  - textbox "管理端登录标题" [ref=e214]:
+                    - /placeholder: 请输入管理端登录标题
+                - generic [ref=e216]:
+                  - generic [ref=e217]: 客户端登录标题
+                  - textbox "客户端登录标题" [ref=e221]:
+                    - /placeholder: 请输入客户端登录标题
+              - generic [ref=e222]:
+                - generic [ref=e224]:
+                  - generic [ref=e225]: 工人端登录标题
+                  - textbox "工人端登录标题" [ref=e229]:
+                    - /placeholder: 请输入工人端登录标题
+                - generic [ref=e231]:
+                  - generic [ref=e232]: 客服电话
+                  - textbox "客服电话" [ref=e236]:
+                    - /placeholder: 请输入客服电话
+              - generic [ref=e237]:
+                - generic [ref=e238]: 公司地址
+                - textbox "公司地址" [ref=e241]:
+                  - /placeholder: 请输入公司地址
+              - generic [ref=e242]:
+                - generic [ref=e244]:
+                  - generic [ref=e245]: "*Logo 地址"
+                  - textbox "*Logo 地址" [ref=e249]:
+                    - /placeholder: /brand-mark.svg
+                - generic [ref=e251]:
+                  - generic [ref=e252]: 浏览器图标
+                  - textbox "浏览器图标" [ref=e256]:
+                    - /placeholder: /brand-mark.svg
+              - generic [ref=e257]:
+                - generic [ref=e259]:
+                  - generic [ref=e260]: "*主题色"
+                  - textbox "*主题色" [ref=e264]:
+                    - /placeholder: "#1677ff"
+                - generic [ref=e266]:
+                  - generic [ref=e267]: 辅助色
+                  - textbox "辅助色" [ref=e271]:
+                    - /placeholder: "#0ea5e9"
+              - generic [ref=e272]:
+                - generic [ref=e273]: 报告抬头
+                - textbox "报告抬头" [ref=e277]:
+                  - /placeholder: 请输入报告抬头
+              - generic [ref=e278]:
+                - generic [ref=e279]: 报告页尾
+                - textbox "报告页尾" [ref=e283]:
+                  - /placeholder: 请输入报告页尾
+          - generic [ref=e284]:
+            - generic [ref=e285]:
+              - generic [ref=e288]: 品牌预览
+              - generic [ref=e289]:
+                - img "品牌 Logo" [ref=e291]
+                - generic [ref=e292]:
+                  - generic [ref=e293]:
+                    - generic [ref=e294]: 公司全称
+                    - strong
+                  - generic [ref=e295]:
+                    - generic [ref=e296]: 客服电话
+                    - strong
+                  - generic [ref=e297]:
+                    - generic [ref=e298]: 报告抬头
+                    - strong
+                  - generic [ref=e299]:
+                    - generic [ref=e300]: 主题色
+                    - strong
+            - generic [ref=e301]:
+              - generic [ref=e304]: 联动范围
+              - generic [ref=e306]:
+                - generic [ref=e307]:
+                  - generic:
+                    - generic: 管理端 Web
+                - generic [ref=e308]:
+                  - generic:
+                    - generic: 客户端 Web
+                - generic [ref=e309]:
+                  - generic:
+                    - generic: 工人端 Web
+                - generic [ref=e310]:
+                  - generic:
+                    - generic: 管理端微信
+                - generic [ref=e311]:
+                  - generic:
+                    - generic: 客户端微信
+                - generic [ref=e312]:
+                  - generic:
+                    - generic: 工人端微信
+                - generic [ref=e313]:
+                  - generic:
+                    - generic: 报告模板

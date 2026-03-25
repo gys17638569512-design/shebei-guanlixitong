@@ -1,0 +1,205 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img "品牌标识" [ref=e7]
+      - generic [ref=e8]:
+        - generic [ref=e9]: 数字化起重机维保系统
+        - generic [ref=e10]: Operations Command Center
+        - generic [ref=e11]: 设备、排程、权限与模板一体调度
+    - generic [ref=e12]:
+      - generic [ref=e13]: 业务中枢
+      - link "控制看板 运行概览与风险脉冲" [ref=e14] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e17]
+        - generic [ref=e19]:
+          - strong [ref=e20]: 控制看板
+          - generic [ref=e21]: 运行概览与风险脉冲
+      - link "客户管理 客户档案与联系人" [ref=e22] [cursor=pointer]:
+        - /url: /customers
+        - img [ref=e25]
+        - generic [ref=e29]:
+          - strong [ref=e30]: 客户管理
+          - generic [ref=e31]: 客户档案与联系人
+      - link "设备档案 设备台账与参数快照" [ref=e32] [cursor=pointer]:
+        - /url: /equipments
+        - img [ref=e35]
+        - generic [ref=e37]:
+          - strong [ref=e38]: 设备档案
+          - generic [ref=e39]: 设备台账与参数快照
+      - link "工单中心 派工、进度、签字闭环" [ref=e40] [cursor=pointer]:
+        - /url: /orders
+        - img [ref=e43]
+        - generic [ref=e45]:
+          - strong [ref=e46]: 工单中心
+          - generic [ref=e47]: 派工、进度、签字闭环
+      - link "维修工单 故障维修与处理记录" [ref=e48] [cursor=pointer]:
+        - /url: /repairs
+        - img [ref=e51]
+        - generic [ref=e53]:
+          - strong [ref=e54]: 维修工单
+          - generic [ref=e55]: 故障维修与处理记录
+      - link "批量排期 成组调度与计划编排" [ref=e56] [cursor=pointer]:
+        - /url: /orders/batch
+        - img [ref=e59]
+        - generic [ref=e61]:
+          - strong [ref=e62]: 批量排期
+          - generic [ref=e63]: 成组调度与计划编排
+      - link "备件库 库存、部件、规格基线" [ref=e64] [cursor=pointer]:
+        - /url: /system/parts
+        - img [ref=e67]
+        - generic [ref=e69]:
+          - strong [ref=e70]: 备件库
+          - generic [ref=e71]: 库存、部件、规格基线
+    - generic [ref=e72]:
+      - generic [ref=e73]:
+        - img [ref=e76]
+        - generic [ref=e78]:
+          - generic [ref=e79]: 设置工作台
+          - generic [ref=e80]: 模板、权限、品牌、审计、报告
+      - link "设备模板中心 模板组、候选、通用模板 ›" [ref=e81] [cursor=pointer]:
+        - /url: /equipment-templates
+        - img [ref=e84]
+        - generic [ref=e86]:
+          - strong [ref=e87]: 设备模板中心
+          - generic [ref=e88]: 模板组、候选、通用模板
+        - generic [ref=e89]: ›
+      - link "权限管理 账号、角色默认权限、个人覆盖 ›" [ref=e90] [cursor=pointer]:
+        - /url: /system/employees
+        - img [ref=e93]
+        - generic [ref=e95]:
+          - strong [ref=e96]: 权限管理
+          - generic [ref=e97]: 账号、角色默认权限、个人覆盖
+        - generic [ref=e98]: ›
+      - link "平台品牌配置 品牌资产、门户样式、展示规范 ›" [ref=e99] [cursor=pointer]:
+        - /url: /system/brand-config
+        - img [ref=e102]
+        - generic [ref=e105]:
+          - strong [ref=e106]: 平台品牌配置
+          - generic [ref=e107]: 品牌资产、门户样式、展示规范
+        - generic [ref=e108]: ›
+      - link "安全审计 审计事件与账号痕迹 ›" [ref=e109] [cursor=pointer]:
+        - /url: /system/audit
+        - img [ref=e112]
+        - generic [ref=e114]:
+          - strong [ref=e115]: 安全审计
+          - generic [ref=e116]: 审计事件与账号痕迹
+        - generic [ref=e117]: ›
+      - link "报告集中 归档报告与签字材料 ›" [ref=e118] [cursor=pointer]:
+        - /url: /system/reports
+        - img [ref=e121]
+        - generic [ref=e123]:
+          - strong [ref=e124]: 报告集中
+          - generic [ref=e125]: 归档报告与签字材料
+        - generic [ref=e126]: ›
+    - generic [ref=e127]:
+      - generic [ref=e128]: "?"
+      - generic [ref=e129]:
+        - strong [ref=e130]: "?????"
+        - generic [ref=e131]: 系统管理员
+      - button "退出登录" [ref=e132] [cursor=pointer]:
+        - img [ref=e134]
+  - generic [ref=e137]:
+    - banner [ref=e138]:
+      - generic [ref=e139]:
+        - generic [ref=e140]: Settings Control Layer
+        - heading "设备模板中心" [level=1] [ref=e141]
+        - paragraph [ref=e142]: 统一维护模板、权限、品牌、审计与报告治理能力。
+      - generic [ref=e144]:
+        - generic [ref=e145]: 当前作业层
+        - strong [ref=e146]: 设置管控域
+        - generic [ref=e147]: 2026年3月25日 星期三
+      - generic [ref=e148]:
+        - generic [ref=e149]: 系统管理员
+        - button [ref=e151] [cursor=pointer]:
+          - img [ref=e154]
+        - generic [ref=e158]: 10:28:36
+    - main [ref=e159]:
+      - generic [ref=e160]:
+        - generic [ref=e161]:
+          - generic [ref=e162]:
+            - paragraph [ref=e163]: Template Governance
+            - heading "设备模板、候选审核与检修基底统一维护" [level=2] [ref=e164]
+            - paragraph [ref=e165]: 模板中心负责正式模板版本、设备录入候选回流和检修通用模板，让新增设备从纯手填切换成推荐命中、确认应用、回流沉淀的闭环。
+            - generic [ref=e166]:
+              - generic [ref=e167]: 模板组 0
+              - generic [ref=e168]: 待审候选 0
+              - generic [ref=e169]: 检修基底 0
+          - generic [ref=e170]:
+            - generic [ref=e171]:
+              - generic [ref=e172]: 版本策略
+              - generic [ref=e173]: 通用版 + 厂家版
+              - generic [ref=e174]: 按大类、型式、吨位与跨度规则命中设备模板
+            - generic [ref=e175]:
+              - button "刷新" [disabled]:
+                - generic:
+                  - img
+                - generic: 刷新
+              - button "新建模板组" [ref=e176] [cursor=pointer]:
+                - generic [ref=e177]: 新建模板组
+              - button "新建模板版本" [ref=e178] [cursor=pointer]:
+                - generic [ref=e179]: 新建模板版本
+        - generic [ref=e180]:
+          - article [ref=e181]:
+            - generic [ref=e182]: 模板组
+            - generic [ref=e183]: "0"
+            - generic [ref=e184]: 按设备大类与型式组织的模板集合
+          - article [ref=e185]:
+            - generic [ref=e186]: 生效版本
+            - generic [ref=e187]: "0"
+            - generic [ref=e188]: 当前可用于设备匹配的正式模板版本
+          - article [ref=e189]:
+            - generic [ref=e190]: 待审候选
+            - generic [ref=e191]: "0"
+            - generic [ref=e192]: 来自设备录入回流、等待审核的新模板候选
+          - article [ref=e193]:
+            - generic [ref=e194]: 检修基底
+            - generic [ref=e195]: "0"
+            - generic [ref=e196]: 可在模板编辑中一键引用的检修通用模板
+        - generic [ref=e197]:
+          - tablist [ref=e201]:
+            - tab "设备模板" [selected] [ref=e203]
+            - tab "模板候选" [ref=e204]
+            - tab "检修通用模板" [ref=e205]
+          - tabpanel "设备模板" [ref=e207]:
+            - generic [ref=e209]:
+              - generic [ref=e210]:
+                - generic [ref=e212] [cursor=pointer]:
+                  - generic:
+                    - combobox [ref=e214]
+                    - generic [ref=e215]: 设备大类
+                  - img [ref=e218]
+                - generic [ref=e221] [cursor=pointer]:
+                  - generic:
+                    - combobox [ref=e223]
+                    - generic [ref=e224]: 设备型式
+                  - img [ref=e227]
+                - textbox "厂家搜索" [ref=e231]
+                - generic [ref=e233] [cursor=pointer]:
+                  - generic:
+                    - combobox [ref=e235]
+                    - generic [ref=e236]: 规则类型
+                  - img [ref=e239]
+              - generic [ref=e241]:
+                - generic [ref=e242]:
+                  - table [ref=e244]:
+                    - rowgroup [ref=e253]:
+                      - row "模板组 / 版本 适用设备 厂家 匹配规则 内容概览 状态 操作" [ref=e254]:
+                        - columnheader "模板组 / 版本" [ref=e255]:
+                          - generic [ref=e256]: 模板组 / 版本
+                        - columnheader "适用设备" [ref=e257]:
+                          - generic [ref=e258]: 适用设备
+                        - columnheader "厂家" [ref=e259]:
+                          - generic [ref=e260]: 厂家
+                        - columnheader "匹配规则" [ref=e261]:
+                          - generic [ref=e262]: 匹配规则
+                        - columnheader "内容概览" [ref=e263]:
+                          - generic [ref=e264]: 内容概览
+                        - columnheader "状态" [ref=e265]:
+                          - generic [ref=e266]: 状态
+                        - columnheader "操作" [ref=e267]:
+                          - generic [ref=e268]: 操作
+                  - generic [ref=e272]:
+                    - table:
+                      - rowgroup
+                    - generic [ref=e274]: No Data
+                - img [ref=e278]

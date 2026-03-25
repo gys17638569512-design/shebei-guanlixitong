@@ -1,0 +1,212 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img "品牌标识" [ref=e7]
+      - generic [ref=e8]:
+        - generic [ref=e9]: 数字化起重机维保系统
+        - generic [ref=e10]: Operations Command Center
+        - generic [ref=e11]: 设备、排程、权限与模板一体调度
+    - generic [ref=e12]:
+      - generic [ref=e13]: 业务中枢
+      - link "控制看板 运行概览与风险脉冲" [ref=e14] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e17]
+        - generic [ref=e19]:
+          - strong [ref=e20]: 控制看板
+          - generic [ref=e21]: 运行概览与风险脉冲
+      - link "客户管理 客户档案与联系人" [ref=e22] [cursor=pointer]:
+        - /url: /customers
+        - img [ref=e25]
+        - generic [ref=e29]:
+          - strong [ref=e30]: 客户管理
+          - generic [ref=e31]: 客户档案与联系人
+      - link "设备档案 设备台账与参数快照" [ref=e32] [cursor=pointer]:
+        - /url: /equipments
+        - img [ref=e35]
+        - generic [ref=e37]:
+          - strong [ref=e38]: 设备档案
+          - generic [ref=e39]: 设备台账与参数快照
+      - link "工单中心 派工、进度、签字闭环" [ref=e40] [cursor=pointer]:
+        - /url: /orders
+        - img [ref=e43]
+        - generic [ref=e45]:
+          - strong [ref=e46]: 工单中心
+          - generic [ref=e47]: 派工、进度、签字闭环
+      - link "维修工单 故障维修与处理记录" [ref=e48] [cursor=pointer]:
+        - /url: /repairs
+        - img [ref=e51]
+        - generic [ref=e53]:
+          - strong [ref=e54]: 维修工单
+          - generic [ref=e55]: 故障维修与处理记录
+      - link "批量排期 成组调度与计划编排" [ref=e56] [cursor=pointer]:
+        - /url: /orders/batch
+        - img [ref=e59]
+        - generic [ref=e61]:
+          - strong [ref=e62]: 批量排期
+          - generic [ref=e63]: 成组调度与计划编排
+      - link "备件库 库存、部件、规格基线" [ref=e64] [cursor=pointer]:
+        - /url: /system/parts
+        - img [ref=e67]
+        - generic [ref=e69]:
+          - strong [ref=e70]: 备件库
+          - generic [ref=e71]: 库存、部件、规格基线
+    - generic [ref=e72]:
+      - generic [ref=e73]:
+        - img [ref=e76]
+        - generic [ref=e78]:
+          - generic [ref=e79]: 设置工作台
+          - generic [ref=e80]: 模板、权限、品牌、审计、报告
+      - link "设备模板中心 模板组、候选、通用模板 ›" [ref=e81] [cursor=pointer]:
+        - /url: /equipment-templates
+        - img [ref=e84]
+        - generic [ref=e86]:
+          - strong [ref=e87]: 设备模板中心
+          - generic [ref=e88]: 模板组、候选、通用模板
+        - generic [ref=e89]: ›
+      - link "权限管理 账号、角色默认权限、个人覆盖 ›" [ref=e90] [cursor=pointer]:
+        - /url: /system/employees
+        - img [ref=e93]
+        - generic [ref=e95]:
+          - strong [ref=e96]: 权限管理
+          - generic [ref=e97]: 账号、角色默认权限、个人覆盖
+        - generic [ref=e98]: ›
+      - link "平台品牌配置 品牌资产、门户样式、展示规范 ›" [ref=e99] [cursor=pointer]:
+        - /url: /system/brand-config
+        - img [ref=e102]
+        - generic [ref=e105]:
+          - strong [ref=e106]: 平台品牌配置
+          - generic [ref=e107]: 品牌资产、门户样式、展示规范
+        - generic [ref=e108]: ›
+      - link "安全审计 审计事件与账号痕迹 ›" [ref=e109] [cursor=pointer]:
+        - /url: /system/audit
+        - img [ref=e112]
+        - generic [ref=e114]:
+          - strong [ref=e115]: 安全审计
+          - generic [ref=e116]: 审计事件与账号痕迹
+        - generic [ref=e117]: ›
+      - link "报告集中 归档报告与签字材料 ›" [ref=e118] [cursor=pointer]:
+        - /url: /system/reports
+        - img [ref=e121]
+        - generic [ref=e123]:
+          - strong [ref=e124]: 报告集中
+          - generic [ref=e125]: 归档报告与签字材料
+        - generic [ref=e126]: ›
+    - generic [ref=e127]:
+      - generic [ref=e128]: "?"
+      - generic [ref=e129]:
+        - strong [ref=e130]: "?????"
+        - generic [ref=e131]: 系统管理员
+      - button "退出登录" [ref=e132] [cursor=pointer]:
+        - img [ref=e134]
+  - generic [ref=e137]:
+    - banner [ref=e138]:
+      - generic [ref=e139]:
+        - generic [ref=e140]: Operations Mesh
+        - heading "客户管理" [level=1] [ref=e141]
+        - paragraph [ref=e142]: 围绕客户、设备、工单与维保执行的日常运营工作台。
+      - generic [ref=e144]:
+        - generic [ref=e145]: 当前作业层
+        - strong [ref=e146]: 业务执行域
+        - generic [ref=e147]: 2026年3月25日 星期三
+      - generic [ref=e148]:
+        - generic [ref=e149]: 系统管理员
+        - button [ref=e151] [cursor=pointer]:
+          - img [ref=e154]
+        - generic [ref=e158]: 10:29:13
+    - main [ref=e159]:
+      - generic [ref=e160]:
+        - generic [ref=e161]:
+          - generic [ref=e162]:
+            - paragraph [ref=e163]: Customer Operations
+            - heading "客户关系与门户接入一体管理" [level=2] [ref=e164]
+            - paragraph [ref=e165]: 在一个页面里维护客户档案、联系人、门户访问手机号和协作入口，方便后续设备、工单与签字链路快速挂接。
+            - generic [ref=e166]:
+              - generic [ref=e167]: 客户总量 0
+              - generic [ref=e168]: 门户就绪 0
+              - generic [ref=e169]: 多联系人客户 0
+          - generic [ref=e170]:
+            - generic [ref=e171]:
+              - generic [ref=e172]: 新增动作
+              - generic [ref=e173]: 客户建档
+              - generic [ref=e174]: 创建后即可继续录入设备和绑定门户手机号
+            - button "新建客户" [ref=e176] [cursor=pointer]:
+              - generic [ref=e177]: 新建客户
+        - generic [ref=e178]:
+          - article [ref=e179]:
+            - generic [ref=e180]: 客户总量
+            - generic [ref=e181]: "0"
+            - generic [ref=e182]: 已建档客户主体数量
+          - article [ref=e183]:
+            - generic [ref=e184]: 本月新增
+            - generic [ref=e185]: "0"
+            - generic [ref=e186]: 本月新录入的客户档案
+          - article [ref=e187]:
+            - generic [ref=e188]: 门户就绪
+            - generic [ref=e189]: "0"
+            - generic [ref=e190]: 已配置门户登录手机号的客户
+          - article [ref=e191]:
+            - generic [ref=e192]: 检索结果
+            - generic [ref=e193]: "0"
+            - generic [ref=e194]: 当前筛选条件命中的客户数量
+        - generic [ref=e195]:
+          - article [ref=e196]:
+            - generic [ref=e198]:
+              - heading "客户档案总表" [level=3] [ref=e199]
+              - paragraph [ref=e200]: 搜索公司名或联系人，快速进入详情或继续补充档案。
+            - generic [ref=e201]:
+              - generic [ref=e202]:
+                - generic [ref=e204]:
+                  - img [ref=e206]
+                  - textbox "搜索公司名或联系人" [ref=e209]
+                - button "搜索" [ref=e210] [cursor=pointer]:
+                  - generic [ref=e211]: 搜索
+                - generic [ref=e212]: 结果 0 条
+              - generic [ref=e213]:
+                - generic [ref=e214]: 客户、联系人、门户入口将在后续设备与工单流转中复用。
+                - strong [ref=e215]: 总计 0 条记录
+              - generic [ref=e216]:
+                - generic [ref=e217]:
+                  - table [ref=e219]:
+                    - rowgroup [ref=e227]:
+                      - row "客户主体 联系电话 门户登录手机号 公司地址 操作" [ref=e228]:
+                        - columnheader [ref=e229]
+                        - columnheader "客户主体" [ref=e230]:
+                          - generic [ref=e231]: 客户主体
+                        - columnheader "联系电话" [ref=e232]:
+                          - generic [ref=e233]: 联系电话
+                        - columnheader "门户登录手机号" [ref=e234]:
+                          - generic [ref=e235]: 门户登录手机号
+                        - columnheader "公司地址" [ref=e236]:
+                          - generic [ref=e237]: 公司地址
+                        - columnheader "操作" [ref=e238]:
+                          - generic [ref=e239]: 操作
+                  - generic [ref=e243]:
+                    - table:
+                      - rowgroup
+                    - generic [ref=e245]: No Data
+                - img [ref=e248]
+          - generic [ref=e250]:
+            - article [ref=e251]:
+              - generic [ref=e253]:
+                - heading "接入信号" [level=3] [ref=e254]
+                - paragraph [ref=e255]: 门户准备度和联系人覆盖情况会直接影响后续协作效率。
+              - generic [ref=e257]:
+                - generic [ref=e259]:
+                  - generic [ref=e260]: 门户接入率
+                  - strong [ref=e261]: 0%
+                  - generic [ref=e262]: 客户门户手机号配置越完整，后续签字与查看报告越顺畅。
+                - generic [ref=e265]:
+                  - generic [ref=e266]: 联系人冗余
+                  - strong [ref=e267]: 0 家
+                  - generic [ref=e268]: 具备多联系人意味着后续沟通容错更高，适合优先推进门户协同。
+                - generic [ref=e271]:
+                  - generic [ref=e272]: 当月建档
+                  - strong [ref=e273]: 0 家
+                  - generic [ref=e274]: 新客户较多时，建议同步检查设备模板是否覆盖到对应场景。
+            - article [ref=e276]:
+              - generic [ref=e278]:
+                - heading "最近录入客户" [level=3] [ref=e279]
+                - paragraph [ref=e280]: 便于快速补全联系人、门户手机号和设备信息。
+              - generic [ref=e282]:
+                - img [ref=e284]
+                - paragraph [ref=e301]: 暂无最近录入客户

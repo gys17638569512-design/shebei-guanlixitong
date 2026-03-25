@@ -36,14 +36,20 @@ async def get_report_archive(
     db: Session = Depends(get_db)
 ):
     from core.response import ok
-    orders = db.query(WorkOrder).filter(WorkOrder.pdf_report_url != None).order_by(WorkOrder.completed_at.desc()).all()
+    orders = (
+        db.query(WorkOrder)
+        .filter(WorkOrder.pdf_report_url != None)
+        .order_by(WorkOrder.updated_at.desc(), WorkOrder.created_at.desc())
+        .all()
+    )
     result = []
     for order in orders:
+        archive_time = order.updated_at or order.created_at
         result.append({
             "order_id": order.id,
             "equipment_name": order.equipment.name if order.equipment else "未知设备",
             "customer_name": order.customer.company_name if order.customer else "未知客户",
-            "completed_at": str(order.completed_at) if order.completed_at else None,
+            "completed_at": str(archive_time) if archive_time else None,
             "pdf_url": order.pdf_report_url,
             "esign_cert_url": order.esign_cert_url
         })

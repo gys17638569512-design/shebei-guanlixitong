@@ -9,7 +9,7 @@ from core.audit import write_audit_log
 from models.user import User
 from models.work_order import WorkOrder, OrderStatus
 from schemas.work_order import WorkOrderCreate, WorkOrderBatch
-from services import order_service, pdf_service
+from services import order_service
 from core import sms
 from core.settings import settings
 from models.customer import Customer
@@ -56,10 +56,12 @@ async def complete_order_route(
     db: Session = Depends(get_db)
 ):
     order_service.complete_order(db, id, completion_data, current_user)
-    
+
+    from services import pdf_service
+
     # 异步生成电子维保单 PDF 并自动归档
     background_tasks.add_task(pdf_service.generate_maintenance_report, id)
-    
+
     return ok(None, msg="Order completed successfully")
 
 

@@ -1,0 +1,222 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img "品牌标识" [ref=e7]
+      - generic [ref=e8]:
+        - generic [ref=e9]: 数字化起重机维保系统
+        - generic [ref=e10]: Operations Command Center
+        - generic [ref=e11]: 设备、排程、权限与模板一体调度
+    - generic [ref=e12]:
+      - generic [ref=e13]: 业务中枢
+      - link "控制看板 运行概览与风险脉冲" [ref=e14] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e17]
+        - generic [ref=e19]:
+          - strong [ref=e20]: 控制看板
+          - generic [ref=e21]: 运行概览与风险脉冲
+      - link "客户管理 客户档案与联系人" [ref=e22] [cursor=pointer]:
+        - /url: /customers
+        - img [ref=e25]
+        - generic [ref=e29]:
+          - strong [ref=e30]: 客户管理
+          - generic [ref=e31]: 客户档案与联系人
+      - link "设备档案 设备台账与参数快照" [ref=e32] [cursor=pointer]:
+        - /url: /equipments
+        - img [ref=e35]
+        - generic [ref=e37]:
+          - strong [ref=e38]: 设备档案
+          - generic [ref=e39]: 设备台账与参数快照
+      - link "工单中心 派工、进度、签字闭环" [ref=e40] [cursor=pointer]:
+        - /url: /orders
+        - img [ref=e43]
+        - generic [ref=e45]:
+          - strong [ref=e46]: 工单中心
+          - generic [ref=e47]: 派工、进度、签字闭环
+      - link "维修工单 故障维修与处理记录" [ref=e48] [cursor=pointer]:
+        - /url: /repairs
+        - img [ref=e51]
+        - generic [ref=e53]:
+          - strong [ref=e54]: 维修工单
+          - generic [ref=e55]: 故障维修与处理记录
+      - link "批量排期 成组调度与计划编排" [ref=e56] [cursor=pointer]:
+        - /url: /orders/batch
+        - img [ref=e59]
+        - generic [ref=e61]:
+          - strong [ref=e62]: 批量排期
+          - generic [ref=e63]: 成组调度与计划编排
+      - link "备件库 库存、部件、规格基线" [ref=e64] [cursor=pointer]:
+        - /url: /system/parts
+        - img [ref=e67]
+        - generic [ref=e69]:
+          - strong [ref=e70]: 备件库
+          - generic [ref=e71]: 库存、部件、规格基线
+    - generic [ref=e72]:
+      - generic [ref=e73]:
+        - img [ref=e76]
+        - generic [ref=e78]:
+          - generic [ref=e79]: 设置工作台
+          - generic [ref=e80]: 模板、权限、品牌、审计、报告
+      - link "设备模板中心 模板组、候选、通用模板 ›" [ref=e81] [cursor=pointer]:
+        - /url: /equipment-templates
+        - img [ref=e84]
+        - generic [ref=e86]:
+          - strong [ref=e87]: 设备模板中心
+          - generic [ref=e88]: 模板组、候选、通用模板
+        - generic [ref=e89]: ›
+      - link "权限管理 账号、角色默认权限、个人覆盖 ›" [ref=e90] [cursor=pointer]:
+        - /url: /system/employees
+        - img [ref=e93]
+        - generic [ref=e95]:
+          - strong [ref=e96]: 权限管理
+          - generic [ref=e97]: 账号、角色默认权限、个人覆盖
+        - generic [ref=e98]: ›
+      - link "平台品牌配置 品牌资产、门户样式、展示规范 ›" [ref=e99] [cursor=pointer]:
+        - /url: /system/brand-config
+        - img [ref=e102]
+        - generic [ref=e105]:
+          - strong [ref=e106]: 平台品牌配置
+          - generic [ref=e107]: 品牌资产、门户样式、展示规范
+        - generic [ref=e108]: ›
+      - link "安全审计 审计事件与账号痕迹 ›" [ref=e109] [cursor=pointer]:
+        - /url: /system/audit
+        - img [ref=e112]
+        - generic [ref=e114]:
+          - strong [ref=e115]: 安全审计
+          - generic [ref=e116]: 审计事件与账号痕迹
+        - generic [ref=e117]: ›
+      - link "报告集中 归档报告与签字材料 ›" [ref=e118] [cursor=pointer]:
+        - /url: /system/reports
+        - img [ref=e121]
+        - generic [ref=e123]:
+          - strong [ref=e124]: 报告集中
+          - generic [ref=e125]: 归档报告与签字材料
+        - generic [ref=e126]: ›
+    - generic [ref=e127]:
+      - generic [ref=e128]: "?"
+      - generic [ref=e129]:
+        - strong [ref=e130]: "?????"
+        - generic [ref=e131]: 系统管理员
+      - button "退出登录" [ref=e132] [cursor=pointer]:
+        - img [ref=e134]
+  - generic [ref=e137]:
+    - banner [ref=e138]:
+      - generic [ref=e139]:
+        - generic [ref=e140]: Operations Mesh
+        - heading "设备档案" [level=1] [ref=e141]
+        - paragraph [ref=e142]: 围绕客户、设备、工单与维保执行的日常运营工作台。
+      - generic [ref=e144]:
+        - generic [ref=e145]: 当前作业层
+        - strong [ref=e146]: 业务执行域
+        - generic [ref=e147]: 2026年3月25日 星期三
+      - generic [ref=e148]:
+        - generic [ref=e149]: 系统管理员
+        - button [ref=e151] [cursor=pointer]:
+          - img [ref=e154]
+        - generic [ref=e158]: 10:28:07
+    - main [ref=e159]:
+      - generic [ref=e160]:
+        - generic [ref=e161]:
+          - generic [ref=e162]:
+            - paragraph [ref=e163]: Equipment Registry
+            - heading "设备资产、检验周期与模板录入集中查看" [level=2] [ref=e164]
+            - paragraph [ref=e165]: 把设备档案、客户归属、模板适配和检验风险放到同一视图中管理，减少新增设备与后续派工的切换成本。
+            - generic [ref=e166]:
+              - generic [ref=e167]: 在册设备 0
+              - generic [ref=e168]: 30 天内到检 0
+              - generic [ref=e169]: 客户覆盖 0
+          - generic [ref=e170]:
+            - generic [ref=e171]:
+              - generic [ref=e172]: 录入模式
+              - generic [ref=e173]: 模板驱动
+              - generic [ref=e174]: 先命中模板，再补充厂家与个性化参数
+            - generic [ref=e175]:
+              - button "设备模板中心" [ref=e176] [cursor=pointer]:
+                - generic [ref=e177]: 设备模板中心
+              - button "新增设备" [ref=e178] [cursor=pointer]:
+                - generic [ref=e179]: 新增设备
+        - generic [ref=e180]:
+          - article [ref=e181]:
+            - generic [ref=e182]: 设备总量
+            - generic [ref=e183]: "0"
+            - generic [ref=e184]: 当前台账中的全部设备资产
+          - article [ref=e185]:
+            - generic [ref=e186]: 30 天内到检
+            - generic [ref=e187]: "0"
+            - generic [ref=e188]: 建议提前安排检验与派工准备
+          - article [ref=e189]:
+            - generic [ref=e190]: 已超期
+            - generic [ref=e191]: "0"
+            - generic [ref=e192]: 需要优先跟进的高风险设备
+          - article [ref=e193]:
+            - generic [ref=e194]: 客户覆盖
+            - generic [ref=e195]: "0"
+            - generic [ref=e196]: 当前设备所覆盖的客户主体数量
+        - generic [ref=e197]:
+          - article [ref=e198]:
+            - generic [ref=e200]:
+              - heading "设备台账总览" [level=3] [ref=e201]
+              - paragraph [ref=e202]: 支持按客户与关键词筛选，快速进入设备档案、派单或模板补录流程。
+            - generic [ref=e203]:
+              - generic [ref=e204]:
+                - generic [ref=e206]:
+                  - img [ref=e209]
+                  - textbox "搜索设备名称或出厂编号" [ref=e211]
+                - generic [ref=e213] [cursor=pointer]:
+                  - generic:
+                    - combobox [ref=e215]
+                    - generic [ref=e216]: 归属客户
+                  - img [ref=e219]
+                - button "查询" [ref=e221] [cursor=pointer]:
+                  - generic [ref=e222]: 查询
+                - button "重置" [ref=e223] [cursor=pointer]:
+                  - generic [ref=e224]: 重置
+              - generic [ref=e225]:
+                - generic [ref=e226]: 重点关注临近检验设备，它们会在表格中高亮提示。
+                - strong [ref=e227]: 共 0 台设备
+              - generic [ref=e228]:
+                - generic [ref=e229]:
+                  - table [ref=e231]:
+                    - rowgroup [ref=e239]:
+                      - row "ID 设备资产信息 归属客户 当前状态 检验与维保窗口 操作" [ref=e240]:
+                        - columnheader "ID" [ref=e241]:
+                          - generic [ref=e242]: ID
+                        - columnheader "设备资产信息" [ref=e243]:
+                          - generic [ref=e244]: 设备资产信息
+                        - columnheader "归属客户" [ref=e245]:
+                          - generic [ref=e246]: 归属客户
+                        - columnheader "当前状态" [ref=e247]:
+                          - generic [ref=e248]: 当前状态
+                        - columnheader "检验与维保窗口" [ref=e249]:
+                          - generic [ref=e250]: 检验与维保窗口
+                        - columnheader "操作" [ref=e251]:
+                          - generic [ref=e252]: 操作
+                  - generic [ref=e256]:
+                    - table:
+                      - rowgroup
+                    - generic [ref=e258]: No Data
+                - img [ref=e261]
+          - generic [ref=e263]:
+            - article [ref=e264]:
+              - generic [ref=e266]:
+                - heading "检验压力" [level=3] [ref=e267]
+                - paragraph [ref=e268]: 将设备到检节点翻译成明确的运营预警。
+              - generic [ref=e270]:
+                - generic [ref=e272]:
+                  - generic [ref=e273]: 到检预警
+                  - strong [ref=e274]: 0 台
+                  - generic [ref=e275]: 距离下次定检不足 30 天的设备数量。
+                - generic [ref=e278]:
+                  - generic [ref=e279]: 超期设备
+                  - strong [ref=e280]: 0 台
+                  - generic [ref=e281]: 已超过定检日期，建议优先安排处理或确认状态。
+                - generic [ref=e284]:
+                  - generic [ref=e285]: 模板录入
+                  - strong [ref=e286]: 已开放
+                  - generic [ref=e287]: 设备模板中心可帮助后续新增设备时自动预填充。
+            - article [ref=e289]:
+              - generic [ref=e291]:
+                - heading "最近到检设备" [level=3] [ref=e292]
+                - paragraph [ref=e293]: 优先处理距离检验时间最近的设备，减少超期风险。
+              - generic [ref=e295]:
+                - img [ref=e297]
+                - paragraph [ref=e314]: 暂无临近检验设备
