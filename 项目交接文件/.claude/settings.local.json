@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(unzip -q files.zip)",
+      "Bash(unzip -q 郭氏维保管理系统_完整文档包.zip)"
+    ]
+  }
+}

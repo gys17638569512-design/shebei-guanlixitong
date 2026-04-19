@@ -34,3 +34,14 @@ env/
 # IDE 配置
 .vscode/
 .idea/
+
+# Git 配置
+.git/
+
+# 压缩包
+*.tar.gz
+*.zip
+
+# 临时文件
+*.tmp
+*.temp
