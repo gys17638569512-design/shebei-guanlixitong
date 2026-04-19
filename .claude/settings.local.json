@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(unzip -q files.zip -d .)",
+      "Bash(unzip:*)"
+    ]
+  }
+}
